@@ -1,0 +1,264 @@
+/* Scrolls smoothly when clicking on navbar buttons */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Setting a background photo that has a fixed position */
+body {
+  /* Remove margins and paddings */
+  margin: 0;
+  padding: 0;
+  /* iPhone 5/SE */
+  min-width: 319px;
+
+  /* Location of the image */
+  background-image: url(images/IMG_20161105_185953_3.jpg);
+  /* Background image is centered vertically and horizontally at all times */
+  background-position: center center;
+  
+  /* Background image doesn't tile */
+  background-repeat: no-repeat;
+  
+  /* Background image is fixed in the viewport so that it doesn't move when 
+     the content's height is greater than the image's height */
+  background-attachment: fixed;
+  
+  /* This is what makes the background image rescale based
+     on the container's size */
+  background-size: cover;
+  
+  /* Set a background color that will be displayed
+     while the background image is loading */
+  background-color: #464646;
+
+  /* Bring section to the back of the page */
+  z-index: -1;
+}
+
+.classBgText {
+  /* Bring section to the back of the page */
+  z-index: -1;
+  font-size: 10pt;
+  color: white;
+  text-align: left;
+  /* Always stays in the same place even if the page is scrolled */
+  position: fixed;
+  /* Shift to the bottom right corner */
+  padding: 90vh 0 0 85vw;
+  opacity: 0.6;
+}
+
+.classNavbar {
+  /* Bring navbar to the front */
+  z-index: 1;
+}
+
+/* Centre the <div> */
+.classDivCenter {
+  width: 100%;
+  display: flex;
+  /* The flexible items are displayed vertically, as a column */
+  flex-direction: column;
+  /* Align the flex items at the center of the container, horizontally */
+  justify-content: center;
+  /* Center the alignments for all the items of the flexible <div> element, vertically */
+  align-items: center;
+  /* Center the text horizontally */
+  text-align: center;
+}
+
+.classHomeSection {
+  /* 100% of screen view height */
+  height: 100vh;
+  padding: 0 20px 0 20px;
+}
+
+.classHomeHeader {
+  font-family: 'Comfortaa', cursive;
+  font-size: 28pt;
+  font-weight: bold;
+  color: white;
+}
+
+.classHomeText {
+  /*font-family: monospace;*/
+  font-size: 14pt;
+  color: white;
+}
+
+/* Projects section */
+
+.classProjectsSection {
+  font-family: "Roboto", sans-serif;
+  background-color: white;
+  padding: 50px 20px 80px 20px;
+}
+
+.classSectionHeader {
+  font-size: 24pt;
+  padding: 20px;
+}
+
+.classPersonalProjects {
+  padding-top: 60px;
+}
+
+.classProjectContainer {
+  justify-content: center;
+}
+
+.classCardShadow {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  color: black;
+}
+
+.classCardSize {
+  max-width: 50%;
+}
+
+/* Display framework used for each project */
+.classCardImgHoverDiv {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.classCardImgHoverText {
+  background-color: white;
+  /* color: black; */
+  /* font-size: 13pt; */
+  padding: 15px;
+}
+
+.classCardText {
+  font-size: 13pt;
+}
+
+.classCardShadow:hover img {
+  opacity: 0.2;
+}
+
+.classCardDeck:hover a {
+  /* Text doesn't get underlined */
+  text-decoration: none;
+  /* background-color: silver; */
+  color: black;
+}
+
+.classCardShadow:hover .classCardImgHoverDiv {
+  opacity: 1;
+}
+
+/* Skills Section */
+
+.classSkillsSection {
+  /* height: auto; */
+  color: white;
+  /* padding: 50px 20px 40px 20px; */
+}
+
+.classBgSkillsImg {
+  width: 100%;
+  height: 90vh;
+
+  background-image: url('https://jylee2.github.io/portfolio/images/P2250528_Thesis_3.JPG');
+  
+  /* Background image is centered vertically and horizontally at all times */
+  background-position: center center;
+  
+  /* Background image doesn't tile */
+  background-repeat: no-repeat;
+  
+  /* Background image is fixed in the viewport so that it doesn't move when 
+     the content's height is greater than the image's height */
+  background-attachment: fixed;
+  
+  /* This is what makes the background image rescale based
+     on the container's size */
+  background-size: cover;
+  
+  /* Set a background color that will be displayed
+     while the background image is loading */
+  background-color: #464646;
+  
+  /* filter: brightness(60%); */
+  /* Bring navbar to the front */
+  /* z-index: 1; */
+}
+
+.classSkillsContent {
+  position: absolute;
+  /* padding: 10px; */
+}
+
+.classSkillsHeader {
+  margin: 10px;
+  font-size: 24pt;
+  padding: 20px;
+  background-color: white;
+  color: black;
+}
+
+.classSkillsText {
+  margin: 10px;
+  background-color: white;
+  color: black;
+  font-size: 15pt;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Contacts Section */
+
+.classContactSection {
+  height: auto;
+  color: white;
+  font-family: "Roboto", sans-serif;
+  padding: 50px 20px 40px 20px;
+}
+
+.classContactItems {
+  /* Align the flex items at the center of the container, horizontally */
+  justify-content: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.classContactBtn {
+  width: 200px;
+  height: 60px;
+  color: white;
+  text-decoration: none;
+  font-size: 15pt;
+  padding: 10px;
+  border: solid;
+  border-color: transparent;
+}
+
+.classContactBtn:hover {
+  border-color: white;
+  color: white;
+}
+
+.classFooterSection {
+  color: white;
+  font-family: "Roboto", sans-serif;
+  font-size: 12pt;
+  padding: 20px 0px 10px 0px;
+}
+
+/* bootstrap col-sm- */
+@media (max-width: 575px)  {
+
+  .classCardSize{
+    max-width: 100%;
+  }
+
+}
