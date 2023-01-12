@@ -26,7 +26,7 @@ const App = () => {
             </div> */}
         
             <section id="home" className="container classDivCenter classHomeSection">
-                <h1 id="home-title" className="classHomeHeader">Hello, I am a Web Developer.</h1>
+                <h1 id="home-title" className="classHomeHeader">Hello, I am a Full Stack Developer.</h1>
                 <p id="home-description" className="classHomeText">Jun Yi Lee</p>
             </section>
         
@@ -205,7 +205,7 @@ const App = () => {
                 <div className="classSkillsContent">
                     <h1 className="classSkillsHeader">Skills</h1>
                     <div className="classSkillsText">
-                        HTML &middot; CSS &middot; JavaScript &middot; Bootstrap &middot; React.js &middot; D3.js &middot; GraphQL &middot; Node.js &middot; Express &middot; MongoDB
+                        HTML &middot; CSS &middot; JavaScript &middot; TypeScript &middot; Python &middot; React.js &middot; GraphQL &middot; Express &middot; MongoDB &middot; PostgreSQL
                     </div>
                     <div className="classSkillsText">
                         Research &middot; Computational Fluid Dynamics &middot; MATLAB
