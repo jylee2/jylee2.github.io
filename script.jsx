@@ -233,9 +233,9 @@ const App = () => {
                     <a href="https://scholar.google.com/citations?user=k6YhcbUAAAAJ&hl=en" target="_blank" >
                         <button className="btn btn-lg btn-block classContactBtn"><i class="fa fa-book" aria-hidden="true"></i> Google Scholar</button>
                     </a>
-                    {/*<a href="https://www.youtube.com/channel/UCgZgJ73743xLn5ZzijlM6_g" target="_blank" >
+                    <a href="https://www.youtube.com/channel/UCgZgJ73743xLn5ZzijlM6_g" target="_blank" >
                         <button className="btn btn-lg btn-block classContactBtn"><i class="fab fa-youtube" aria-hidden="true"></i> YouTube</button>
-                    </a>*/}
+                    </a>
                     <a href="https://jyleeblogging.wordpress.com/" target="_blank" >
                         <button className="btn btn-lg btn-block classContactBtn"><i class="fa fa-bold" aria-hidden="true"></i> Blog</button>
                     </a>
