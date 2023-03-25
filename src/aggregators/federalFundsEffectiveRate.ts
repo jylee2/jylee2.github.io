@@ -1,14 +1,15 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const jsonResponse = require("../data/federalFundsEffectiveRate.json")
+import * as jsonResponse from '../data/federalFundsEffectiveRate.json'
 
 export interface FederalFundsEffectiveRate {
   time: number; // unix timestamp
   rate: number;
 }
 
-export const getFederalFundsEffectiveRate = (): FederalFundsEffectiveRate[] => {
+export const getFederalFundsEffectiveRate = (data: any = jsonResponse): FederalFundsEffectiveRate[] => {
+  const rawData = (data as any)["default"]
+
   const aggregatedData: FederalFundsEffectiveRate[] =
-    jsonResponse?.observations?.[0]?.map((observation: any[]) => {
+    rawData?.observations?.[0]?.map((observation: any[]) => {
       return {
         time: observation[0],
         rate: observation[1]
