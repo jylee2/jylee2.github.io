@@ -1,1 +1,1 @@
-### [View My Portfolio](https://jylee.dev/)
+### [Go to the App](https://jylee.dev/)
