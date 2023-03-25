@@ -20,6 +20,7 @@ const MultiLineChart = ({ data, xAxisProps, yAxisProps }: MultiLineChartProps) =
           left: 20,
           bottom: 5,
         }}
+        data-testid='multiLineChart'
       >
         <XAxis {...xAxisProps} />
         <YAxis {...yAxisProps} />

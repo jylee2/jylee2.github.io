@@ -1,4 +1,3 @@
-import MultiLineChart from './components/lineChart';
 import React from 'react'
 import FederalFundsEffectiveRates from './components/federalFundsEffectiveRates';
 import './App.css'

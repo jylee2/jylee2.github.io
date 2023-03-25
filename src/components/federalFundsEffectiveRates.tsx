@@ -1,5 +1,5 @@
 import React from 'react'
-import MultiLineChart from './lineChart';
+import MultiLineChart from './shared/lineChart';
 import { getFederalFundsEffectiveRate } from '../aggregators/federalFundsEffectiveRate';
 import moment from 'moment';
 
