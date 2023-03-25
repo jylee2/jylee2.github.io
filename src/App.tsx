@@ -6,6 +6,10 @@ import M3MoneySupply from './components/m3MoneySupply';
 import TotalDebtToGDP from './components/totalDebtToGDP';
 import GovernmentDebtToGDP from './components/totalGovernmentDebtToGDP';
 import HouseholdDebtToGDP from './components/totalHouseholdDebtToGDP';
+import CorporateDebtToGDP from './components/totalCorporateDebtToGDP';
+import SP500 from './components/S&P500';
+import AverageSalesPriceHousesSold from './components/averageSalesPriceHousesSold';
+import AveragePriceDozenEggs from './components/averagePriceDozenEggs';
 
 const App = () => {
   return (
@@ -17,6 +21,10 @@ const App = () => {
       <TotalDebtToGDP />
       <GovernmentDebtToGDP />
       <HouseholdDebtToGDP />
+      <CorporateDebtToGDP />
+      <SP500 />
+      <AverageSalesPriceHousesSold />
+      <AveragePriceDozenEggs />
     </div>
   )
 }
