@@ -9,10 +9,10 @@ export interface MultiLineChartProps {
 
 const MultiLineChart = ({ data, xAxisProps, yAxisProps }: MultiLineChartProps) => {
   return (
-    // <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="99%" height={200}>
       <LineChart
-        width={500}
-        height={300}
+        // width={500}
+        // height={300}
         data={data}
         margin={{
           top: 5,
@@ -32,7 +32,7 @@ const MultiLineChart = ({ data, xAxisProps, yAxisProps }: MultiLineChartProps) =
           strokeWidth={2}
         />
       </LineChart>
-    // </ResponsiveContainer>
+    </ResponsiveContainer>
   )
 }
 
