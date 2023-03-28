@@ -1,14 +1,14 @@
 import React from 'react'
 import MultiLineChart from './shared/lineChart';
-import { getTotalCreditNonFinancialSector } from '../aggregators/totalCreditNonFinancialSector';
+import { getMedianSalesPriceHousesSold } from '../aggregators/medianSalesPriceHousesSold';
 import moment from 'moment';
 
-const TotalDebtToGDP = () => {
-  const chartData = getTotalCreditNonFinancialSector()
+const MedianSalesPriceHousesSold = () => {
+  const chartData = getMedianSalesPriceHousesSold()
 
   return (
     <div className="card">
-      <p>Total Debt (Government + Household + Corporate) to GDP (USA)</p>
+      <p>Median Sales Price of Houses Sold (USA)</p>
       <MultiLineChart
         data={chartData}
         xAxisProps={{
@@ -20,15 +20,14 @@ const TotalDebtToGDP = () => {
           tickFormatter: (unixTime: number) => moment(unixTime).format("YYYY")
         }}
         yAxisProps={{
-          dataKey: 'pct',
-          domain: [50, 300],
-          name: 'Total Debt to GDP',
+          dataKey: 'thousands',
+          name: 'Median Sales Price of Houses Sold',
           tickLine: false,
         }}
       />
-      <a href="https://fred.stlouisfed.org/series/QUSCAM770A" target="_blank" rel="noreferrer">Reference</a>
+      <a href="https://fred.stlouisfed.org/series/MSPUS" target="_blank" rel="noreferrer">Reference</a>
     </div>
   )
 }
 
-export default TotalDebtToGDP
+export default MedianSalesPriceHousesSold

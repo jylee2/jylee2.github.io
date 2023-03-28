@@ -1,14 +1,14 @@
 import React from 'react'
 import MultiLineChart from './shared/lineChart';
-import { getTotalCreditNonFinancialSector } from '../aggregators/totalCreditNonFinancialSector';
+import { getCrudeOilPricesWTI } from '../aggregators/crudeOilPricesWTI';
 import moment from 'moment';
 
-const TotalDebtToGDP = () => {
-  const chartData = getTotalCreditNonFinancialSector()
+const CrudeOilPricesWTI = () => {
+  const chartData = getCrudeOilPricesWTI()
 
   return (
     <div className="card">
-      <p>Total Debt (Government + Household + Corporate) to GDP (USA)</p>
+      <p>Crude Oil Prices per Barrel: West Texas Intermediate (WTI) - Cushing, Oklahoma</p>
       <MultiLineChart
         data={chartData}
         xAxisProps={{
@@ -20,15 +20,14 @@ const TotalDebtToGDP = () => {
           tickFormatter: (unixTime: number) => moment(unixTime).format("YYYY")
         }}
         yAxisProps={{
-          dataKey: 'pct',
-          domain: [50, 300],
-          name: 'Total Debt to GDP',
+          dataKey: 'dollars',
+          name: 'Commercial Banks',
           tickLine: false,
         }}
       />
-      <a href="https://fred.stlouisfed.org/series/QUSCAM770A" target="_blank" rel="noreferrer">Reference</a>
+      <a href="https://fred.stlouisfed.org/series/DCOILWTICO" target="_blank" rel="noreferrer">Reference</a>
     </div>
   )
 }
 
-export default TotalDebtToGDP
+export default CrudeOilPricesWTI

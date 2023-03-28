@@ -27,3 +27,5 @@ Serve the `dist` folder locally
 ### `nvm use && npm run deploy`
 
 Deploy to production
+
+Add CNAME to the branch
