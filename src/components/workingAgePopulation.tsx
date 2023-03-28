@@ -1,14 +1,14 @@
 import React from 'react'
 import MultiLineChart from './shared/lineChart';
-import { getAverageSalesPriceHousesSold } from '../aggregators/averageSalesPriceHousesSold';
+import { getWorkingAgePopulation } from '../aggregators/workingAgePopulation';
 import moment from 'moment';
 
-const AverageSalesPriceHousesSold = () => {
-  const chartData = getAverageSalesPriceHousesSold()
+const WorkingAgePopulation = () => {
+  const chartData = getWorkingAgePopulation()
 
   return (
     <div className="card">
-      <p>Average Sales Price of Houses Sold (USA)</p>
+      <p>Working Age Population: Aged 15-64 (USA)</p>
       <MultiLineChart
         data={chartData}
         xAxisProps={{
@@ -20,14 +20,15 @@ const AverageSalesPriceHousesSold = () => {
           tickFormatter: (unixTime: number) => moment(unixTime).format("YYYY")
         }}
         yAxisProps={{
-          dataKey: 'thousands',
-          name: 'Average Sales Price of Houses Sold',
+          dataKey: 'millions',
+          domain: [120, 220],
+          name: 'Working Age Population: Aged 15-64',
           tickLine: false,
         }}
       />
-      <a href="https://fred.stlouisfed.org/series/ASPUS" target="_blank" rel="noreferrer">Reference</a>
+      <a href="https://fred.stlouisfed.org/series/LFWA64TTUSM647S" target="_blank" rel="noreferrer">Reference</a>
     </div>
   )
 }
 
-export default AverageSalesPriceHousesSold
+export default WorkingAgePopulation

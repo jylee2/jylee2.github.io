@@ -3,12 +3,15 @@ import React from 'react'
 import FederalFundsEffectiveRates from './components/federalFundsEffectiveRates';
 import CentralBankAssetsToGDP from './components/centralBankAssetsToGDP';
 import M3MoneySupply from './components/m3MoneySupply';
+import CommercialBanks from './components/commercialBanks';
 import TotalDebtToGDP from './components/totalDebtToGDP';
 import GovernmentDebtToGDP from './components/totalGovernmentDebtToGDP';
 import HouseholdDebtToGDP from './components/totalHouseholdDebtToGDP';
 import CorporateDebtToGDP from './components/totalCorporateDebtToGDP';
+import WorkingAgePopulation from './components/workingAgePopulation';
 import SP500 from './components/S&P500';
-import AverageSalesPriceHousesSold from './components/averageSalesPriceHousesSold';
+import MedianSalesPriceHousesSold from './components/medianSalesPriceHousesSold';
+import CrudeOilPricesWTI from './components/crudeOilPricesWTI';
 import AveragePriceDozenEggs from './components/averagePriceDozenEggs';
 
 const App = () => {
@@ -18,12 +21,15 @@ const App = () => {
       <FederalFundsEffectiveRates />
       <CentralBankAssetsToGDP />
       <M3MoneySupply />
+      <CommercialBanks />
       <TotalDebtToGDP />
       <GovernmentDebtToGDP />
       <HouseholdDebtToGDP />
       <CorporateDebtToGDP />
+      <WorkingAgePopulation />
       <SP500 />
-      <AverageSalesPriceHousesSold />
+      <MedianSalesPriceHousesSold />
+      <CrudeOilPricesWTI />
       <AveragePriceDozenEggs />
     </div>
   )
