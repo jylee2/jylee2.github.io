@@ -4,6 +4,8 @@
 
 In the project directory, you can run:
 
+### `nvm use 18`
+
 ### `npm run dev`
 
 Runs the app in the development mode.\
