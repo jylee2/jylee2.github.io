@@ -24,12 +24,12 @@ Launches the test runner.
 
 Builds the app for production to the `dist` folder.
 
-### `npm run predeploy && serve dist`
+### `npm run predeploy && npx serve -s dist`
 
 Serve the `dist` folder locally
 
 ### `nvm use && npm run deploy`
 
-Deploy to production
+Deploy to production, check the Actions workflow.
 
-Add CNAME to the branch
+Copy the CNAME file to the `gh-pages` branch
