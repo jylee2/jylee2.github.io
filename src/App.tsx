@@ -1,5 +1,6 @@
 import './App.css'
 import React from 'react'
+import { Routes, Route, Link } from 'react-router-dom'
 import FederalFundsEffectiveRates from './components/federalFundsEffectiveRates';
 import CentralBankAssetsToGDP from './components/centralBankAssetsToGDP';
 import M3MoneySupply from './components/m3MoneySupply';
@@ -13,24 +14,42 @@ import SP500 from './components/S&P500';
 import MedianSalesPriceHousesSold from './components/medianSalesPriceHousesSold';
 import CrudeOilPricesWTI from './components/crudeOilPricesWTI';
 import AveragePriceDozenEggs from './components/averagePriceDozenEggs';
+import Quiz from './components/Quiz';
 
 const App = () => {
   return (
     <div className="App">
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Dashboard</Link>
+          </li>
+          <li>
+            <Link to="/quiz">Rust Quiz</Link>
+          </li>
+        </ul>
+      </nav>
       <h1>Jun&apos;s Dashboard</h1>
-      <FederalFundsEffectiveRates />
-      <CentralBankAssetsToGDP />
-      <M3MoneySupply />
-      <CommercialBanks />
-      <TotalDebtToGDP />
-      <GovernmentDebtToGDP />
-      <HouseholdDebtToGDP />
-      <CorporateDebtToGDP />
-      <WorkingAgePopulation />
-      <SP500 />
-      <MedianSalesPriceHousesSold />
-      <CrudeOilPricesWTI />
-      <AveragePriceDozenEggs />
+      <Routes>
+        <Route path="/" element={
+          <>
+            <FederalFundsEffectiveRates />
+            <CentralBankAssetsToGDP />
+            <M3MoneySupply />
+            <CommercialBanks />
+            <TotalDebtToGDP />
+            <GovernmentDebtToGDP />
+            <HouseholdDebtToGDP />
+            <CorporateDebtToGDP />
+            <WorkingAgePopulation />
+            <SP500 />
+            <MedianSalesPriceHousesSold />
+            <CrudeOilPricesWTI />
+            <AveragePriceDozenEggs />
+          </>
+        } />
+        <Route path="/quiz" element={<Quiz />} />
+      </Routes>
     </div>
   )
 }

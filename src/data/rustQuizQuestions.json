@@ -1,0 +1,255 @@
+[
+  {
+    "id": 1,
+    "question": "What is Rust primarily known for?",
+    "options": [
+      "Web development (frontend)",
+      "System programming (performance and safety)",
+      "Mobile app development (iOS/Android)",
+      "Data science and machine learning"
+    ],
+    "answer": "System programming (performance and safety)"
+  },
+  {
+    "id": 2,
+    "question": "Which of the following is NOT a core principle of Rust?",
+    "options": [
+      "Memory safety",
+      "Concurrency",
+      "Garbage collection",
+      "Performance"
+    ],
+    "answer": "Garbage collection"
+  },
+  {
+    "id": 3,
+    "question": "What is 'ownership' in Rust?",
+    "options": [
+      "A way to manage object-oriented inheritance",
+      "A system for managing memory without a garbage collector",
+      "A method for defining user permissions",
+      "A feature for defining data structures"
+    ],
+    "answer": "A system for managing memory without a garbage collector"
+  },
+  {
+    "id": 4,
+    "question": "What is a 'borrow' in Rust?",
+    "options": [
+      "Creating a copy of data",
+      "Gaining temporary access to data without taking ownership",
+      "Moving data from one variable to another",
+      "Allocating new memory on the heap"
+    ],
+    "answer": "Gaining temporary access to data without taking ownership"
+  },
+  {
+    "id": 5,
+    "question": "Which keyword is used to declare an immutable variable in Rust?",
+    "options": [
+      "var",
+      "let",
+      "const",
+      "static"
+    ],
+    "answer": "let"
+  },
+  {
+    "id": 6,
+    "question": "Which keyword is used to declare a mutable variable in Rust?",
+    "options": [
+      "mut",
+      "var",
+      "mutable",
+      "change"
+    ],
+    "answer": "mut"
+  },
+  {
+    "id": 7,
+    "question": "What is the purpose of 'Cargo' in Rust?",
+    "options": [
+      "A web framework",
+      "The Rust compiler",
+      "Rust's build system and package manager",
+      "A graphical user interface library"
+    ],
+    "answer": "Rust's build system and package manager"
+  },
+  {
+    "id": 8,
+    "question": "What is a 'slice' in Rust?",
+    "options": [
+      "A fixed-size array",
+      "A reference to a contiguous sequence of elements in a collection",
+      "A data structure for key-value pairs",
+      "A type of smart pointer"
+    ],
+    "answer": "A reference to a contiguous sequence of elements in a collection"
+  },
+  {
+    "id": 9,
+    "question": "What does 'Result<T, E>' represent in Rust?",
+    "options": [
+      "A way to handle asynchronous operations",
+      "A type for representing success (T) or failure (E)",
+      "A generic data structure for lists",
+      "A mechanism for defining traits"
+    ],
+    "answer": "A type for representing success (T) or failure (E)"
+  },
+  {
+    "id": 10,
+    "question": "What is 'Option<T>' used for in Rust?",
+    "options": [
+      "To represent a boolean value",
+      "To indicate the presence (Some(T)) or absence (None) of a value",
+      "To store multiple possible values",
+      "To define optional function arguments"
+    ],
+    "answer": "To indicate the presence (Some(T)) or absence (None) of a value"
+  },
+  {
+    "id": 11,
+    "question": "What is a 'trait' in Rust?",
+    "options": [
+      "A concrete implementation of an interface",
+      "A way to share behavior across different types",
+      "A mechanism for defining macros",
+      "A type alias for complex types"
+    ],
+    "answer": "A way to share behavior across different types"
+  },
+  {
+    "id": 12,
+    "question": "What is the 'match' control flow operator used for?",
+    "options": [
+      "Looping through collections",
+      "Conditional execution based on pattern matching",
+      "Defining functions",
+      "Handling errors exclusively"
+    ],
+    "answer": "Conditional execution based on pattern matching"
+  },
+  {
+    "id": 13,
+    "question": "What is the 'macro!' syntax used for in Rust?",
+    "options": [
+      "Defining asynchronous functions",
+      "Creating compile-time code generation",
+      "Declaring modules",
+      "Importing external crates"
+    ],
+    "answer": "Creating compile-time code generation"
+  },
+  {
+    "id": 14,
+    "question": "Which of these is a valid way to create a new, empty vector in Rust?",
+    "options": [
+      "let v = Vec::new();",
+      "let v = vec![];",
+      "let v = Vector::new();",
+      "let v = new Vec();"
+    ],
+    "answer": "let v = Vec::new();"
+  },
+  {
+    "id": 15,
+    "question": "What is the purpose of the 'mod' keyword in Rust?",
+    "options": [
+      "To define a function",
+      "To declare a new variable",
+      "To organize code into modules",
+      "To import external libraries"
+    ],
+    "answer": "To organize code into modules"
+  },
+  {
+    "id": 16,
+    "question": "How do you handle errors in Rust?",
+    "options": [
+      "Using try-catch blocks",
+      "With `panic!` for recoverable errors",
+      "Primarily with `Result<T, E>` and `Option<T>`",
+      "By ignoring them and letting the program crash"
+    ],
+    "answer": "Primarily with `Result<T, E>` and `Option<T>`"
+  },
+  {
+    "id": 17,
+    "question": "What is a 'closure' in Rust?",
+    "options": [
+      "A type of loop",
+      "An anonymous function that can capture its environment",
+      "A data structure for linked lists",
+      "A way to define interfaces"
+    ],
+    "answer": "An anonymous function that can capture its environment"
+  },
+  {
+    "id": 18,
+    "question": "What does ' lifetimes' in Rust ensure?",
+    "options": [
+      "How long a program runs",
+      "That references are always valid",
+      "The order of function execution",
+      "The size of data structures"
+    ],
+    "answer": "That references are always valid"
+  },
+  {
+    "id": 19,
+    "question": "What is 'unsafe' Rust?",
+    "options": [
+      "Code that is guaranteed to be buggy",
+      "A block of code where the compiler cannot guarantee memory safety",
+      "Deprecated syntax",
+      "A feature for interacting with JavaScript"
+    ],
+    "answer": "A block of code where the compiler cannot guarantee memory safety"
+  },
+  {
+    "id": 20,
+    "question": "Which command compiles a Rust program?",
+    "options": [
+      "rust run",
+      "cargo build",
+      "rustc run",
+      "cargo execute"
+    ],
+    "answer": "cargo build"
+  },
+  {
+    "id": 21,
+    "question": "What is the default behavior of `clone()` in Rust for most types?",
+    "options": [
+      "Performs a shallow copy",
+      "Performs a deep copy",
+      "Moves ownership",
+      "Borrows a reference"
+    ],
+    "answer": "Performs a deep copy"
+  },
+  {
+    "id": 22,
+    "question": "What is the primary use case for `Arc<T>` and `Mutex<T>` in Rust?",
+    "options": [
+      "File I/O operations",
+      "Network programming",
+      "Concurrent shared state management",
+      "Database interactions"
+    ],
+    "answer": "Concurrent shared state management"
+  },
+  {
+    "id": 23,
+    "question": "Which of the following traits allows a type to be converted into an iterator?",
+    "options": [
+      "Convert",
+      "Iterator",
+      "IntoIterator",
+      "Enumerable"
+    ],
+    "answer": "IntoIterator"
+  }
+]
