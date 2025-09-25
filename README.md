@@ -1,10 +1,12 @@
 # [View the App](https://jylee.dev/)
 
-## Available Scripts
+## Getting started
 
 In the project directory, you can run:
 
 ### `nvm use 18`
+
+### `npm i`
 
 ### `npm run dev`
 
