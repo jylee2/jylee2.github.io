@@ -1,6 +1,6 @@
 import './App.css'
 import React from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import FederalFundsEffectiveRates from './components/federalFundsEffectiveRates';
 import CentralBankAssetsToGDP from './components/centralBankAssetsToGDP';
 import M3MoneySupply from './components/m3MoneySupply';
@@ -19,20 +19,11 @@ import Quiz from './components/Quiz';
 const App = () => {
   return (
     <div className="App">
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Dashboard</Link>
-          </li>
-          <li>
-            <Link to="/quiz">Rust Quiz</Link>
-          </li>
-        </ul>
-      </nav>
-      <h1>Jun&apos;s Dashboard</h1>
+      
       <Routes>
         <Route path="/" element={
           <>
+            <h1>Jun&apos;s Dashboard</h1>
             <FederalFundsEffectiveRates />
             <CentralBankAssetsToGDP />
             <M3MoneySupply />
