@@ -1,161 +1,184 @@
 {
   "status": "true",
-  "chart_series": [
-    {
-      "type": "time-series",
-      "line_index": 1,
-      "legendIndex": 1,
-      "title": "Central Bank Assets to GDP for United States",
-      "hide_marks": true,
-      "available_formula_transformations": {
-        "lin": { "full": "", "short": "" },
-        "chg": { "full": "Change", "short": "Chg." },
-        "ch1": { "full": "Change from Year Ago", "short": "Chg. from Yr. Ago" },
-        "pch": { "full": "Percent Change", "short": "% Chg." },
-        "pc1": {
-          "full": "Percent Change from Year Ago",
-          "short": "% Chg. from Yr. Ago"
-        },
-        "pca": {
-          "full": "Compounded Annual Rate of Change",
-          "short": "Comp. Annual Rate of Chg."
-        },
-        "cch": {
-          "full": "Continuously Compounded Rate of Change",
-          "short": "Cont. Comp. Rate of Chg."
-        },
-        "cca": {
-          "full": "Continuously Compounded Annual Rate of Change",
-          "short": "Cont. Comp. Annual Rate of Chg."
-        },
-        "log": { "full": "Natural Log", "short": "Log" },
-        "nbd": {
-          "full": "Index (Scale value to 100 for chosen period)",
-          "short": "Index"
-        }
+  "chart_series": [{
+    "type": "time-series",
+    "line_index": 1,
+    "legendIndex": 1,
+    "title": "Central Bank Assets to GDP for United States",
+    "available_formula_transformations": {
+      "lin": {
+        "full": "",
+        "short": ""
       },
-      "line_color": "#4572a7",
-      "line_style": "solid",
-      "lw": 2,
-      "mark_type": "none",
-      "mw": 3,
-      "scale": "left",
-      "decimal_places": 5,
-      "frequency": "Annual",
-      "fq": "Annual",
-      "available_colors": {
-        "1": "#4572A7",
-        "2": "#AA4643",
-        "3": "#89A54E",
-        "4": "#80699B",
-        "5": "#3D96AE",
-        "6": "#DB843D",
-        "7": "#92A8CD",
-        "8": "#A47D7C",
-        "9": "#B5CA92",
-        "10": "#91e8e1",
-        "11": "#8d4653",
-        "12": "#8085e8"
+      "chg": {
+        "full": "Change",
+        "short": "Chg."
       },
-      "available_fams": {
-        "Average": "avg",
-        "Sum": "sum",
-        "End of Period": "eop"
+      "ch1": {
+        "full": "Change from Year Ago",
+        "short": "Chg. from Yr. Ago"
       },
-      "fam": "avg",
-      "available_fqs": ["Annual"],
-      "fml": "a",
-      "fgst": "lin",
-      "fgsnd": "2020-01-01",
-      "all_fred_series_have_same_frequency": true,
-      "has_fred_series_with_nbd_transformation": false,
-      "cosd": "1960-01-01",
-      "coed": "2020-01-01",
-      "min_date": "1960-01-01",
-      "max_date": "2020-01-01",
-      "year_range": 60,
-      "ost": -99999,
-      "oet": 99999,
-      "available_mmas": [0, 1, 2],
-      "mma": 0,
-      "graph_series_ids": ["DDDI06USA156NWDB"],
-      "series_objects": {
-        "a": {
-          "series_id": "DDDI06USA156NWDB",
-          "title": "Central Bank Assets to GDP for United States",
-          "season": "Not Seasonally Adjusted",
-          "season_short": "NSA",
-          "frequency": "Annual",
-          "frequency_short": "A",
-          "units": "Percent",
-          "units_short": "%",
-          "keywords": "   ",
-          "notes": "Ratio of central bank assets to GDP. Central bank assets are claims on domestic real nonfinancial sector by the Central Bank.\n\nClaims on domestic real nonfinancial sector by the Central Bank as a share of GDP, calculated using the following deflation method: {(0.5)*[Ft/P_et + Ft-1/P_et-1]}/[GDPt/P_at] where F is Central Bank claims, P_e is end-of period CPI, and P_a is average annual CPI. Raw data are from the electronic version of the IMF's International Financial Statistics. Central Bank claims (IFS lines 12, a-d); GDP in local currency (IFS line 99B..ZF or, if not available, line 99B.CZF); end-of period CPI (IFS line 64M..ZF or, if not available, 64Q..ZF); and annual CPI (IFS line 64..ZF). (International Monetary Fund, International Financial Statistics, and World Bank GDP estimates)\n\nSource Code: GFDD.DI.06",
-          "all_obs_transformations": {
-            "lin": "Percent",
-            "cap": "Percent per Capita",
-            "chg": "Change, Percent",
-            "ch1": "Change from Year Ago, Percent",
-            "pch": "Percent Change",
-            "pc1": "Percent Change from Year Ago",
-            "pca": "Compounded Annual Rate of Change",
-            "cch": "Continuously Compounded Rate of Change",
-            "cca": "Continuously Compounded Annual Rate of Change"
-          },
-          "abbreviated_all_obs_transformations": {
-            "lin": "Levels",
-            "cap": "Levels per Capita",
-            "chg": "Chg.",
-            "ch1": "Chg. from Yr. Ago",
-            "pch": "% Chg.",
-            "pc1": "% Chg. from Yr. Ago",
-            "pca": "Comp. Annual Rate of Chg.",
-            "cch": "Cont. Comp. Rate of Chg.",
-            "cca": "Cont. Comp. Annual Rate of Chg.",
-            "log": "Log"
-          },
-          "obs_transformations": {
-            "lin": "Percent",
-            "chg": "Change, Percent",
-            "ch1": "Change from Year Ago, Percent",
-            "pch": "Percent Change",
-            "pc1": "Percent Change from Year Ago",
-            "pca": "Compounded Annual Rate of Change",
-            "cch": "Continuously Compounded Rate of Change",
-            "cca": "Continuously Compounded Annual Rate of Change"
-          },
-          "valid_start_date": "2022-03-23",
-          "valid_end_date": "2022-03-23",
-          "vintage_date": "2022-03-23",
-          "available_revision_dates": ["2022-03-23"],
-          "revision_date": "2022-03-23",
-          "relative_vintage": null,
-          "nd": "1960-01-01",
-          "step_line": "f",
-          "transformation": "lin",
-          "available_units": {
-            "lin": "Percent",
-            "chg": "Change, Percent",
-            "ch1": "Change from Year Ago, Percent",
-            "pch": "Percent Change",
-            "pc1": "Percent Change from Year Ago",
-            "pca": "Compounded Annual Rate of Change",
-            "cch": "Continuously Compounded Rate of Change",
-            "cca": "Continuously Compounded Annual Rate of Change"
-          },
-          "min_valid_start_date": "2022-03-23",
-          "max_valid_start_date": null,
-          "min_obs_start_date": "1960-01-01",
-          "max_obs_start_date": "2020-01-01",
-          "last_updated": "2022-03-23 16:22:04-05"
-        }
+      "pch": {
+        "full": "Percent Change",
+        "short": "% Chg."
       },
-      "lsv": null,
-      "lev": null,
-      "observation_grouping_approximation": "close",
-      "chart_key": "3ef9ed2c1361dc0525985904b4b8fb5b"
-    }
-  ],
+      "pc1": {
+        "full": "Percent Change from Year Ago",
+        "short": "% Chg. from Yr. Ago"
+      },
+      "pca": {
+        "full": "Compounded Annual Rate of Change",
+        "short": "Comp. Annual Rate of Chg."
+      },
+      "cch": {
+        "full": "Continuously Compounded Rate of Change",
+        "short": "Cont. Comp. Rate of Chg."
+      },
+      "cca": {
+        "full": "Continuously Compounded Annual Rate of Change",
+        "short": "Cont. Comp. Annual Rate of Chg."
+      },
+      "log": {
+        "full": "Natural Log",
+        "short": "Log"
+      },
+      "nbd": {
+        "full": "Index (Scale value to 100 for chosen period)",
+        "short": "Index"
+      }
+    },
+    "line_color": "#0073e6",
+    "line_style": "solid",
+    "lw": 3,
+    "mark_type": "none",
+    "hide_marks": true,
+    "mw": 3,
+    "scale": "left",
+    "decimal_places": 5,
+    "frequency": "Annual",
+    "fq": "Annual",
+    "available_colors": {
+      "1": "#0073E6",
+      "2": "#10847C",
+      "3": "#BD5B00",
+      "4": "#3E00FB",
+      "5": "#DF0F76",
+      "6": "#F42100",
+      "7": "#A45800",
+      "8": "#B88A00",
+      "9": "#019121",
+      "10": "#008B9E",
+      "11": "#ED04DE",
+      "12": "#04ED32"
+    },
+    "available_fams": {
+      "Average": "avg",
+      "Sum": "sum",
+      "End of Period": "eop"
+    },
+    "fam": "avg",
+    "available_fqs": [
+      "Annual"
+    ],
+    "fml": "a",
+    "fgst": "lin",
+    "fgsnd": "2020-02-01",
+    "all_fred_series_have_same_frequency": true,
+    "has_fred_series_with_nbd_transformation": false,
+    "cosd": "1960-01-01",
+    "coed": "2021-01-01",
+    "min_date": "1960-01-01",
+    "max_date": "2021-01-01",
+    "year_range": 61,
+    "ost": -99999,
+    "oet": 99999,
+    "available_mmas": [
+      0,
+      1,
+      2
+    ],
+    "mma": 0,
+    "graph_series_ids": [
+      "DDDI06USA156NWDB"
+    ],
+    "series_objects": {
+      "a": {
+        "series_id": "DDDI06USA156NWDB",
+        "title": "Central Bank Assets to GDP for United States",
+        "season": "Not Seasonally Adjusted",
+        "season_short": "NSA",
+        "frequency": "Annual",
+        "frequency_short": "A",
+        "units_short": "%",
+        "keywords": "   ",
+        "notes": "Ratio of central bank assets to GDP. Central bank assets are claims on domestic real nonfinancial sector by the Central Bank.\n\nClaims on domestic real nonfinancial sector by the Central Bank as a share of GDP, calculated using the following deflation method: {(0.5)*[Ft\/P_et + Ft-1\/P_et-1]}\/[GDPt\/P_at] where F is Central Bank claims, P_e is end-of period CPI, and P_a is average annual CPI. Raw data are from the electronic version of the IMF's International Financial Statistics. Central Bank claims (IFS lines 12, a-d); GDP in local currency (IFS line 99B..ZF or, if not available, line 99B.CZF); end-of period CPI (IFS line 64M..ZF or, if not available, 64Q..ZF); and annual CPI (IFS line 64..ZF). (International Monetary Fund, International Financial Statistics, and World Bank GDP estimates)\n\nSource Code: GFDD.DI.06",
+        "all_obs_transformations": {
+          "lin": "Percent",
+          "cap": "Percent per Capita",
+          "chg": "Change, Percent",
+          "ch1": "Change from Year Ago, Percent",
+          "pch": "Percent Change",
+          "pc1": "Percent Change from Year Ago",
+          "pca": "Compounded Annual Rate of Change",
+          "cch": "Continuously Compounded Rate of Change",
+          "cca": "Continuously Compounded Annual Rate of Change"
+        },
+        "abbreviated_all_obs_transformations": {
+          "lin": "Levels",
+          "cap": "Levels per Capita",
+          "chg": "Chg.",
+          "ch1": "Chg. from Yr. Ago",
+          "pch": "% Chg.",
+          "pc1": "% Chg. from Yr. Ago",
+          "pca": "Comp. Annual Rate of Chg.",
+          "cch": "Cont. Comp. Rate of Chg.",
+          "cca": "Cont. Comp. Annual Rate of Chg.",
+          "log": "Log"
+        },
+        "obs_transformations": {
+          "lin": "Percent",
+          "chg": "Change, Percent",
+          "ch1": "Change from Year Ago, Percent",
+          "pch": "Percent Change",
+          "pc1": "Percent Change from Year Ago",
+          "pca": "Compounded Annual Rate of Change",
+          "cch": "Continuously Compounded Rate of Change",
+          "cca": "Continuously Compounded Annual Rate of Change"
+        },
+        "valid_start_date": "2025-02-04",
+        "valid_end_date": "2025-02-04",
+        "vintage_date": "2025-02-04",
+        "available_revision_dates": [
+          "2025-02-04"
+        ],
+        "revision_date": "2025-02-04",
+        "relative_vintage": null,
+        "nd": "1960-01-01",
+        "step_line": "f",
+        "transformation": "lin",
+        "available_units": {
+          "lin": "Percent",
+          "chg": "Change, Percent",
+          "ch1": "Change from Year Ago, Percent",
+          "pch": "Percent Change",
+          "pc1": "Percent Change from Year Ago",
+          "pca": "Compounded Annual Rate of Change",
+          "cch": "Continuously Compounded Rate of Change",
+          "cca": "Continuously Compounded Annual Rate of Change"
+        },
+        "units": "Percent",
+        "min_valid_start_date": "2024-04-23",
+        "max_valid_start_date": null,
+        "min_obs_start_date": "1960-01-01",
+        "max_obs_start_date": "2021-01-01",
+        "last_updated": "2024-05-07 15:28:03-05"
+      }
+    },
+    "lsv": null,
+    "lev": null,
+    "observation_grouping_approximation": "close",
+    "chart_key": "3ef9ed2c1361dc0525985904b4b8fb5b"
+  }],
   "chart": {
     "labels": {
       "title": "Central Bank Assets to GDP for United States",
@@ -164,14 +187,14 @@
       "right_axis": "",
       "bottom_axis": "",
       "bubble-size_axis": "",
-      "footer": "2022 fred.stlouisfed.org"
+      "footer": "2025 fred.stlouisfed.org"
     },
     "cosd": "1960-01-01",
-    "coed": "2020-01-01",
+    "coed": "2021-01-01",
     "min_date": "1960-01-01",
-    "max_date": "2020-01-01",
+    "max_date": "2021-01-01",
     "frequency": "Annual",
-    "width": "318",
+    "width": "1320",
     "height": 450,
     "drp": 0,
     "stacking": null,
@@ -184,7 +207,7 @@
     "trc": 0,
     "nt": 0,
     "thu": 0,
-    "bgcolor": "#e1e9f0",
+    "bgcolor": "#ebf3fb",
     "graph_bgcolor": "#ffffff",
     "showLegend": "yes",
     "showAxisTitles": "yes",
@@ -207,17 +230,19 @@
       "bottom": false,
       "bubble-size": false
     },
-    "available_stacking": ["normal", "percent"],
-    "legacy_url": "bgcolor=%23e1e9f0&chart_type=line&drp=0&fo=open%20sans&graph_bgcolor=%23ffffff&height=450&mode=fred&recession_bars=on&txtcolor=%23444444&ts=12&tts=12&width=1168&nt=0&thu=0&trc=0&show_legend=yes&show_axis_titles=yes&show_tooltip=yes&id=DDDI06USA156NWDB&scale=left&cosd=1960-01-01&coed=2020-01-01&line_color=%234572a7&link_values=false&line_style=solid&mark_type=none&mw=3&lw=2&ost=-99999&oet=99999&mma=0&fml=a&fq=Annual&fam=avg&fgst=lin&fgsnd=2020-01-01&line_index=1&transformation=lin&vintage_date=2022-03-23&revision_date=2022-03-23&nd=1960-01-01",
+    "available_stacking": [
+      "normal",
+      "percent"
+    ],
+    "legacy_url": "bgcolor=%23ebf3fb&chart_type=line&drp=0&fo=open%20sans&graph_bgcolor=%23ffffff&height=450&mode=fred&recession_bars=on&txtcolor=%23444444&ts=12&tts=12&width=1320&nt=0&thu=0&trc=0&show_legend=yes&show_axis_titles=yes&show_tooltip=yes&id=DDDI06USA156NWDB&scale=left&cosd=1960-01-01&coed=2021-01-01&line_color=%230073e6&link_values=false&line_style=solid&mark_type=none&mw=3&lw=3&ost=-99999&oet=99999&mma=0&fml=a&fq=Annual&fam=avg&fgst=lin&fgsnd=2020-02-01&line_index=1&transformation=lin&vintage_date=2025-02-04&revision_date=2025-02-04&nd=1960-01-01",
     "piedate": null,
-    "lastModified": "Wed, 23 Mar 2022 21:22:04 GMT",
+    "lastModified": "Tue, 07 May 2024 20:28:03 GMT",
     "obsFetch": true,
     "data_min": -315597600000,
-    "data_max": 1577858400000,
-    "data_num_obs": 61
+    "data_max": 1609480800000,
+    "data_num_obs": 62
   },
-  "recession_data": [
-    {
+  "recession_data": [{
       "start": -3552832800,
       "end": -3505485600,
       "start_date": "1857-06-01",
@@ -425,67 +450,254 @@
   "user_notices": [],
   "observations": [
     [
-      [-315597600000, 4.966685],
-      [-283975200000, 5.098882],
-      [-252439200000, 5.036854],
-      [-220903200000, 5.258691000000001],
-      [-189367200000, 5.323126],
-      [-157744800000, 5.442786],
-      [-126208800000, 5.3564419999999995],
-      [-94672800000, 5.684113],
-      [-63136800000, 5.616658],
-      [-31514400000, 5.603883000000001],
-      [21600000, 5.696619999999999],
-      [31557600000, 5.920591],
-      [63093600000, 5.457544],
-      [94716000000, 5.504372],
-      [126252000000, 5.1809330000000005],
-      [157788000000, 5.146703],
-      [189324000000, 4.97851],
-      [220946400000, 4.847571],
-      [252482400000, 4.6554709999999995],
-      [284018400000, 4.426198],
-      [315554400000, 4.175225],
-      [347176800000, 3.983047],
-      [378712800000, 4.055489],
-      [410248800000, 4.142994],
-      [441784800000, 3.9434940000000003],
-      [473407200000, 4.0976919999999994],
-      [504943200000, 4.315304],
-      [536479200000, 4.508677],
-      [568015200000, 4.462232],
-      [599637600000, 4.019707],
-      [631173600000, 3.942383],
-      [662709600000, 4.327386],
-      [694245600000, 4.524481],
-      [725868000000, 4.840886],
-      [757404000000, 5.002157],
-      [788940000000, 4.950385],
-      [820476000000, 4.84208],
-      [852098400000, 5.0216650000000005],
-      [883634400000, 4.988967],
-      [915170400000, 4.962929],
-      [946706400000, 4.991082],
-      [978328800000, 5.2134220000000004],
-      [1009864800000, 5.755137],
-      [1041400800000, 5.818213],
-      [1072936800000, 5.877149],
-      [1104559200000, 5.708641],
-      [1136095200000, 5.638342],
-      [1167631200000, 5.124676999999999],
-      [1199167200000, 3.235373],
-      [1230789600000, 5.410703],
-      [1262325600000, 6.812253999999999],
-      [1293861600000, 10.79157],
-      [1325397600000, 10.26196],
-      [1357020000000, 13.190610000000001],
-      [1388556000000, 14.073020000000001],
-      [1420092000000, 13.52511],
-      [1451628000000, 13.170379999999998],
-      [1483250400000, 12.584660000000001],
-      [1514786400000, 10.896230000000001],
-      [1546322400000, 10.88993],
-      [1577858400000, 22.42064]
+      [
+        -315597600000,
+        4.975091
+      ],
+      [
+        -283975200000,
+        5.108766999999999
+      ],
+      [
+        -252439200000,
+        5.046679
+      ],
+      [
+        -220903200000,
+        5.268161
+      ],
+      [
+        -189367200000,
+        5.333532
+      ],
+      [
+        -157744800000,
+        5.453125
+      ],
+      [
+        -126208800000,
+        5.366886
+      ],
+      [
+        -94672800000,
+        5.695641
+      ],
+      [
+        -63136800000,
+        5.627722
+      ],
+      [
+        -31514400000,
+        5.616438
+      ],
+      [
+        21600000,
+        5.696583
+      ],
+      [
+        31557600000,
+        5.920591
+      ],
+      [
+        63093600000,
+        5.457544
+      ],
+      [
+        94716000000,
+        5.504357
+      ],
+      [
+        126252000000,
+        5.180943
+      ],
+      [
+        157788000000,
+        5.146684
+      ],
+      [
+        189324000000,
+        4.978515
+      ],
+      [
+        220946400000,
+        4.847562
+      ],
+      [
+        252482400000,
+        4.655469
+      ],
+      [
+        284018400000,
+        4.426205
+      ],
+      [
+        315554400000,
+        4.1752199999999995
+      ],
+      [
+        347176800000,
+        3.98305
+      ],
+      [
+        378712800000,
+        4.0554879999999995
+      ],
+      [
+        410248800000,
+        4.142992
+      ],
+      [
+        441784800000,
+        3.943496
+      ],
+      [
+        473407200000,
+        4.0976919999999994
+      ],
+      [
+        504943200000,
+        4.315305
+      ],
+      [
+        536479200000,
+        4.508673
+      ],
+      [
+        568015200000,
+        4.46223
+      ],
+      [
+        599637600000,
+        4.019707
+      ],
+      [
+        631173600000,
+        3.942386
+      ],
+      [
+        662709600000,
+        4.327385
+      ],
+      [
+        694245600000,
+        4.524479
+      ],
+      [
+        725868000000,
+        4.840885
+      ],
+      [
+        757404000000,
+        5.002154
+      ],
+      [
+        788940000000,
+        4.950384
+      ],
+      [
+        820476000000,
+        4.842080999999999
+      ],
+      [
+        852098400000,
+        5.021667
+      ],
+      [
+        883634400000,
+        4.9889660000000005
+      ],
+      [
+        915170400000,
+        4.962668
+      ],
+      [
+        946706400000,
+        4.9917370000000005
+      ],
+      [
+        978328800000,
+        5.213383
+      ],
+      [
+        1009864800000,
+        5.758992
+      ],
+      [
+        1041400800000,
+        5.8191489999999995
+      ],
+      [
+        1072936800000,
+        5.875479
+      ],
+      [
+        1104559200000,
+        5.70752
+      ],
+      [
+        1136095200000,
+        5.637938
+      ],
+      [
+        1167631200000,
+        5.116766
+      ],
+      [
+        1199167200000,
+        3.222865
+      ],
+      [
+        1230789600000,
+        5.39979
+      ],
+      [
+        1262325600000,
+        6.786497
+      ],
+      [
+        1293861600000,
+        10.75207
+      ],
+      [
+        1325397600000,
+        10.22598
+      ],
+      [
+        1357020000000,
+        13.14495
+      ],
+      [
+        1388556000000,
+        14.05425
+      ],
+      [
+        1420092000000,
+        13.5491
+      ],
+      [
+        1451628000000,
+        13.2056
+      ],
+      [
+        1483250400000,
+        12.62562
+      ],
+      [
+        1514786400000,
+        10.941189999999999
+      ],
+      [
+        1546322400000,
+        10.9208
+      ],
+      [
+        1577858400000,
+        22.46667
+      ],
+      [
+        1609480800000,
+        24.60187
+      ]
     ]
   ]
 }
