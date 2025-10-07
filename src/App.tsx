@@ -11,6 +11,7 @@ import HouseholdDebtToGDP from './components/totalHouseholdDebtToGDP';
 import CorporateDebtToGDP from './components/totalCorporateDebtToGDP';
 import WorkingAgePopulation from './components/workingAgePopulation';
 import SP500 from './components/S&P500';
+import ExportPriceIndexNonmonetaryGold from './components/exportPriceIndexNonmonetaryGold';
 import MedianSalesPriceHousesSold from './components/medianSalesPriceHousesSold';
 import CrudeOilPricesWTI from './components/crudeOilPricesWTI';
 import AveragePriceDozenEggs from './components/averagePriceDozenEggs';
@@ -35,6 +36,7 @@ const App = () => {
             <WorkingAgePopulation />
             <SP500 />
             <MedianSalesPriceHousesSold />
+            <ExportPriceIndexNonmonetaryGold />
             <CrudeOilPricesWTI />
             <AveragePriceDozenEggs />
           </>
