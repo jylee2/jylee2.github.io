@@ -35,7 +35,7 @@ const Quiz: React.FC = () => {
 
   return (
     <div className="quiz-container">
-      <h2>Android Developer Quiz</h2>
+      <h2>Software Engineer Quiz</h2>
       <p className="question-counter">Question {currentQuestionIndex + 1} of {questions.length}</p>
       <h3 className="question-text">{currentQuestion.question}</h3>
 
