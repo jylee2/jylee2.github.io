@@ -13,58 +13,103 @@ h2 {
   margin-bottom: 15px;
 }
 
-h3 {
-  color: #555;
+.question-counter {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.question-text {
+  color: #333;
   margin-bottom: 25px;
+  line-height: 1.5;
+  text-align: left;
 }
 
-.options-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.option-button {
+.reveal-button {
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 12px 20px;
+  padding: 14px 28px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.reveal-button:hover {
+  background-color: #0056b3;
+}
+
+.answer-container {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.answer-section {
+  margin-bottom: 20px;
+}
+
+.answer-section h4,
+.example-section h4 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.answer-text {
+  background-color: #e8f5e9;
+  padding: 15px;
+  border-radius: 5px;
+  border-left: 4px solid #28a745;
+  color: #2e7d32;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.example-section {
+  margin-bottom: 10px;
+}
+
+.example-code {
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  padding: 15px;
+  border-radius: 5px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-align: left;
+}
+
+.navigation-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.nav-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 12px 24px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease;
 }
 
-.option-button:hover:not(:disabled) {
-  background-color: #0056b3;
+.nav-button:hover:not(:disabled) {
+  background-color: #545b62;
 }
 
-.option-button:disabled {
-  opacity: 0.7;
+.nav-button:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
-}
-
-.option-button.correct {
-  background-color: #28a745;
-}
-
-.option-button.incorrect {
-  background-color: #dc3545;
-}
-
-.feedback {
-  margin-top: 20px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.correct-feedback {
-  color: #28a745;
-}
-
-.incorrect-feedback {
-  color: #dc3545;
 }
 
 /* Responsive adjustments */
@@ -74,8 +119,9 @@ h3 {
     margin: 10px;
   }
 
-  .option-button {
-    padding: 10px 15px;
+  .reveal-button,
+  .nav-button {
+    padding: 10px 20px;
     font-size: 14px;
   }
 
@@ -83,7 +129,16 @@ h3 {
     font-size: 1.5em;
   }
 
-  h3 {
-    font-size: 1.2em;
+  .question-text {
+    font-size: 1.1em;
+  }
+
+  .example-code {
+    font-size: 12px;
+    padding: 12px;
+  }
+
+  .navigation-container {
+    gap: 10px;
   }
 }
