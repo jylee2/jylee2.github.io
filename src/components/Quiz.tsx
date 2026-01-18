@@ -1,81 +1,77 @@
 import React, { useState } from 'react';
-import questions from '../data/rustQuizQuestions.json';
+import questions from '../data/androidQuizQuestions.json';
 import './Quiz.css';
 
 interface Question {
   id: number;
   question: string;
-  options: string[];
   answer: string;
+  example: string;
 }
 
 const Quiz: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [quizCompleted, setQuizCompleted] = useState(false);
-
-  const handleAnswerClick = (option: string) => {
-    if (quizCompleted) return;
-
-    setSelectedOption(option);
-    const correct = option === questions[currentQuestionIndex].answer;
-    setIsCorrect(correct);
-    setShowFeedback(true);
-
-    if (correct) {
-      setScore(score + 1);
-    }
-
-    setTimeout(() => {
-      setShowFeedback(false);
-      setSelectedOption(null);
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-      } else {
-        setQuizCompleted(true);
-      }
-    }, 1500);
-  };
-
-  if (quizCompleted) {
-    return (
-      <div className="quiz-container">
-        <h2>Quiz Completed!</h2>
-        <p>Your final score is: {score} out of {questions.length}</p>
-      </div>
-    );
-  }
+  const [showAnswer, setShowAnswer] = useState(false);
 
   const currentQuestion: Question = questions[currentQuestionIndex];
 
+  const handleRevealAnswer = () => {
+    setShowAnswer(true);
+  };
+
+  const handlePrevious = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setShowAnswer(false);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setShowAnswer(false);
+    }
+  };
+
   return (
     <div className="quiz-container">
-      <h2>Rust Programming Quiz</h2>
-      <p>Question {currentQuestionIndex + 1} of {questions.length}</p>
-      <h3>{currentQuestion.question}</h3>
-      <div className="options-container">
-        {currentQuestion.options.map((option, index) => (
-          <button
-            key={index}
-            onClick={() => handleAnswerClick(option)}
-            disabled={showFeedback}
-            className={`option-button
-              ${showFeedback && option === currentQuestion.answer ? 'correct' : ''}
-              ${showFeedback && option === selectedOption && !isCorrect ? 'incorrect' : ''}
-            `}
-          >
-            {option}
-          </button>
-        ))}
-      </div>
-      {showFeedback && (
-        <div className={`feedback ${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}`}>
-          {isCorrect ? 'Correct!' : 'Incorrect. The answer was: ' + currentQuestion.answer}
+      <h2>Software Engineer Quiz</h2>
+      <p className="question-counter">Question {currentQuestionIndex + 1} of {questions.length}</p>
+      <h3 className="question-text">{currentQuestion.question}</h3>
+
+      {!showAnswer ? (
+        <button className="reveal-button" onClick={handleRevealAnswer}>
+          Reveal Answer
+        </button>
+      ) : (
+        <div className="answer-container">
+          <div className="answer-section">
+            <h4>Answer:</h4>
+            <p className="answer-text">{currentQuestion.answer}</p>
+          </div>
+          <div className="example-section">
+            <h4>Example:</h4>
+            <pre className="example-code">{currentQuestion.example}</pre>
+          </div>
         </div>
       )}
+
+      <div className="navigation-container">
+        <button
+          className="nav-button"
+          onClick={handlePrevious}
+          disabled={currentQuestionIndex === 0}
+        >
+          Previous
+        </button>
+        <button
+          className="nav-button"
+          onClick={handleNext}
+          disabled={currentQuestionIndex === questions.length - 1}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

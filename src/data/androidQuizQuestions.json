@@ -1,0 +1,332 @@
+[
+  {
+    "id": 1,
+    "question": "In Jetpack Compose, what does `remember` do?",
+    "answer": "Stores a value in composition memory that survives recomposition but not configuration changes",
+    "example": "// remember caches a value during composition\nval count = remember { mutableStateOf(0) }\n\n// Value survives recomposition\n// but is LOST on configuration changes (rotation)\n// For persistence across config changes, use rememberSaveable"
+  },
+  {
+    "id": 2,
+    "question": "What is the difference between `remember` and `rememberSaveable` in Jetpack Compose?",
+    "answer": "`rememberSaveable` survives configuration changes and process death by using the saved instance state mechanism, while `remember` only survives recomposition",
+    "example": "// Lost on rotation:\nvar text by remember { mutableStateOf(\"\") }\n\n// Survives rotation and process death:\nvar text by rememberSaveable { mutableStateOf(\"\") }\n\n// Custom object with Saver:\nval user by rememberSaveable(stateSaver = UserSaver) {\n    mutableStateOf(User())\n}"
+  },
+  {
+    "id": 3,
+    "question": "What is state hoisting in Jetpack Compose?",
+    "answer": "A pattern where state is moved to a composable's caller to make the composable stateless, enabling reusability and testability",
+    "example": "// Before hoisting (stateful):\n@Composable\nfun Counter() {\n    var count by remember { mutableStateOf(0) }\n    Button(onClick = { count++ }) { Text(\"$count\") }\n}\n\n// After hoisting (stateless):\n@Composable\nfun Counter(count: Int, onCountChange: (Int) -> Unit) {\n    Button(onClick = { onCountChange(count + 1) }) {\n        Text(\"$count\")\n    }\n}"
+  },
+  {
+    "id": 4,
+    "question": "Why are keys important in `LazyColumn` and `LazyRow`?",
+    "answer": "Keys help Compose identify which items have changed, been added, or removed, enabling efficient recomposition and preserving item state across reorderings",
+    "example": "LazyColumn {\n    items(\n        items = users,\n        key = { user -> user.id }  // Unique identifier\n    ) { user ->\n        UserCard(user)\n    }\n}\n\n// Without keys: positional tracking (buggy reordering)\n// With keys: identity tracking (correct state preservation)"
+  },
+  {
+    "id": 5,
+    "question": "What happens if you don't provide stable keys to `LazyColumn` items?",
+    "answer": "Compose uses positional indices by default, which can cause incorrect state preservation when items are reordered, added, or removed",
+    "example": "// Problem: TextField at index 2 has focus\n// Insert item at index 0\n// Focus incorrectly moves to new item at index 2!\n\n// Without keys:\nitems(users) { UserCard(it) }  // Uses position\n\n// With keys:\nitems(users, key = { it.id }) { UserCard(it) }  // Uses identity"
+  },
+  {
+    "id": 6,
+    "question": "What is recomposition in Jetpack Compose?",
+    "answer": "The process of re-executing composable functions when their inputs change to update the UI, while skipping composables whose inputs haven't changed",
+    "example": "@Composable\nfun Greeting(name: String) {  // Skipped if name unchanged\n    Text(\"Hello, $name\")\n}\n\n@Composable\nfun Parent() {\n    var count by remember { mutableStateOf(0) }\n    Greeting(\"World\")  // Skipped on count change\n    Text(\"Count: $count\")  // Recomposed on count change\n}"
+  },
+  {
+    "id": 7,
+    "question": "What is the purpose of `derivedStateOf` in Jetpack Compose?",
+    "answer": "Creates a State object whose value is computed from other state objects and only updates when the computed result actually changes, reducing unnecessary recompositions",
+    "example": "val listState = rememberLazyListState()\n\n// Without derivedStateOf: recomposes on EVERY scroll\nval showButton = listState.firstVisibleItemIndex > 0\n\n// With derivedStateOf: recomposes only when boolean changes\nval showButton by remember {\n    derivedStateOf { listState.firstVisibleItemIndex > 0 }\n}"
+  },
+  {
+    "id": 8,
+    "question": "What is a side effect in Jetpack Compose?",
+    "answer": "Any change to app state that happens outside the scope of a composable function, such as showing a snackbar, navigating, or writing to a database",
+    "example": "// LaunchedEffect for coroutines:\nLaunchedEffect(key) {\n    snackbarHostState.showSnackbar(message)\n}\n\n// DisposableEffect for cleanup:\nDisposableEffect(lifecycleOwner) {\n    val observer = LifecycleEventObserver { ... }\n    onDispose { lifecycle.removeObserver(observer) }\n}\n\n// SideEffect for non-suspend code:\nSideEffect { analytics.log(screenName) }"
+  },
+  {
+    "id": 9,
+    "question": "When should you use `LaunchedEffect` in Jetpack Compose?",
+    "answer": "When you need to run a suspend function safely within a composable, tied to the composable's lifecycle and restarted when key parameters change",
+    "example": "// Restarts when userId changes:\nLaunchedEffect(userId) {\n    viewModel.loadUser(userId)\n}\n\n// Runs once, never restarts:\nLaunchedEffect(Unit) {\n    viewModel.trackScreenView()\n}\n\n// Cancelled when composable leaves composition"
+  },
+  {
+    "id": 10,
+    "question": "What is `DisposableEffect` used for in Jetpack Compose?",
+    "answer": "For side effects that require cleanup when the composable leaves the composition or when keys change, providing an onDispose callback",
+    "example": "DisposableEffect(lifecycleOwner) {\n    val observer = LifecycleEventObserver { _, event ->\n        if (event == Lifecycle.Event.ON_RESUME) {\n            // Handle resume\n        }\n    }\n    lifecycleOwner.lifecycle.addObserver(observer)\n    \n    onDispose {\n        lifecycleOwner.lifecycle.removeObserver(observer)\n    }\n}"
+  },
+  {
+    "id": 11,
+    "question": "What is the difference between `StateFlow` and `SharedFlow` in Kotlin?",
+    "answer": "`StateFlow` always has a current value and emits only distinct values, while `SharedFlow` can emit duplicate values and doesn't require an initial value",
+    "example": "// StateFlow: has .value, emits only distinct\nprivate val _state = MutableStateFlow(UiState())\nval state: StateFlow<UiState> = _state\nval current = _state.value  // Always available\n\n// SharedFlow: no .value, can emit duplicates\nprivate val _events = MutableSharedFlow<Event>()\nval events: SharedFlow<Event> = _events\n// _events.value  // ERROR: no value property"
+  },
+  {
+    "id": 12,
+    "question": "What is the difference between a cold Flow and a hot Flow?",
+    "answer": "Cold flows execute their producer block on each collection and emit values independently per collector, while hot flows emit values regardless of collectors and share emissions among all collectors",
+    "example": "// Cold Flow: each collector triggers new execution\nval cold = flow {\n    emit(fetchData())  // Called per collector\n}\n\n// Hot Flow: shared among collectors\nval hot: StateFlow<Data> = cold\n    .stateIn(\n        scope = viewModelScope,\n        started = SharingStarted.WhileSubscribed(5000),\n        initialValue = Data()\n    )"
+  },
+  {
+    "id": 13,
+    "question": "What does `flowOn` do in Kotlin Flow?",
+    "answer": "Changes the coroutine context for upstream flow operations (emissions), but does not affect downstream operators or collection",
+    "example": "flow { emit(heavyComputation()) }  // Runs on Default\n    .flowOn(Dispatchers.Default)    // Affects above only\n    .map { transform(it) }          // Runs on collector's context\n    .collect { updateUi(it) }       // Runs on collector's context\n\n// Multiple flowOn: each affects operations above it"
+  },
+  {
+    "id": 14,
+    "question": "What is `collectAsState` used for in Jetpack Compose?",
+    "answer": "Collects values from a Flow and represents its latest value as Compose State, automatically triggering recomposition when new values are emitted",
+    "example": "// For StateFlow (has initial value):\nval uiState by viewModel.uiState.collectAsState()\n\n// For regular Flow (needs initial value):\nval data by viewModel.dataFlow.collectAsState(initial = emptyList())\n\n// Handles lifecycle automatically in Compose"
+  },
+  {
+    "id": 15,
+    "question": "What is structured concurrency in Kotlin coroutines?",
+    "answer": "A paradigm where coroutines are organized in a hierarchy through scopes, ensuring child coroutines complete before their parent and propagating cancellation automatically",
+    "example": "coroutineScope {\n    launch { task1() }  // Child 1\n    launch { task2() }  // Child 2\n}  // Waits for both children\n\n// If task1 fails, task2 is cancelled\n\n// supervisorScope: children fail independently\nsupervisorScope {\n    launch { task1() }  // Failure doesn't affect task2\n    launch { task2() }\n}"
+  },
+  {
+    "id": 16,
+    "question": "What is the difference between `launch` and `async` in Kotlin coroutines?",
+    "answer": "`launch` returns a Job and is fire-and-forget for side effects, while `async` returns a Deferred that can be awaited to get a result value",
+    "example": "// launch: fire-and-forget, returns Job\nlaunch {\n    saveToDb(data)\n}\n\n// async: returns Deferred with result\nval a = async { fetchA() }\nval b = async { fetchB() }\nval result = process(a.await(), b.await())  // Parallel fetch"
+  },
+  {
+    "id": 17,
+    "question": "What happens when you call `await()` on a Deferred that threw an exception?",
+    "answer": "The exception is re-thrown at the await() call site, allowing it to be caught with try-catch",
+    "example": "val deferred = async {\n    throw IOException(\"Network error\")\n}\n\ntry {\n    deferred.await()\n} catch (e: IOException) {\n    handleError(e)\n}\n\n// Note: exception also propagates to parent scope\n// unless using supervisorScope"
+  },
+  {
+    "id": 18,
+    "question": "What is `viewModelScope` in Android?",
+    "answer": "A CoroutineScope tied to a ViewModel's lifecycle that automatically cancels all coroutines when the ViewModel is cleared",
+    "example": "class MyViewModel : ViewModel() {\n    fun loadData() {\n        viewModelScope.launch {\n            val data = repository.fetch()\n            _state.value = data\n        }\n    }\n}\n\n// Uses Dispatchers.Main.immediate by default\n// Automatically cancelled when ViewModel is cleared"
+  },
+  {
+    "id": 19,
+    "question": "What is the difference between `Dispatchers.IO` and `Dispatchers.Default`?",
+    "answer": "`Dispatchers.IO` is optimized for blocking I/O operations with a larger thread pool, while `Dispatchers.Default` is optimized for CPU-intensive work with threads limited to CPU cores",
+    "example": "// Default: CPU-bound (threads = CPU cores)\nwithContext(Dispatchers.Default) {\n    sortLargeList()\n    parseJson()\n}\n\n// IO: blocking operations (up to 64 threads)\nwithContext(Dispatchers.IO) {\n    file.readText()\n    networkCall()\n}"
+  },
+  {
+    "id": 20,
+    "question": "What is `Dispatchers.Main.immediate` and when should you use it?",
+    "answer": "Executes immediately on the main thread if already on it, avoiding unnecessary redispatching; useful for UI updates that may already be on the main thread",
+    "example": "// Dispatchers.Main: always posts to queue\nwithContext(Dispatchers.Main) {\n    textView.text = result  // Queued\n}\n\n// Main.immediate: skips queue if already on main\nwithContext(Dispatchers.Main.immediate) {\n    textView.text = result  // Immediate if on main\n}\n\n// viewModelScope uses Main.immediate by default"
+  },
+  {
+    "id": 21,
+    "question": "What is `SupervisorJob` and when would you use it?",
+    "answer": "A Job where failure of a child doesn't cancel other children or the parent; used when you want independent child coroutines that shouldn't affect each other",
+    "example": "val scope = CoroutineScope(\n    SupervisorJob() + Dispatchers.Main\n)\n\nscope.launch { networkCall1() }  // Failure here\nscope.launch { networkCall2() }  // Continues running\n\n// Or use supervisorScope:\nsupervisorScope {\n    launch { task1() }  // Independent\n    launch { task2() }  // Independent\n}"
+  },
+  {
+    "id": 22,
+    "question": "What is the difference between a foreground service and a background service in Android?",
+    "answer": "A foreground service must show a persistent notification and has higher priority to avoid being killed, while a background service can be killed by the system when resources are low",
+    "example": "// Foreground service:\nclass MusicService : Service() {\n    override fun onStartCommand(...): Int {\n        val notification = buildNotification()\n        startForeground(NOTIFICATION_ID, notification)\n        return START_STICKY\n    }\n}\n\n// Must call startForeground() within 5 seconds\n// For background work, prefer WorkManager"
+  },
+  {
+    "id": 23,
+    "question": "What is a bound service in Android?",
+    "answer": "A service that allows components to bind to it via `bindService()`, providing a client-server interface for interaction, and is destroyed when all clients unbind",
+    "example": "class MusicService : Service() {\n    private val binder = LocalBinder()\n    \n    inner class LocalBinder : Binder() {\n        fun getService() = this@MusicService\n    }\n    \n    override fun onBind(intent: Intent) = binder\n}\n\n// Client:\nbindService(intent, connection, Context.BIND_AUTO_CREATE)"
+  },
+  {
+    "id": 24,
+    "question": "What restrictions did Android 8.0 (Oreo) introduce for background services?",
+    "answer": "Apps cannot start background services when in the background; they must use foreground services or JobScheduler/WorkManager instead",
+    "example": "// This throws IllegalStateException from background:\nstartService(intent)\n\n// Solutions:\n// 1. Foreground service:\nstartForegroundService(intent)\n\n// 2. WorkManager:\nWorkManager.getInstance(context).enqueue(workRequest)\n\n// 3. Wait until app is in foreground"
+  },
+  {
+    "id": 25,
+    "question": "When should you use WorkManager instead of a foreground service?",
+    "answer": "For deferrable, guaranteed background work that should persist across app restarts and device reboots, such as syncing data or uploading logs",
+    "example": "val constraints = Constraints.Builder()\n    .setRequiredNetworkType(NetworkType.CONNECTED)\n    .build()\n\nval uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()\n    .setConstraints(constraints)\n    .build()\n\nWorkManager.getInstance(context).enqueue(uploadWork)\n\n// Handles retries, constraints, and chaining"
+  },
+  {
+    "id": 26,
+    "question": "What is the difference between `onStop()` and `onDestroy()` in an Activity?",
+    "answer": "`onStop()` is called when the activity is no longer visible but may still exist, while `onDestroy()` is called when the activity is being destroyed permanently",
+    "example": "override fun onStop() {\n    super.onStop()\n    saveData()  // Activity may return\n}\n\noverride fun onDestroy() {\n    super.onDestroy()\n    cleanup()  // NOT guaranteed to be called!\n}\n\n// Lifecycle: onStop() -> onRestart() -> onStart() (if returning)\n// Or: onStop() -> onDestroy() (if finishing)"
+  },
+  {
+    "id": 27,
+    "question": "Why might `onDestroy()` not be called when an Activity is killed?",
+    "answer": "The system may kill the process directly without calling `onDestroy()` in low-memory situations; critical cleanup should happen in `onStop()` or `onPause()`",
+    "example": "// DON'T rely on onDestroy for important saves:\noverride fun onDestroy() {\n    saveUserData()  // May never be called!\n}\n\n// DO save in onStop:\noverride fun onStop() {\n    super.onStop()\n    saveUserData()  // Guaranteed to be called\n}\n\n// Use ViewModel + SavedStateHandle for state preservation"
+  },
+  {
+    "id": 28,
+    "question": "What is a ViewModel and why is it useful?",
+    "answer": "A lifecycle-aware component that survives configuration changes like screen rotation, designed to store and manage UI-related data",
+    "example": "class UserViewModel : ViewModel() {\n    private val _user = MutableStateFlow<User?>(null)\n    val user: StateFlow<User?> = _user\n}\n\n// In Activity:\nval viewModel: UserViewModel by viewModels()\n\n// Same instance after rotation!\n// Cleared only when Activity finishes permanently"
+  },
+  {
+    "id": 29,
+    "question": "How does a ViewModel survive configuration changes?",
+    "answer": "ViewModels are stored in a ViewModelStore associated with the Activity/Fragment scope and retained across configuration changes by the framework",
+    "example": "// ViewModelStore is retained across config changes\nclass MyActivity : AppCompatActivity() {\n    val viewModel: MyViewModel by viewModels()\n}\n\n// Rotation happens:\n// 1. Activity destroyed, but ViewModelStore retained\n// 2. Activity recreated\n// 3. viewModels() returns SAME ViewModel instance\n// 4. ViewModel cleared only on finish()"
+  },
+  {
+    "id": 30,
+    "question": "What is `SavedStateHandle` in ViewModel?",
+    "answer": "A key-value map that allows ViewModel to save and restore state across process death, backed by the saved instance state mechanism",
+    "example": "@HiltViewModel\nclass MyViewModel @Inject constructor(\n    private val savedStateHandle: SavedStateHandle\n) : ViewModel() {\n    \n    val query = savedStateHandle.getStateFlow(\"query\", \"\")\n    \n    fun setQuery(q: String) {\n        savedStateHandle[\"query\"] = q  // Survives process death\n    }\n}"
+  },
+  {
+    "id": 31,
+    "question": "What is the difference between `LiveData` and `StateFlow`?",
+    "answer": "`LiveData` is lifecycle-aware and stops observing in stopped states, while `StateFlow` requires manual lifecycle handling but integrates better with coroutines",
+    "example": "// LiveData: automatic lifecycle handling\nliveData.observe(owner) { value ->\n    updateUi(value)  // Stops in onStop automatically\n}\n\n// StateFlow: manual lifecycle handling needed\nlifecycleScope.launch {\n    repeatOnLifecycle(Lifecycle.State.STARTED) {\n        stateFlow.collect { updateUi(it) }\n    }\n}"
+  },
+  {
+    "id": 32,
+    "question": "What is `repeatOnLifecycle` and why is it important for Flow collection?",
+    "answer": "A lifecycle-aware collector that restarts collection when lifecycle reaches the target state and cancels it when below; prevents wasting resources collecting when the UI is not visible",
+    "example": "lifecycleScope.launch {\n    repeatOnLifecycle(Lifecycle.State.STARTED) {\n        viewModel.uiState.collect { state ->\n            updateUi(state)\n        }\n    }\n}\n\n// Collection pauses in onStop, resumes in onStart\n// In Compose, collectAsState() handles this automatically"
+  },
+  {
+    "id": 33,
+    "question": "What is dependency injection and why is it useful in Android?",
+    "answer": "A design pattern where dependencies are provided to a class rather than created internally, improving testability, maintainability, and enabling loose coupling",
+    "example": "// Without DI (hard to test):\nclass UserRepo {\n    val api = RetrofitClient.create()\n}\n\n// With DI (testable):\nclass UserRepo @Inject constructor(\n    private val api: ApiService\n)\n\n// In tests, inject mock:\nval repo = UserRepo(mockApi)"
+  },
+  {
+    "id": 34,
+    "question": "What is the difference between `@Inject` and `@Provides` in Hilt/Dagger?",
+    "answer": "`@Inject` is used on constructors for automatic injection of classes you own, while `@Provides` is used in modules to provide instances of classes you don't own or need custom creation logic",
+    "example": "// @Inject: classes you own\nclass UserRepository @Inject constructor(\n    private val api: Api\n)\n\n// @Provides: classes you don't own\n@Module\n@InstallIn(SingletonComponent::class)\nobject NetworkModule {\n    @Provides\n    fun provideRetrofit(): Retrofit =\n        Retrofit.Builder().build()\n}"
+  },
+  {
+    "id": 35,
+    "question": "What is the difference between `@Singleton` and `@ViewModelScoped` in Hilt?",
+    "answer": "`@Singleton` creates one instance for the entire application lifetime, while `@ViewModelScoped` creates one instance per ViewModel that's destroyed when the ViewModel is cleared",
+    "example": "@Singleton  // One instance for entire app\nclass ApiService @Inject constructor(...)\n\n@ViewModelScoped  // One instance per ViewModel\nclass ScreenStateHolder @Inject constructor(...)\n\n// Other scopes:\n// @ActivityScoped - per Activity\n// @FragmentScoped - per Fragment\n// @ActivityRetainedScoped - survives config changes"
+  },
+  {
+    "id": 36,
+    "question": "What is a memory leak in Android and what commonly causes them?",
+    "answer": "When objects are no longer needed but cannot be garbage collected due to lingering references; common causes include static references to Context, unremoved listeners, and inner classes holding Activity references",
+    "example": "// Memory leak: static holds Activity\ncompanion object {\n    var activity: Activity? = null  // LEAK!\n}\n\n// Memory leak: inner class holds Activity\ninner class MyHandler : Handler()  // LEAK!\n\n// Fixes:\n// - Use WeakReference\n// - Use applicationContext for long-lived objects\n// - Unregister listeners in onStop/onDestroy"
+  },
+  {
+    "id": 37,
+    "question": "Why should you avoid passing Activity context to long-lived objects?",
+    "answer": "It prevents the Activity from being garbage collected after destruction, causing memory leaks; use Application context for long-lived objects instead",
+    "example": "// BAD: Singleton holds Activity reference\nSingleton.init(this)  // Activity context - LEAK!\n\n// GOOD: Use application context\nSingleton.init(applicationContext)\n\n// For UI operations requiring Activity context:\nclass MyClass(context: WeakReference<Activity>)"
+  },
+  {
+    "id": 38,
+    "question": "What is the difference between implicit and explicit intents?",
+    "answer": "Explicit intents specify the exact component to start by class name, while implicit intents declare a general action and let the system find appropriate components via intent filters",
+    "example": "// Explicit: specify exact component\nval explicit = Intent(this, DetailActivity::class.java)\nstartActivity(explicit)\n\n// Implicit: system finds component\nval implicit = Intent(Intent.ACTION_VIEW).apply {\n    data = Uri.parse(\"https://example.com\")\n}\nif (implicit.resolveActivity(packageManager) != null) {\n    startActivity(implicit)\n}"
+  },
+  {
+    "id": 39,
+    "question": "What is a PendingIntent and when would you use it?",
+    "answer": "A token that wraps an Intent and grants another app permission to execute it as your app; used for notifications, alarms, and app widgets",
+    "example": "val intent = Intent(context, MainActivity::class.java)\nval pendingIntent = PendingIntent.getActivity(\n    context,\n    requestCode,\n    intent,\n    PendingIntent.FLAG_IMMUTABLE\n)\n\n// Used in notifications:\nNotificationCompat.Builder(context, channelId)\n    .setContentIntent(pendingIntent)\n    .build()"
+  },
+  {
+    "id": 40,
+    "question": "What is the difference between `FLAG_IMMUTABLE` and `FLAG_MUTABLE` for PendingIntent?",
+    "answer": "`FLAG_IMMUTABLE` prevents the Intent from being modified when sent, improving security; `FLAG_MUTABLE` allows modification, required for inline reply actions in notifications",
+    "example": "// Prefer IMMUTABLE for security:\nPendingIntent.getActivity(\n    context, 0, intent,\n    PendingIntent.FLAG_IMMUTABLE\n)\n\n// Use MUTABLE only when needed:\n// - Direct reply notifications\n// - Bubble notifications\nPendingIntent.getActivity(\n    context, 0, intent,\n    PendingIntent.FLAG_MUTABLE\n)"
+  },
+  {
+    "id": 41,
+    "question": "What is a Content Provider and when should you use one?",
+    "answer": "A component that manages shared app data and provides a standard interface for other apps to query or modify it; used for sharing data between apps or accessing system data like contacts",
+    "example": "// Query contacts:\nval cursor = contentResolver.query(\n    ContactsContract.Contacts.CONTENT_URI,\n    projection,\n    selection,\n    selectionArgs,\n    sortOrder\n)\n\n// Custom ContentProvider:\nclass MyProvider : ContentProvider() {\n    override fun query(...): Cursor { ... }\n    override fun insert(...): Uri { ... }\n}"
+  },
+  {
+    "id": 42,
+    "question": "What is the difference between `commit()` and `apply()` in SharedPreferences?",
+    "answer": "`commit()` writes synchronously and returns success/failure, while `apply()` writes asynchronously in the background and returns immediately without a result",
+    "example": "val prefs = getSharedPreferences(\"app\", MODE_PRIVATE)\n\n// apply(): async, no result, safe on main thread\nprefs.edit()\n    .putString(\"key\", \"value\")\n    .apply()\n\n// commit(): sync, returns boolean, blocks thread\nval success = prefs.edit()\n    .putString(\"key\", \"value\")\n    .commit()  // Use off main thread"
+  },
+  {
+    "id": 43,
+    "question": "What is Room and what are its main components?",
+    "answer": "A persistence library providing an abstraction layer over SQLite; main components are Database (holder class), Entity (table definition), and DAO (data access methods)",
+    "example": "@Entity\ndata class User(\n    @PrimaryKey val id: Int,\n    val name: String\n)\n\n@Dao\ninterface UserDao {\n    @Query(\"SELECT * FROM user\")\n    fun getAll(): Flow<List<User>>\n}\n\n@Database(entities = [User::class], version = 1)\nabstract class AppDatabase : RoomDatabase() {\n    abstract fun userDao(): UserDao\n}"
+  },
+  {
+    "id": 44,
+    "question": "What is the purpose of `@Transaction` annotation in Room?",
+    "answer": "Ensures that all database operations within the annotated method are executed atomically; if any operation fails, all changes are rolled back",
+    "example": "@Dao\ninterface UserDao {\n    @Transaction\n    suspend fun replaceUserPosts(\n        user: User,\n        posts: List<Post>\n    ) {\n        deletePostsForUser(user.id)\n        insertPosts(posts)\n        updateUser(user)\n    }  // All succeed or all rollback\n}"
+  },
+  {
+    "id": 45,
+    "question": "What is ProGuard/R8 and why is it important?",
+    "answer": "Code shrinker and obfuscator that removes unused code, renames classes/methods, and optimizes bytecode to reduce APK size and make reverse engineering harder",
+    "example": "// build.gradle:\nandroid {\n    buildTypes {\n        release {\n            minifyEnabled true\n            proguardFiles getDefaultProguardFile(\n                'proguard-android-optimize.txt'\n            ), 'proguard-rules.pro'\n        }\n    }\n}\n\n// Reduces APK size by 10-40%"
+  },
+  {
+    "id": 46,
+    "question": "What does the `@Keep` annotation do?",
+    "answer": "Prevents ProGuard/R8 from removing or renaming the annotated class, method, or field; used for code accessed via reflection or JNI",
+    "example": "// Prevents shrinking/obfuscation:\n@Keep\ndata class ApiResponse(\n    val data: String,\n    val status: Int\n)\n\n// Alternative in proguard-rules.pro:\n// -keep class com.example.ApiResponse { *; }"
+  },
+  {
+    "id": 47,
+    "question": "What is the difference between `add()` and `replace()` in Fragment transactions?",
+    "answer": "`add()` keeps existing fragments and adds a new one on top, while `replace()` removes all existing fragments in the container before adding the new one",
+    "example": "// add(): keeps previous fragment\nsupportFragmentManager.commit {\n    add(R.id.container, FragmentB())  // A stays\n}\n\n// replace(): removes previous fragment\nsupportFragmentManager.commit {\n    replace(R.id.container, FragmentB())  // A removed\n    addToBackStack(null)  // A's view destroyed, restored on back\n}"
+  },
+  {
+    "id": 48,
+    "question": "What is `setReorderingAllowed(true)` in Fragment transactions?",
+    "answer": "Allows the framework to optimize fragment operations by reordering and batching them, required for proper animations and transitions with Navigation component",
+    "example": "supportFragmentManager.commit {\n    setReorderingAllowed(true)  // Enable optimizations\n    replace(R.id.container, fragment)\n    addToBackStack(null)\n}\n\n// Enables:\n// - Postponed transitions\n// - Shared element animations\n// - Navigation component sets this automatically"
+  },
+  {
+    "id": 49,
+    "question": "What is the purpose of `Modifier.semantics` in Jetpack Compose?",
+    "answer": "Provides accessibility information to screen readers and testing frameworks by describing the meaning and behavior of UI elements",
+    "example": "Image(\n    painter = painterResource(R.drawable.profile),\n    contentDescription = null,\n    modifier = Modifier.semantics {\n        contentDescription = \"User profile picture\"\n        role = Role.Image\n    }\n)\n\n// In tests:\ncomposeTestRule\n    .onNodeWithContentDescription(\"User profile picture\")\n    .assertIsDisplayed()"
+  },
+  {
+    "id": 50,
+    "question": "What is `CompositionLocal` and when should you use it?",
+    "answer": "A way to pass data implicitly through the composition tree without explicit parameters; useful for theming, navigation, or other widely-used data, but should be used sparingly",
+    "example": "// Define:\nval LocalNavController = compositionLocalOf<NavController> {\n    error(\"No NavController provided\")\n}\n\n// Provide:\nCompositionLocalProvider(LocalNavController provides navController) {\n    AppContent()\n}\n\n// Consume:\n@Composable\nfun Screen() {\n    val nav = LocalNavController.current\n}"
+  },
+  {
+    "id": 51,
+    "question": "What is the difference between `snapshotFlow` and `derivedStateOf`?",
+    "answer": "`snapshotFlow` converts Compose State to a Flow for use outside composition, while `derivedStateOf` creates derived State for use within composition to prevent unnecessary recompositions",
+    "example": "// snapshotFlow: State -> Flow (for LaunchedEffect)\nLaunchedEffect(Unit) {\n    snapshotFlow { scrollState.value }\n        .collect { analytics.logScroll(it) }\n}\n\n// derivedStateOf: derived State (for composition)\nval showButton by remember {\n    derivedStateOf { scrollState.value > 100 }\n}"
+  },
+  {
+    "id": 52,
+    "question": "What is `SideEffect` in Jetpack Compose?",
+    "answer": "A composable that executes a block of code on every successful recomposition; used to publish Compose state to non-Compose code without launching coroutines",
+    "example": "@Composable\nfun Screen(screenName: String) {\n    // Runs on every successful recomposition\n    SideEffect {\n        analytics.setCurrentScreen(screenName)\n    }\n    \n    // For suspend functions, use LaunchedEffect instead\n}"
+  },
+  {
+    "id": 53,
+    "question": "What does `@Stable` annotation indicate in Jetpack Compose?",
+    "answer": "Tells the Compose compiler that a type's public properties will always return the same result for the same instance, enabling recomposition skipping optimizations",
+    "example": "// Compose can skip recomposition when UiState unchanged\n@Stable\nclass UiState(\n    val items: List<Item>,\n    val loading: Boolean\n)\n\n// Data classes with immutable primitives are auto-stable\ndata class User(val id: Int, val name: String)  // Stable"
+  },
+  {
+    "id": 54,
+    "question": "What is the difference between `withContext` and `launch` for changing dispatchers?",
+    "answer": "`withContext` suspends and switches context for a block of code then returns to the original context, while `launch` creates a new coroutine that runs independently on the specified dispatcher",
+    "example": "// withContext: sequential, returns result\nval data = withContext(Dispatchers.IO) {\n    fetchData()  // Returns to original context after\n}\nprocess(data)  // Continues sequentially\n\n// launch: parallel, fire-and-forget\nlaunch(Dispatchers.IO) {\n    saveToDb()  // Runs independently\n}\nprocess(data)  // Continues immediately"
+  },
+  {
+    "id": 55,
+    "question": "What is `produceState` in Jetpack Compose?",
+    "answer": "A composable that launches a coroutine scoped to the composition and allows producing State values over time, useful for converting non-Compose async sources to State",
+    "example": "@Composable\nfun UserScreen(userId: String) {\n    val user by produceState<User?>(null, userId) {\n        value = repository.getUser(userId)\n    }\n    \n    // Combines remember + LaunchedEffect\n    // Coroutine cancels when leaving composition\n    // or when userId changes\n}"
+  }
+]
