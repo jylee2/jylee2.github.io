@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "question": "What is the difference between `interface` and `type` in TypeScript?",
+    "answer": "Both define object shapes, but interfaces are extendable via declaration merging and `extends`, while types are more flexible (unions, intersections, mapped types). Use interfaces for object shapes and public APIs, types for complex type compositions",
+    "example": "// Interface - can be extended and merged\ninterface User {\n  name: string;\n}\ninterface User {  // Declaration merging\n  age: number;\n}\ninterface Admin extends User {\n  role: string;\n}\n\n// Type - more flexible\ntype ID = string | number;  // Union\ntype UserWithID = User & { id: ID };  // Intersection\ntype Keys = keyof User;  // 'name' | 'age'\ntype Nullable<T> = T | null;  // Generic alias"
+  },
+  {
+    "id": 2,
+    "question": "What are the basic TypeScript primitive types?",
+    "answer": "TypeScript has `string`, `number`, `boolean`, `null`, `undefined`, `symbol`, `bigint`, plus special types `any`, `unknown`, `void`, and `never`",
+    "example": "let name: string = 'Alice';\nlet age: number = 30;\nlet active: boolean = true;\nlet nothing: null = null;\nlet notDefined: undefined = undefined;\nlet id: symbol = Symbol('id');\nlet big: bigint = 100n;\n\n// Special types\nlet flexible: any = 'anything';  // Avoid when possible\nlet safe: unknown = 'must check';  // Safer than any\nfunction log(): void { console.log('hi'); }  // No return\nfunction fail(): never { throw new Error(); }  // Never returns"
+  },
+  {
+    "id": 3,
+    "question": "How do you type arrays and tuples in TypeScript?",
+    "answer": "Arrays use `Type[]` or `Array<Type>` syntax for homogeneous collections. Tuples use `[Type1, Type2]` for fixed-length arrays with specific types at each position",
+    "example": "// Arrays - same type throughout\nconst numbers: number[] = [1, 2, 3];\nconst names: Array<string> = ['Alice', 'Bob'];\n\n// Tuples - fixed length, specific types\nconst pair: [string, number] = ['age', 30];\nconst rgb: [number, number, number] = [255, 128, 0];\n\n// Optional and rest elements in tuples\nconst optional: [string, number?] = ['name'];\nconst rest: [string, ...number[]] = ['scores', 1, 2, 3];\n\n// Readonly\nconst fixed: readonly [string, number] = ['x', 1];\n// fixed[0] = 'y';  // Error"
+  },
+  {
+    "id": 4,
+    "question": "What is the difference between `any` and `unknown` in TypeScript?",
+    "answer": "`any` disables type checking entirely. `unknown` is the type-safe counterpart - you must narrow/check the type before using the value. Prefer `unknown` for values of uncertain type",
+    "example": "// any - no type checking (dangerous)\nlet x: any = 'hello';\nx.foo();  // No error, but will crash at runtime\n\n// unknown - must check before using (safe)\nlet y: unknown = 'hello';\n// y.foo();  // Error: Object is of type 'unknown'\n\nif (typeof y === 'string') {\n  console.log(y.toUpperCase());  // OK after narrowing\n}\n\n// Common use: parsing external data\nfunction parseJSON(json: string): unknown {\n  return JSON.parse(json);  // Return unknown, not any\n}"
+  },
+  {
+    "id": 5,
+    "question": "How do you create a basic React functional component with TypeScript?",
+    "answer": "Define a props interface and type the component as `React.FC<Props>` or directly type the props parameter. Modern approach prefers direct prop typing over `React.FC`",
+    "example": "import React from 'react';\n\n// Define props interface\ninterface ButtonProps {\n  label: string;\n  onClick: () => void;\n  disabled?: boolean;  // Optional prop\n}\n\n// Modern approach (preferred)\nfunction Button({ label, onClick, disabled = false }: ButtonProps) {\n  return (\n    <button onClick={onClick} disabled={disabled}>\n      {label}\n    </button>\n  );\n}\n\n// Or with React.FC (includes children implicitly in older versions)\nconst Button: React.FC<ButtonProps> = ({ label, onClick, disabled }) => (\n  <button onClick={onClick} disabled={disabled}>{label}</button>\n);"
+  },
+  {
+    "id": 6,
+    "question": "How do you type the `useState` hook in React?",
+    "answer": "TypeScript usually infers the type from the initial value. For complex types, null initial values, or arrays, provide an explicit generic type argument",
+    "example": "import { useState } from 'react';\n\n// Type inferred from initial value\nconst [count, setCount] = useState(0);  // number\nconst [name, setName] = useState('');   // string\n\n// Explicit type for complex or nullable state\ninterface User {\n  id: number;\n  name: string;\n}\nconst [user, setUser] = useState<User | null>(null);\n\n// Array state\nconst [items, setItems] = useState<string[]>([]);\n\n// Union types\ntype Status = 'idle' | 'loading' | 'error';\nconst [status, setStatus] = useState<Status>('idle');"
+  },
+  {
+    "id": 7,
+    "question": "How do you type event handlers in React with TypeScript?",
+    "answer": "Use React's built-in event types like `React.MouseEvent`, `React.ChangeEvent`, `React.FormEvent`, etc. The generic parameter specifies the element type",
+    "example": "import React from 'react';\n\n// Click event\nconst handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {\n  console.log(e.currentTarget.name);\n};\n\n// Input change event\nconst handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n  console.log(e.target.value);\n};\n\n// Form submit event\nconst handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {\n  e.preventDefault();\n  // Handle form submission\n};\n\n// Keyboard event\nconst handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {\n  if (e.key === 'Enter') {\n    // Submit\n  }\n};"
+  },
+  {
+    "id": 8,
+    "question": "What are union types in TypeScript?",
+    "answer": "Union types allow a value to be one of several types, using the `|` operator. Use type guards to narrow the type when accessing type-specific properties",
+    "example": "// Basic union\ntype ID = string | number;\n\nfunction printId(id: ID) {\n  if (typeof id === 'string') {\n    console.log(id.toUpperCase());  // string methods\n  } else {\n    console.log(id.toFixed(2));  // number methods\n  }\n}\n\n// Literal unions for enums\ntype Status = 'pending' | 'approved' | 'rejected';\ntype HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';\n\n// Discriminated unions\ntype Result<T> =\n  | { success: true; data: T }\n  | { success: false; error: string };\n\nfunction handle(result: Result<User>) {\n  if (result.success) {\n    console.log(result.data);  // TypeScript knows data exists\n  } else {\n    console.log(result.error);  // TypeScript knows error exists\n  }\n}"
+  },
+  {
+    "id": 9,
+    "question": "How do you type the `useRef` hook in React?",
+    "answer": "Use generics to specify the element type. For DOM refs, initialize with `null`. For mutable value refs, provide the value type directly",
+    "example": "import { useRef, useEffect } from 'react';\n\n// DOM element ref - initialize with null\nconst inputRef = useRef<HTMLInputElement>(null);\nuseEffect(() => {\n  inputRef.current?.focus();  // Use optional chaining\n}, []);\n<input ref={inputRef} />\n\n// Mutable value ref (like instance variable)\nconst countRef = useRef<number>(0);\ncountRef.current += 1;  // No optional chaining needed\n\n// Ref to store previous value\nconst prevValueRef = useRef<string | undefined>(undefined);\n\n// Ref with complex type\ninterface Timer { id: number; name: string; }\nconst timerRef = useRef<Timer | null>(null);"
+  },
+  {
+    "id": 10,
+    "question": "What is type narrowing in TypeScript?",
+    "answer": "Type narrowing reduces a type to a more specific type using type guards like `typeof`, `instanceof`, `in`, or custom type predicates. TypeScript tracks narrowing in control flow",
+    "example": "// typeof narrowing\nfunction process(value: string | number) {\n  if (typeof value === 'string') {\n    return value.toUpperCase();  // string\n  }\n  return value.toFixed(2);  // number\n}\n\n// instanceof narrowing\nfunction handleError(error: Error | string) {\n  if (error instanceof Error) {\n    console.log(error.message);  // Error\n  } else {\n    console.log(error);  // string\n  }\n}\n\n// in operator narrowing\ninterface Fish { swim: () => void; }\ninterface Bird { fly: () => void; }\n\nfunction move(animal: Fish | Bird) {\n  if ('swim' in animal) {\n    animal.swim();  // Fish\n  } else {\n    animal.fly();  // Bird\n  }\n}"
+  },
+  {
+    "id": 11,
+    "question": "How do you type the `useEffect` hook?",
+    "answer": "`useEffect` doesn't need explicit typing - it accepts a function that returns void or a cleanup function. TypeScript enforces that async functions aren't passed directly",
+    "example": "import { useEffect } from 'react';\n\n// Basic effect\nuseEffect(() => {\n  document.title = 'Hello';\n}, []);\n\n// With cleanup\nuseEffect(() => {\n  const handler = () => console.log('resize');\n  window.addEventListener('resize', handler);\n  return () => {  // Cleanup function\n    window.removeEventListener('resize', handler);\n  };\n}, []);\n\n// Async operations - use inner function\nuseEffect(() => {\n  const fetchData = async () => {\n    const response = await fetch('/api/data');\n    const data = await response.json();\n    setData(data);\n  };\n  fetchData();\n}, []);"
+  },
+  {
+    "id": 12,
+    "question": "What are generics in TypeScript and how do you use them?",
+    "answer": "Generics allow writing reusable code that works with multiple types while maintaining type safety. Use angle brackets `<T>` to define type parameters",
+    "example": "// Generic function\nfunction identity<T>(arg: T): T {\n  return arg;\n}\nconst num = identity<number>(42);  // Explicit\nconst str = identity('hello');     // Inferred\n\n// Generic interface\ninterface Box<T> {\n  value: T;\n}\nconst numBox: Box<number> = { value: 42 };\n\n// Generic with constraints\ninterface HasLength { length: number; }\nfunction logLength<T extends HasLength>(arg: T): number {\n  return arg.length;\n}\nlogLength('hello');  // OK\nlogLength([1, 2]);   // OK\n// logLength(42);    // Error: number has no length\n\n// Multiple type parameters\nfunction pair<K, V>(key: K, value: V): [K, V] {\n  return [key, value];\n}"
+  },
+  {
+    "id": 13,
+    "question": "How do you type children props in React components?",
+    "answer": "Use `React.ReactNode` for the most flexible children type (strings, elements, arrays, fragments). Use `React.ReactElement` for only React elements",
+    "example": "import React from 'react';\n\n// Most common - accepts any valid React children\ninterface CardProps {\n  title: string;\n  children: React.ReactNode;\n}\n\nfunction Card({ title, children }: CardProps) {\n  return (\n    <div className=\"card\">\n      <h2>{title}</h2>\n      {children}\n    </div>\n  );\n}\n\n// Strict - only React elements\ninterface WrapperProps {\n  children: React.ReactElement;\n}\n\n// Function as children (render props)\ninterface DataFetcherProps<T> {\n  url: string;\n  children: (data: T) => React.ReactNode;\n}\n\nfunction DataFetcher<T>({ url, children }: DataFetcherProps<T>) {\n  const [data, setData] = useState<T | null>(null);\n  return data ? children(data) : <Loading />;\n}"
+  },
+  {
+    "id": 14,
+    "question": "What is the difference between `==` and `===` in JavaScript/TypeScript?",
+    "answer": "`==` performs type coercion before comparison (loose equality), while `===` compares both value and type without coercion (strict equality). Always use `===` to avoid unexpected behavior",
+    "example": "// Loose equality (==) - coerces types\nconsole.log(1 == '1');       // true (string coerced to number)\nconsole.log(0 == false);     // true (false coerced to 0)\nconsole.log(null == undefined); // true (special case)\nconsole.log('' == 0);        // true (both coerce to 0)\n\n// Strict equality (===) - no coercion\nconsole.log(1 === '1');      // false (different types)\nconsole.log(0 === false);    // false (different types)\nconsole.log(null === undefined); // false (different types)\n\n// TypeScript helps catch some issues\nconst x: number = 5;\n// if (x === '5') {}  // Error: This comparison is always false"
+  },
+  {
+    "id": 15,
+    "question": "How do you type custom hooks in React?",
+    "answer": "Define the return type explicitly or let TypeScript infer it. Use generics for reusable hooks. Return tuples with `as const` for proper typing",
+    "example": "import { useState, useCallback } from 'react';\n\n// Simple custom hook with inferred return type\nfunction useToggle(initial: boolean = false) {\n  const [value, setValue] = useState(initial);\n  const toggle = useCallback(() => setValue(v => !v), []);\n  return [value, toggle] as const;  // Returns readonly tuple\n}\n\n// Generic custom hook\nfunction useLocalStorage<T>(key: string, initialValue: T) {\n  const [storedValue, setStoredValue] = useState<T>(() => {\n    const item = window.localStorage.getItem(key);\n    return item ? JSON.parse(item) : initialValue;\n  });\n\n  const setValue = (value: T | ((val: T) => T)) => {\n    const valueToStore = value instanceof Function ? value(storedValue) : value;\n    setStoredValue(valueToStore);\n    window.localStorage.setItem(key, JSON.stringify(valueToStore));\n  };\n\n  return [storedValue, setValue] as const;\n}"
+  },
+  {
+    "id": 16,
+    "question": "What are utility types in TypeScript?",
+    "answer": "Built-in generic types that transform other types: `Partial<T>`, `Required<T>`, `Readonly<T>`, `Pick<T, K>`, `Omit<T, K>`, `Record<K, V>`, etc.",
+    "example": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Partial - all properties optional\ntype PartialUser = Partial<User>;\n// { id?: number; name?: string; email?: string; }\n\n// Required - all properties required\ntype RequiredUser = Required<PartialUser>;\n\n// Pick - select specific properties\ntype UserPreview = Pick<User, 'id' | 'name'>;\n// { id: number; name: string; }\n\n// Omit - exclude properties\ntype UserWithoutEmail = Omit<User, 'email'>;\n// { id: number; name: string; }\n\n// Record - construct object type\ntype UserRoles = Record<string, 'admin' | 'user' | 'guest'>;\n// { [key: string]: 'admin' | 'user' | 'guest' }\n\n// Readonly - immutable\nconst user: Readonly<User> = { id: 1, name: 'Alice', email: 'a@b.c' };\n// user.name = 'Bob';  // Error"
+  },
+  {
+    "id": 17,
+    "question": "How do you use the `useReducer` hook with TypeScript?",
+    "answer": "Define types for state and actions (often using discriminated unions), then type the reducer function. `useReducer` infers types from the reducer",
+    "example": "import { useReducer } from 'react';\n\n// State type\ninterface State {\n  count: number;\n  error: string | null;\n}\n\n// Action types using discriminated union\ntype Action =\n  | { type: 'increment' }\n  | { type: 'decrement' }\n  | { type: 'set'; payload: number }\n  | { type: 'error'; payload: string };\n\n// Typed reducer\nfunction reducer(state: State, action: Action): State {\n  switch (action.type) {\n    case 'increment':\n      return { ...state, count: state.count + 1 };\n    case 'decrement':\n      return { ...state, count: state.count - 1 };\n    case 'set':\n      return { ...state, count: action.payload };  // TypeScript knows payload exists\n    case 'error':\n      return { ...state, error: action.payload };\n  }\n}\n\nconst [state, dispatch] = useReducer(reducer, { count: 0, error: null });\ndispatch({ type: 'set', payload: 10 });  // Type-safe"
+  },
+  {
+    "id": 18,
+    "question": "What is `useContext` and how do you type it properly?",
+    "answer": "Create a typed context with `createContext<T>()`, optionally with a default value. Use a custom hook to ensure the context is used within its provider",
+    "example": "import { createContext, useContext, useState, ReactNode } from 'react';\n\n// Define context type\ninterface AuthContextType {\n  user: User | null;\n  login: (user: User) => void;\n  logout: () => void;\n}\n\n// Create context with undefined default\nconst AuthContext = createContext<AuthContextType | undefined>(undefined);\n\n// Custom hook with null check\nfunction useAuth() {\n  const context = useContext(AuthContext);\n  if (context === undefined) {\n    throw new Error('useAuth must be used within AuthProvider');\n  }\n  return context;\n}\n\n// Provider component\nfunction AuthProvider({ children }: { children: ReactNode }) {\n  const [user, setUser] = useState<User | null>(null);\n  const login = (user: User) => setUser(user);\n  const logout = () => setUser(null);\n  \n  return (\n    <AuthContext.Provider value={{ user, login, logout }}>\n      {children}\n    </AuthContext.Provider>\n  );\n}"
+  },
+  {
+    "id": 19,
+    "question": "What is the difference between `null` and `undefined` in TypeScript?",
+    "answer": "`undefined` means a variable was declared but not assigned. `null` is an intentional absence of value. With `strictNullChecks`, both must be handled explicitly",
+    "example": "// undefined - not assigned\nlet x: number | undefined;\nconsole.log(x);  // undefined\n\nfunction greet(name?: string) {  // Optional param is string | undefined\n  console.log(name);  // Could be undefined\n}\n\n// null - intentional absence\nlet user: User | null = null;  // Explicitly no user\n\n// Handling both\nfunction process(value: string | null | undefined) {\n  // Nullish coalescing - handles both null and undefined\n  const safe = value ?? 'default';\n  \n  // Optional chaining\n  const length = value?.length;  // number | undefined\n  \n  // Non-null assertion (use sparingly)\n  const definite = value!;  // Tells TS value is not null/undefined\n}"
+  },
+  {
+    "id": 20,
+    "question": "How do you type async functions and Promises in TypeScript?",
+    "answer": "Async functions automatically return `Promise<T>`. Type the resolved value with generics. Use `async/await` or `.then()` to handle the promise",
+    "example": "// Async function - return type is Promise<User>\nasync function fetchUser(id: number): Promise<User> {\n  const response = await fetch(`/api/users/${id}`);\n  return response.json();\n}\n\n// Promise with explicit typing\nfunction fetchData(): Promise<string[]> {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => resolve(['a', 'b', 'c']), 1000);\n  });\n}\n\n// Handling in component\nconst [user, setUser] = useState<User | null>(null);\nuseEffect(() => {\n  fetchUser(1).then(setUser);\n  // Or with async/await\n  const load = async () => {\n    const user = await fetchUser(1);\n    setUser(user);\n  };\n  load();\n}, []);"
+  },
+  {
+    "id": 21,
+    "question": "What is `useMemo` and when should you use it?",
+    "answer": "`useMemo` memoizes expensive calculations, recomputing only when dependencies change. Use it for computationally heavy operations or to maintain referential equality for objects",
+    "example": "import { useMemo, useState } from 'react';\n\ninterface Item { id: number; name: string; price: number; }\n\nfunction ShoppingCart({ items }: { items: Item[] }) {\n  const [filter, setFilter] = useState('');\n\n  // Expensive calculation - memoize\n  const total = useMemo(() => {\n    return items.reduce((sum, item) => sum + item.price, 0);\n  }, [items]);\n\n  // Filtered list - memoize to avoid recalculation\n  const filteredItems = useMemo(() => {\n    return items.filter(item =>\n      item.name.toLowerCase().includes(filter.toLowerCase())\n    );\n  }, [items, filter]);\n\n  // Object passed to child - memoize for referential equality\n  const config = useMemo(() => ({\n    showPrices: true,\n    currency: 'USD'\n  }), []);  // Empty deps = computed once\n\n  return <ItemList items={filteredItems} config={config} />;\n}"
+  },
+  {
+    "id": 22,
+    "question": "What is `useCallback` and how does it differ from `useMemo`?",
+    "answer": "`useCallback` memoizes functions, returning the same function reference unless dependencies change. `useMemo` memoizes values. Use `useCallback` for callbacks passed to optimized children",
+    "example": "import { useCallback, useState, memo } from 'react';\n\n// Memoized child component\nconst ExpensiveChild = memo(({ onClick }: { onClick: () => void }) => {\n  console.log('Child rendered');\n  return <button onClick={onClick}>Click</button>;\n});\n\nfunction Parent() {\n  const [count, setCount] = useState(0);\n  const [name, setName] = useState('');\n\n  // Without useCallback: new function every render, child re-renders\n  // const handleClick = () => setCount(c => c + 1);\n\n  // With useCallback: same function reference, child doesn't re-render\n  const handleClick = useCallback(() => {\n    setCount(c => c + 1);\n  }, []);  // No dependencies, function never changes\n\n  // useCallback with dependencies\n  const handleSubmit = useCallback(() => {\n    console.log('Submitting:', name);\n  }, [name]);  // New function when name changes\n\n  return (\n    <>\n      <input value={name} onChange={e => setName(e.target.value)} />\n      <ExpensiveChild onClick={handleClick} />\n    </>\n  );\n}"
+  },
+  {
+    "id": 23,
+    "question": "How do you type forwardRef components in React?",
+    "answer": "Use `React.forwardRef` with generic parameters for the ref type and props type. The ref is the first generic, props is the second",
+    "example": "import React, { forwardRef, useRef } from 'react';\n\ninterface InputProps {\n  label: string;\n  error?: string;\n}\n\n// forwardRef<RefType, PropsType>\nconst Input = forwardRef<HTMLInputElement, InputProps>(\n  ({ label, error }, ref) => {\n    return (\n      <div>\n        <label>{label}</label>\n        <input ref={ref} className={error ? 'error' : ''} />\n        {error && <span>{error}</span>}\n      </div>\n    );\n  }\n);\n\nInput.displayName = 'Input';  // For DevTools\n\n// Usage\nfunction Form() {\n  const inputRef = useRef<HTMLInputElement>(null);\n  \n  const focusInput = () => {\n    inputRef.current?.focus();\n  };\n  \n  return <Input ref={inputRef} label=\"Email\" />;\n}"
+  },
+  {
+    "id": 24,
+    "question": "What are mapped types in TypeScript?",
+    "answer": "Mapped types transform existing types by iterating over their keys. Use `in keyof` to iterate and modifiers like `?` and `readonly` to change properties",
+    "example": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Make all properties optional (like Partial)\ntype MyPartial<T> = {\n  [K in keyof T]?: T[K];\n};\n\n// Make all properties readonly\ntype MyReadonly<T> = {\n  readonly [K in keyof T]: T[K];\n};\n\n// Make all properties nullable\ntype Nullable<T> = {\n  [K in keyof T]: T[K] | null;\n};\n\n// Remove readonly (using -readonly)\ntype Mutable<T> = {\n  -readonly [K in keyof T]: T[K];\n};\n\n// Transform property types\ntype Getters<T> = {\n  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];\n};\n// Getters<User> = { getId: () => number; getName: () => string; ... }"
+  },
+  {
+    "id": 25,
+    "question": "What is the `as const` assertion and when do you use it?",
+    "answer": "`as const` makes values deeply readonly and infers literal types instead of widened types. Essential for tuples, object literals, and array constants",
+    "example": "// Without as const - types are widened\nconst config = {\n  endpoint: '/api',\n  timeout: 5000\n};  // Type: { endpoint: string; timeout: number; }\n\n// With as const - literal types, readonly\nconst config = {\n  endpoint: '/api',\n  timeout: 5000\n} as const;  // Type: { readonly endpoint: '/api'; readonly timeout: 5000; }\n\n// Arrays become readonly tuples\nconst colors = ['red', 'green', 'blue'] as const;\n// Type: readonly ['red', 'green', 'blue']\n\n// Useful for custom hooks returning tuples\nfunction useToggle(initial: boolean) {\n  const [value, setValue] = useState(initial);\n  const toggle = () => setValue(v => !v);\n  return [value, toggle] as const;  // [boolean, () => void] not (boolean | (() => void))[]\n}"
+  },
+  {
+    "id": 26,
+    "question": "How do conditional types work in TypeScript?",
+    "answer": "Conditional types select one of two types based on a condition: `T extends U ? X : Y`. They enable type-level programming and are distributive over unions",
+    "example": "// Basic conditional type\ntype IsString<T> = T extends string ? true : false;\ntype A = IsString<string>;  // true\ntype B = IsString<number>;  // false\n\n// Extract non-nullable types (like NonNullable)\ntype NoNull<T> = T extends null | undefined ? never : T;\ntype C = NoNull<string | null>;  // string\n\n// Infer keyword - extract types\ntype ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;\ntype FnReturn = ReturnType<() => string>;  // string\n\ntype ArrayElement<T> = T extends (infer E)[] ? E : never;\ntype Element = ArrayElement<string[]>;  // string\n\n// Distributive over unions\ntype ToArray<T> = T extends any ? T[] : never;\ntype D = ToArray<string | number>;  // string[] | number[]"
+  },
+  {
+    "id": 27,
+    "question": "What is React.memo and when should you use it?",
+    "answer": "`React.memo` is a higher-order component that memoizes a component, preventing re-renders if props haven't changed. Use for expensive components with frequently unchanged props",
+    "example": "import { memo, useState } from 'react';\n\ninterface ItemProps {\n  name: string;\n  price: number;\n}\n\n// Basic memo - shallow comparison of props\nconst Item = memo(function Item({ name, price }: ItemProps) {\n  console.log('Item rendered:', name);\n  return <div>{name}: ${price}</div>;\n});\n\n// Custom comparison function\nconst Item = memo(\n  function Item({ name, price }: ItemProps) {\n    return <div>{name}: ${price}</div>;\n  },\n  (prevProps, nextProps) => {\n    // Return true if props are equal (skip re-render)\n    return prevProps.name === nextProps.name;\n  }\n);\n\n// Usage - Item won't re-render when count changes\nfunction App() {\n  const [count, setCount] = useState(0);\n  return (\n    <>\n      <button onClick={() => setCount(c => c + 1)}>{count}</button>\n      <Item name=\"Widget\" price={10} />\n    </>\n  );\n}"
+  },
+  {
+    "id": 28,
+    "question": "How do you handle forms in React with TypeScript?",
+    "answer": "Type the form state interface, use controlled components with typed event handlers, and validate on submit. Consider form libraries like React Hook Form for complex forms",
+    "example": "import { useState, FormEvent, ChangeEvent } from 'react';\n\ninterface FormData {\n  email: string;\n  password: string;\n}\n\ninterface FormErrors {\n  email?: string;\n  password?: string;\n}\n\nfunction LoginForm() {\n  const [formData, setFormData] = useState<FormData>({\n    email: '',\n    password: ''\n  });\n  const [errors, setErrors] = useState<FormErrors>({});\n\n  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {\n    const { name, value } = e.target;\n    setFormData(prev => ({ ...prev, [name]: value }));\n  };\n\n  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    // Validate and submit\n    if (!formData.email) {\n      setErrors({ email: 'Required' });\n      return;\n    }\n    // Submit form\n  };\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <input name=\"email\" value={formData.email} onChange={handleChange} />\n      {errors.email && <span>{errors.email}</span>}\n      <button type=\"submit\">Login</button>\n    </form>\n  );\n}"
+  },
+  {
+    "id": 29,
+    "question": "What are template literal types in TypeScript?",
+    "answer": "Template literal types use backtick syntax to create string types from combinations. They enable type-safe string manipulation and pattern matching",
+    "example": "// Basic template literal type\ntype Greeting = `Hello, ${string}!`;\nconst g: Greeting = 'Hello, World!';  // OK\n// const bad: Greeting = 'Hi there';  // Error\n\n// Combining literal types\ntype Color = 'red' | 'blue';\ntype Size = 'small' | 'large';\ntype ColorSize = `${Color}-${Size}`;\n// 'red-small' | 'red-large' | 'blue-small' | 'blue-large'\n\n// Event handler pattern\ntype EventName = 'click' | 'focus' | 'blur';\ntype Handler = `on${Capitalize<EventName>}`;\n// 'onClick' | 'onFocus' | 'onBlur'\n\n// API routes\ntype Entity = 'user' | 'post';\ntype ApiRoute = `/api/${Entity}` | `/api/${Entity}/${number}`;\nconst route: ApiRoute = '/api/user/123';  // OK"
+  },
+  {
+    "id": 30,
+    "question": "How do Server Components work in modern React (Next.js App Router)?",
+    "answer": "Server Components render on the server with no JavaScript sent to client. They can access databases directly, use async/await at component level, and reduce bundle size. Use 'use client' directive for interactive components",
+    "example": "// Server Component (default in App Router)\n// app/users/page.tsx\nimport { db } from '@/lib/db';\n\n// Can be async - runs on server only\nasync function UsersPage() {\n  const users = await db.user.findMany();  // Direct DB access\n  \n  return (\n    <div>\n      {users.map(user => (\n        <UserCard key={user.id} user={user} />\n      ))}\n      <AddUserButton />  {/* Client Component */}\n    </div>\n  );\n}\n\n// Client Component - for interactivity\n// components/AddUserButton.tsx\n'use client';\n\nimport { useState } from 'react';\n\nexport function AddUserButton() {\n  const [isOpen, setIsOpen] = useState(false);\n  return <button onClick={() => setIsOpen(true)}>Add User</button>;\n}"
+  },
+  {
+    "id": 31,
+    "question": "What is the `satisfies` operator in TypeScript?",
+    "answer": "`satisfies` validates that an expression matches a type while preserving its narrower inferred type. Unlike type annotation, it keeps literal types and specific properties",
+    "example": "type Colors = Record<string, [number, number, number] | string>;\n\n// With type annotation - loses specific keys\nconst colors1: Colors = {\n  red: [255, 0, 0],\n  green: '#00ff00'\n};\n// colors1.red is [number, number, number] | string\n\n// With satisfies - keeps narrow types\nconst colors2 = {\n  red: [255, 0, 0],\n  green: '#00ff00'\n} satisfies Colors;\n\ncolors2.red;     // [number, number, number] - knows it's a tuple\ncolors2.green;   // string - knows it's a string\ncolors2.red[0];  // number - can access tuple elements\n\n// Also validates the type\nconst colors3 = {\n  red: [255, 0, 0],\n  green: 123  // Error: number is not assignable\n} satisfies Colors;"
+  },
+  {
+    "id": 32,
+    "question": "How do you implement error boundaries in React with TypeScript?",
+    "answer": "Error boundaries are class components that catch JavaScript errors in child components. Define `getDerivedStateFromError` and `componentDidCatch` lifecycle methods",
+    "example": "import { Component, ErrorInfo, ReactNode } from 'react';\n\ninterface Props {\n  children: ReactNode;\n  fallback?: ReactNode;\n}\n\ninterface State {\n  hasError: boolean;\n  error: Error | null;\n}\n\nclass ErrorBoundary extends Component<Props, State> {\n  state: State = { hasError: false, error: null };\n\n  static getDerivedStateFromError(error: Error): State {\n    return { hasError: true, error };\n  }\n\n  componentDidCatch(error: Error, errorInfo: ErrorInfo) {\n    console.error('Error caught:', error, errorInfo);\n    // Log to error reporting service\n  }\n\n  render() {\n    if (this.state.hasError) {\n      return this.props.fallback ?? <h1>Something went wrong.</h1>;\n    }\n    return this.props.children;\n  }\n}\n\n// Usage\n<ErrorBoundary fallback={<ErrorPage />}>\n  <MyComponent />\n</ErrorBoundary>"
+  },
+  {
+    "id": 33,
+    "question": "What are the `infer` keyword use cases in TypeScript?",
+    "answer": "`infer` declares a type variable within a conditional type's `extends` clause, allowing extraction of types from complex structures like function parameters, return types, or generic arguments",
+    "example": "// Extract return type\ntype MyReturnType<T> = T extends (...args: any[]) => infer R ? R : never;\ntype R1 = MyReturnType<() => string>;  // string\n\n// Extract parameter types\ntype Parameters<T> = T extends (...args: infer P) => any ? P : never;\ntype P1 = Parameters<(a: string, b: number) => void>;  // [string, number]\n\n// Extract first parameter\ntype FirstParam<T> = T extends (first: infer F, ...rest: any[]) => any ? F : never;\ntype F1 = FirstParam<(name: string, age: number) => void>;  // string\n\n// Extract Promise resolved type\ntype Awaited<T> = T extends Promise<infer U> ? Awaited<U> : T;\ntype A1 = Awaited<Promise<string>>;  // string\ntype A2 = Awaited<Promise<Promise<number>>>;  // number\n\n// Extract array element type\ntype Flatten<T> = T extends (infer E)[] ? E : T;\ntype F2 = Flatten<string[]>;  // string"
+  },
+  {
+    "id": 34,
+    "question": "How does React Suspense work with data fetching?",
+    "answer": "Suspense catches promises thrown by data-fetching libraries, showing a fallback while loading. Works with React Query, SWR, or React's `use` hook. Enables streaming SSR and parallel data fetching",
+    "example": "import { Suspense } from 'react';\nimport { useQuery } from '@tanstack/react-query';\n\n// Component that suspends\nfunction UserProfile({ id }: { id: string }) {\n  const { data } = useQuery({\n    queryKey: ['user', id],\n    queryFn: () => fetchUser(id),\n    suspense: true  // Enable Suspense mode\n  });\n  \n  return <div>{data.name}</div>;  // data is guaranteed\n}\n\n// Parent with Suspense boundary\nfunction App() {\n  return (\n    <Suspense fallback={<Spinner />}>\n      <UserProfile id=\"1\" />\n    </Suspense>\n  );\n}\n\n// Multiple parallel fetches with single boundary\nfunction Dashboard() {\n  return (\n    <Suspense fallback={<DashboardSkeleton />}>\n      <UserStats />   {/* All three load in parallel */}\n      <RecentOrders />\n      <Notifications />\n    </Suspense>\n  );\n}"
+  },
+  {
+    "id": 35,
+    "question": "What is the `keyof` operator in TypeScript?",
+    "answer": "`keyof` produces a union type of all property keys of an object type. Essential for type-safe property access and creating generic utilities",
+    "example": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// keyof produces union of keys\ntype UserKey = keyof User;  // 'id' | 'name' | 'email'\n\n// Type-safe property access\nfunction getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key];\n}\n\nconst user: User = { id: 1, name: 'Alice', email: 'a@b.c' };\nconst name = getProperty(user, 'name');  // string\nconst id = getProperty(user, 'id');      // number\n// getProperty(user, 'invalid');  // Error\n\n// With mapped types\ntype Optional<T> = {\n  [K in keyof T]?: T[K];\n};\n\n// keyof with index signatures\ntype Dict = { [key: string]: number };\ntype DictKeys = keyof Dict;  // string | number (number keys coerce to string)"
+  },
+  {
+    "id": 36,
+    "question": "How do you implement optimistic updates in React?",
+    "answer": "Update UI immediately before server confirmation, then reconcile on success or rollback on failure. Common in form submissions and mutations with React Query or SWR",
+    "example": "import { useMutation, useQueryClient } from '@tanstack/react-query';\n\ninterface Todo { id: string; text: string; done: boolean; }\n\nfunction useTodoToggle() {\n  const queryClient = useQueryClient();\n\n  return useMutation({\n    mutationFn: (todo: Todo) => toggleTodoApi(todo.id),\n    \n    // Optimistic update\n    onMutate: async (todo) => {\n      await queryClient.cancelQueries({ queryKey: ['todos'] });\n      const previous = queryClient.getQueryData<Todo[]>(['todos']);\n      \n      // Optimistically update\n      queryClient.setQueryData<Todo[]>(['todos'], (old) =>\n        old?.map(t => t.id === todo.id ? { ...t, done: !t.done } : t)\n      );\n      \n      return { previous };  // Context for rollback\n    },\n    \n    // Rollback on error\n    onError: (err, todo, context) => {\n      queryClient.setQueryData(['todos'], context?.previous);\n    },\n    \n    // Refetch after success or error\n    onSettled: () => {\n      queryClient.invalidateQueries({ queryKey: ['todos'] });\n    }\n  });\n}"
+  },
+  {
+    "id": 37,
+    "question": "What is the `useTransition` hook in React 18+?",
+    "answer": "`useTransition` marks state updates as non-urgent, allowing React to keep the UI responsive by interrupting them for more urgent updates. Returns `[isPending, startTransition]`",
+    "example": "import { useState, useTransition } from 'react';\n\nfunction SearchResults() {\n  const [query, setQuery] = useState('');\n  const [results, setResults] = useState<string[]>([]);\n  const [isPending, startTransition] = useTransition();\n\n  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    // Urgent: update input immediately\n    setQuery(e.target.value);\n    \n    // Non-urgent: can be interrupted\n    startTransition(() => {\n      const filtered = filterLargeDataset(e.target.value);\n      setResults(filtered);\n    });\n  };\n\n  return (\n    <div>\n      <input value={query} onChange={handleChange} />\n      {isPending && <Spinner />}\n      <ul style={{ opacity: isPending ? 0.7 : 1 }}>\n        {results.map(item => <li key={item}>{item}</li>)}\n      </ul>\n    </div>\n  );\n}"
+  },
+  {
+    "id": 38,
+    "question": "What is the `useDeferredValue` hook in React 18+?",
+    "answer": "`useDeferredValue` returns a deferred version of a value that lags behind during urgent updates. Useful for deferring expensive re-renders without wrapping state updates",
+    "example": "import { useState, useDeferredValue, memo } from 'react';\n\n// Expensive component\nconst SearchResults = memo(({ query }: { query: string }) => {\n  const results = slowSearch(query);  // Expensive\n  return <ul>{results.map(r => <li key={r}>{r}</li>)}</ul>;\n});\n\nfunction Search() {\n  const [query, setQuery] = useState('');\n  const deferredQuery = useDeferredValue(query);\n  const isStale = query !== deferredQuery;\n\n  return (\n    <div>\n      <input\n        value={query}\n        onChange={e => setQuery(e.target.value)}\n      />\n      <div style={{ opacity: isStale ? 0.5 : 1 }}>\n        {/* Uses deferred value - won't block typing */}\n        <SearchResults query={deferredQuery} />\n      </div>\n    </div>\n  );\n}\n\n// Difference from useTransition:\n// - useTransition: wraps setState, controls when update starts\n// - useDeferredValue: wraps value, controls when component sees new value"
+  },
+  {
+    "id": 39,
+    "question": "How do you implement compound components pattern in React?",
+    "answer": "Compound components share implicit state through Context. The parent manages state, children access it via context. Provides flexible, readable component APIs",
+    "example": "import { createContext, useContext, useState, ReactNode } from 'react';\n\n// Context for shared state\ninterface TabsContextType {\n  activeTab: string;\n  setActiveTab: (id: string) => void;\n}\nconst TabsContext = createContext<TabsContextType | null>(null);\n\n// Parent component\nfunction Tabs({ children, defaultTab }: { children: ReactNode; defaultTab: string }) {\n  const [activeTab, setActiveTab] = useState(defaultTab);\n  return (\n    <TabsContext.Provider value={{ activeTab, setActiveTab }}>\n      <div className=\"tabs\">{children}</div>\n    </TabsContext.Provider>\n  );\n}\n\n// Child components\nfunction TabList({ children }: { children: ReactNode }) {\n  return <div className=\"tab-list\">{children}</div>;\n}\n\nfunction Tab({ id, children }: { id: string; children: ReactNode }) {\n  const ctx = useContext(TabsContext)!;\n  return (\n    <button\n      className={ctx.activeTab === id ? 'active' : ''}\n      onClick={() => ctx.setActiveTab(id)}\n    >{children}</button>\n  );\n}\n\nfunction TabPanel({ id, children }: { id: string; children: ReactNode }) {\n  const ctx = useContext(TabsContext)!;\n  return ctx.activeTab === id ? <div>{children}</div> : null;\n}\n\n// Usage\n<Tabs defaultTab=\"a\">\n  <TabList><Tab id=\"a\">Tab A</Tab><Tab id=\"b\">Tab B</Tab></TabList>\n  <TabPanel id=\"a\">Content A</TabPanel>\n  <TabPanel id=\"b\">Content B</TabPanel>\n</Tabs>"
+  },
+  {
+    "id": 40,
+    "question": "What is declaration merging in TypeScript?",
+    "answer": "Declaration merging combines multiple declarations with the same name into a single definition. Works with interfaces, namespaces, and enums. Used to extend existing types",
+    "example": "// Interface merging - declarations combine\ninterface User {\n  name: string;\n}\ninterface User {\n  age: number;\n}\nconst user: User = { name: 'Alice', age: 30 };  // Has both properties\n\n// Extending built-in types\ndeclare global {\n  interface Window {\n    myApp: { version: string };\n  }\n}\nwindow.myApp.version;  // Now typed\n\n// Extending third-party libraries\ndeclare module 'express' {\n  interface Request {\n    user?: User;\n  }\n}\n\n// Namespace merging with class\nclass Album {\n  label: Album.AlbumLabel;  // Can use namespace type\n}\nnamespace Album {\n  export interface AlbumLabel {\n    name: string;\n  }\n}"
+  },
+  {
+    "id": 41,
+    "question": "How do you type higher-order components (HOCs) in React?",
+    "answer": "HOCs take a component and return an enhanced component. Type both the input props and injected props, using generics to preserve the wrapped component's prop types",
+    "example": "import { ComponentType } from 'react';\n\n// Props injected by HOC\ninterface WithLoadingProps {\n  isLoading: boolean;\n}\n\n// Generic HOC that adds loading state\nfunction withLoading<P extends object>(\n  WrappedComponent: ComponentType<P>\n): ComponentType<P & WithLoadingProps> {\n  return function WithLoadingComponent(props: P & WithLoadingProps) {\n    const { isLoading, ...restProps } = props;\n    \n    if (isLoading) {\n      return <Spinner />;\n    }\n    \n    return <WrappedComponent {...(restProps as P)} />;\n  };\n}\n\n// Usage\ninterface UserListProps {\n  users: User[];\n}\n\nconst UserList = ({ users }: UserListProps) => (\n  <ul>{users.map(u => <li key={u.id}>{u.name}</li>)}</ul>\n);\n\nconst UserListWithLoading = withLoading(UserList);\n// Props: UserListProps & WithLoadingProps\n<UserListWithLoading users={[]} isLoading={false} />"
+  },
+  {
+    "id": 42,
+    "question": "What is the `use` hook in React 19?",
+    "answer": "`use` is a new React hook that can read resources like Promises or Contexts. Unlike other hooks, it can be called conditionally and inside loops. Integrates with Suspense for data fetching",
+    "example": "import { use, Suspense } from 'react';\n\n// Reading a Promise with use\nfunction UserProfile({ userPromise }: { userPromise: Promise<User> }) {\n  const user = use(userPromise);  // Suspends until resolved\n  return <div>{user.name}</div>;\n}\n\n// Can be conditional (unlike other hooks)\nfunction Comments({ shouldLoad }: { shouldLoad: boolean }) {\n  if (shouldLoad) {\n    const comments = use(fetchComments());\n    return <CommentList comments={comments} />;\n  }\n  return null;\n}\n\n// Reading Context with use\nfunction Button() {\n  const theme = use(ThemeContext);  // Same as useContext\n  return <button className={theme}>Click</button>;\n}\n\n// Usage pattern\nfunction App() {\n  const userPromise = fetchUser(1);  // Start fetching\n  return (\n    <Suspense fallback={<Spinner />}>\n      <UserProfile userPromise={userPromise} />\n    </Suspense>\n  );\n}"
+  },
+  {
+    "id": 43,
+    "question": "How do you implement render props pattern with TypeScript?",
+    "answer": "Render props pass a function as a prop that returns React elements. Type the function signature including its parameters and return type",
+    "example": "import { useState, ReactNode } from 'react';\n\n// Render prop type\ninterface MousePosition {\n  x: number;\n  y: number;\n}\n\ninterface MouseTrackerProps {\n  children: (position: MousePosition) => ReactNode;\n}\n\nfunction MouseTracker({ children }: MouseTrackerProps) {\n  const [position, setPosition] = useState<MousePosition>({ x: 0, y: 0 });\n\n  const handleMouseMove = (e: React.MouseEvent) => {\n    setPosition({ x: e.clientX, y: e.clientY });\n  };\n\n  return (\n    <div onMouseMove={handleMouseMove} style={{ height: '100vh' }}>\n      {children(position)}\n    </div>\n  );\n}\n\n// Usage\nfunction App() {\n  return (\n    <MouseTracker>\n      {({ x, y }) => (\n        <p>Mouse position: {x}, {y}</p>\n      )}\n    </MouseTracker>\n  );\n}\n\n// Alternative: render prop instead of children\ninterface DataFetcherProps<T> {\n  url: string;\n  render: (data: T, loading: boolean) => ReactNode;\n}"
+  },
+  {
+    "id": 44,
+    "question": "What are type guards and how do you create custom ones?",
+    "answer": "Type guards are expressions that narrow types at runtime. Custom type guards use the `is` keyword in return type. They help TypeScript understand type narrowing in conditional blocks",
+    "example": "// Built-in type guards\nfunction example(value: string | number) {\n  if (typeof value === 'string') {\n    value.toUpperCase();  // TypeScript knows it's string\n  }\n}\n\n// Custom type guard with 'is' keyword\ninterface Fish { swim: () => void; }\ninterface Bird { fly: () => void; }\n\nfunction isFish(animal: Fish | Bird): animal is Fish {\n  return (animal as Fish).swim !== undefined;\n}\n\nfunction move(animal: Fish | Bird) {\n  if (isFish(animal)) {\n    animal.swim();  // TypeScript knows it's Fish\n  } else {\n    animal.fly();   // TypeScript knows it's Bird\n  }\n}\n\n// Type guard for null check\nfunction isNonNull<T>(value: T): value is NonNullable<T> {\n  return value !== null && value !== undefined;\n}\n\nconst items: (string | null)[] = ['a', null, 'b'];\nconst filtered: string[] = items.filter(isNonNull);"
+  },
+  {
+    "id": 45,
+    "question": "How do you handle API responses with TypeScript in React?",
+    "answer": "Define response types, use generics for reusable fetch functions, and validate/parse responses. Consider using Zod for runtime validation matching TypeScript types",
+    "example": "import { z } from 'zod';\n\n// Define schema with Zod (provides both type and validation)\nconst UserSchema = z.object({\n  id: z.number(),\n  name: z.string(),\n  email: z.string().email()\n});\n\ntype User = z.infer<typeof UserSchema>;\n\n// Type-safe fetch function\nasync function fetchApi<T>(url: string, schema: z.ZodType<T>): Promise<T> {\n  const response = await fetch(url);\n  if (!response.ok) {\n    throw new Error(`HTTP error: ${response.status}`);\n  }\n  const data = await response.json();\n  return schema.parse(data);  // Runtime validation\n}\n\n// Usage in component\nfunction useUser(id: string) {\n  const [user, setUser] = useState<User | null>(null);\n  const [error, setError] = useState<Error | null>(null);\n\n  useEffect(() => {\n    fetchApi(`/api/users/${id}`, UserSchema)\n      .then(setUser)\n      .catch(setError);\n  }, [id]);\n\n  return { user, error };\n}"
+  },
+  {
+    "id": 46,
+    "question": "What is the `NoInfer` utility type in TypeScript 5.4+?",
+    "answer": "`NoInfer<T>` prevents TypeScript from inferring a type parameter from a specific position. Useful when you want inference from one argument but not another",
+    "example": "// Without NoInfer - T inferred from both arguments\nfunction createFSM<T extends string>(\n  initial: T,\n  states: T[]\n) { /* ... */ }\n\ncreateFSM('idle', ['idle', 'loading', 'error']);\n// T is 'idle' | 'loading' | 'error' - good\n\ncreateFSM('idle', ['loading', 'error']);\n// T is 'idle' | 'loading' | 'error' - but 'idle' not in states!\n\n// With NoInfer - T only inferred from states array\nfunction createFSM<T extends string>(\n  initial: NoInfer<T>,\n  states: T[]\n) { /* ... */ }\n\ncreateFSM('idle', ['loading', 'error']);\n// Error: 'idle' is not assignable to 'loading' | 'error'\n\ncreateFSM('idle', ['idle', 'loading', 'error']);\n// OK: T is 'idle' | 'loading' | 'error'"
+  },
+  {
+    "id": 47,
+    "question": "How do you implement polymorphic components in React?",
+    "answer": "Polymorphic components accept an `as` prop to change the rendered element while preserving type safety. Use generics and conditional types to infer correct props",
+    "example": "import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react';\n\n// Polymorphic component props\ntype BoxProps<E extends ElementType> = {\n  as?: E;\n  children: ReactNode;\n} & Omit<ComponentPropsWithoutRef<E>, 'as' | 'children'>;\n\n// Component with generic element type\nfunction Box<E extends ElementType = 'div'>(\n  { as, children, ...props }: BoxProps<E>\n) {\n  const Component = as || 'div';\n  return <Component {...props}>{children}</Component>;\n}\n\n// Usage - type-safe props based on element\n<Box>Default div</Box>\n<Box as=\"span\">Span element</Box>\n<Box as=\"a\" href=\"/home\">Link with href</Box>\n<Box as=\"button\" onClick={() => {}}>Button</Box>\n\n// Error: href not valid on button\n// <Box as=\"button\" href=\"/home\">Invalid</Box>\n\n// Works with custom components too\n<Box as={Link} to=\"/home\">React Router Link</Box>"
+  },
+  {
+    "id": 48,
+    "question": "What is the difference between `extends` and `implements` in TypeScript?",
+    "answer": "`extends` creates inheritance from a class (single) or constrains generics. `implements` ensures a class satisfies an interface contract without inheriting implementation",
+    "example": "// extends - inheritance (single class, multiple interfaces)\nclass Animal {\n  move() { console.log('Moving'); }\n}\n\nclass Dog extends Animal {  // Inherits move()\n  bark() { console.log('Woof'); }\n}\n\n// implements - contract (multiple interfaces)\ninterface Printable {\n  print(): void;\n}\n\ninterface Loggable {\n  log(): void;\n}\n\nclass Report implements Printable, Loggable {\n  print() { console.log('Printing...'); }  // Must implement\n  log() { console.log('Logging...'); }     // Must implement\n}\n\n// extends in generics - constraint\nfunction longest<T extends { length: number }>(a: T, b: T): T {\n  return a.length >= b.length ? a : b;\n}\n\n// extends with interfaces\ninterface Timestamped {\n  createdAt: Date;\n}\ninterface Entity extends Timestamped {\n  id: string;\n}"
+  },
+  {
+    "id": 49,
+    "question": "How do you handle deeply nested state updates in React?",
+    "answer": "Use Immer for immutable updates with mutable syntax, or spread operators for simple cases. Consider normalizing state or using useReducer for complex state",
+    "example": "import { produce } from 'immer';\nimport { useState } from 'react';\n\ninterface State {\n  user: {\n    profile: {\n      name: string;\n      address: {\n        city: string;\n        zip: string;\n      };\n    };\n  };\n}\n\n// Without Immer - verbose spread\nconst updateCity = (state: State, city: string): State => ({\n  ...state,\n  user: {\n    ...state.user,\n    profile: {\n      ...state.user.profile,\n      address: {\n        ...state.user.profile.address,\n        city\n      }\n    }\n  }\n});\n\n// With Immer - mutable syntax, immutable result\nconst updateCityImmer = (state: State, city: string) =>\n  produce(state, draft => {\n    draft.user.profile.address.city = city;\n  });\n\n// With useImmer hook\nimport { useImmer } from 'use-immer';\n\nfunction Profile() {\n  const [state, updateState] = useImmer<State>(initialState);\n  \n  const handleCityChange = (city: string) => {\n    updateState(draft => {\n      draft.user.profile.address.city = city;\n    });\n  };\n}"
+  },
+  {
+    "id": 50,
+    "question": "What is variance in TypeScript (covariance and contravariance)?",
+    "answer": "Variance describes how subtyping works with generics. Covariance preserves subtype direction (output positions), contravariance reverses it (input positions). TypeScript infers variance but you can be explicit",
+    "example": "// Covariance - output positions (return types)\n// If Dog extends Animal, then Producer<Dog> extends Producer<Animal>\ntype Producer<T> = () => T;\n\nconst dogProducer: Producer<Dog> = () => new Dog();\nconst animalProducer: Producer<Animal> = dogProducer;  // OK\n\n// Contravariance - input positions (parameters)\n// If Dog extends Animal, then Consumer<Animal> extends Consumer<Dog>\ntype Consumer<T> = (item: T) => void;\n\nconst animalConsumer: Consumer<Animal> = (a: Animal) => {};\nconst dogConsumer: Consumer<Dog> = animalConsumer;  // OK\n\n// Invariance - both input and output\ntype Box<T> = { get: () => T; set: (value: T) => void };\n// Box<Dog> is NOT assignable to Box<Animal> (or vice versa)\n\n// TypeScript 4.7+ explicit variance annotations\ntype ReadonlyBox<out T> = { get: () => T };      // Covariant\ntype WriteOnlyBox<in T> = { set: (v: T) => void }; // Contravariant\ntype MutableBox<in out T> = { get: () => T; set: (v: T) => void }; // Invariant"
+  }
+]
