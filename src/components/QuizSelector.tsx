@@ -6,9 +6,12 @@ import swiftQuestions from '../data/swiftQuizQuestions.json';
 import typescriptQuestions from '../data/typescriptQuizQuestions.json';
 import devopsQuestions from '../data/devopsQuizQuestions.json';
 import systemDesignQuestions from '../data/systemDesignQuizQuestions.json';
+import aiMlQuestions from '../data/aiMlQuizQuestions.json';
+import cybersecurityQuestions from '../data/cybersecurityQuizQuestions.json';
+import embeddedSystemsQuestions from '../data/embeddedSystemsQuizQuestions.json';
 import './Quiz.css';
 
-type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | null;
+type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | 'aiMl' | 'cybersecurity' | 'embeddedSystems' | null;
 
 interface QuizConfig {
   questions: Question[];
@@ -39,6 +42,18 @@ const quizConfigs: Record<Exclude<QuizType, null>, QuizConfig> = {
   systemDesign: {
     questions: systemDesignQuestions as Question[],
     title: 'System Design Quiz',
+  },
+  aiMl: {
+    questions: aiMlQuestions as Question[],
+    title: 'AI & Machine Learning Quiz',
+  },
+  cybersecurity: {
+    questions: cybersecurityQuestions as Question[],
+    title: 'Cybersecurity Quiz',
+  },
+  embeddedSystems: {
+    questions: embeddedSystemsQuestions as Question[],
+    title: 'Embedded Systems Quiz',
   },
 };
 
@@ -106,6 +121,27 @@ const QuizSelector: React.FC = () => {
         >
           <span className="quiz-select-title">System Design</span>
           <span className="quiz-select-count">{quizConfigs.systemDesign.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('aiMl')}
+        >
+          <span className="quiz-select-title">AI & ML</span>
+          <span className="quiz-select-count">{quizConfigs.aiMl.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('cybersecurity')}
+        >
+          <span className="quiz-select-title">Cybersecurity</span>
+          <span className="quiz-select-count">{quizConfigs.cybersecurity.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('embeddedSystems')}
+        >
+          <span className="quiz-select-title">Embedded Systems</span>
+          <span className="quiz-select-count">{quizConfigs.embeddedSystems.questions.length} questions</span>
         </button>
       </div>
     </div>
