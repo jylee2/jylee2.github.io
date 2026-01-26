@@ -4,9 +4,10 @@ import androidQuestions from '../data/androidQuizQuestions.json';
 import rustQuestions from '../data/rustQuizQuestions.json';
 import swiftQuestions from '../data/swiftQuizQuestions.json';
 import typescriptQuestions from '../data/typescriptQuizQuestions.json';
+import devopsQuestions from '../data/devopsQuizQuestions.json';
 import './Quiz.css';
 
-type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | null;
+type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | null;
 
 interface QuizConfig {
   questions: Question[];
@@ -29,6 +30,10 @@ const quizConfigs: Record<Exclude<QuizType, null>, QuizConfig> = {
   typescript: {
     questions: typescriptQuestions as Question[],
     title: 'TypeScript React Quiz',
+  },
+  devops: {
+    questions: devopsQuestions as Question[],
+    title: 'DevOps Quiz',
   },
 };
 
@@ -82,6 +87,13 @@ const QuizSelector: React.FC = () => {
         >
           <span className="quiz-select-title">TypeScript React</span>
           <span className="quiz-select-count">{quizConfigs.typescript.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('devops')}
+        >
+          <span className="quiz-select-title">DevOps</span>
+          <span className="quiz-select-count">{quizConfigs.devops.questions.length} questions</span>
         </button>
       </div>
     </div>
