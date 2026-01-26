@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import Quiz, { Question } from './Quiz';
 import androidQuestions from '../data/androidQuizQuestions.json';
 import rustQuestions from '../data/rustQuizQuestions.json';
+import swiftQuestions from '../data/swiftQuizQuestions.json';
 import './Quiz.css';
 
-type QuizType = 'android' | 'rust' | null;
+type QuizType = 'android' | 'rust' | 'swift' | null;
 
 interface QuizConfig {
   questions: Question[];
@@ -19,6 +20,10 @@ const quizConfigs: Record<Exclude<QuizType, null>, QuizConfig> = {
   rust: {
     questions: rustQuestions as Question[],
     title: 'Rust Backend Quiz',
+  },
+  swift: {
+    questions: swiftQuestions as Question[],
+    title: 'Swift iOS Quiz',
   },
 };
 
@@ -51,6 +56,13 @@ const QuizSelector: React.FC = () => {
         >
           <span className="quiz-select-title">Kotlin Android</span>
           <span className="quiz-select-count">{quizConfigs.android.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('swift')}
+        >
+          <span className="quiz-select-title">Swift iOS</span>
+          <span className="quiz-select-count">{quizConfigs.swift.questions.length} questions</span>
         </button>
         <button
           className="quiz-select-button"
