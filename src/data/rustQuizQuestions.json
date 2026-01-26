@@ -1,141 +1,141 @@
 [
   {
     "id": 1,
-    "question": "What is Rust primarily known for?",
-    "answer": "System programming with a focus on performance and memory safety without garbage collection",
-    "example": "// Rust excels at system programming:\n// - Operating systems\n// - Game engines\n// - Embedded systems\n// - WebAssembly\n// - CLI tools\n\nfn main() {\n    // Zero-cost abstractions\n    // Memory safety at compile time\n    // No garbage collector overhead\n}"
+    "question": "How do you declare variables in Rust and what is the default mutability?",
+    "answer": "Variables are declared with `let` and are immutable by default. Use `let mut` for mutable variables. This prevents accidental mutations and makes code safer",
+    "example": "// Immutable by default\nlet x = 5;\n// x = 6;  // Error: cannot assign twice to immutable variable\n\n// Explicitly mutable\nlet mut y = 5;\ny = 6;  // OK\n\n// Type annotation (optional due to inference)\nlet z: i32 = 10;\n\n// Shadowing - redeclare with same name\nlet x = x + 1;  // Creates new variable, shadows previous"
   },
   {
     "id": 2,
-    "question": "Which of the following is NOT a core principle of Rust?",
-    "answer": "Garbage collection is NOT a core principle of Rust; it uses ownership and borrowing instead for memory management",
-    "example": "// Rust's core principles:\n// 1. Memory safety (without GC)\n// 2. Concurrency without data races\n// 3. Zero-cost abstractions\n// 4. Performance\n\n// Memory is managed through ownership:\nlet s1 = String::from(\"hello\");\nlet s2 = s1;  // s1 is moved, not garbage collected\n// println!(\"{}\", s1);  // Error: s1 no longer valid"
+    "question": "What are Rust's basic scalar types?",
+    "answer": "Rust has four scalar types: integers (i8-i128, u8-u128), floating-point (f32, f64), boolean (bool), and character (char, 4 bytes for Unicode)",
+    "example": "// Integers: signed (i) and unsigned (u)\nlet a: i32 = -42;      // 32-bit signed (default)\nlet b: u64 = 100;      // 64-bit unsigned\nlet c: usize = 10;     // Pointer-sized, for indexing\n\n// Floating-point\nlet d: f64 = 3.14;     // 64-bit (default)\nlet e: f32 = 2.5;      // 32-bit\n\n// Boolean and char\nlet t: bool = true;\nlet ch: char = 'z';    // Unicode scalar value\nlet emoji: char = '🦀';"
   },
   {
     "id": 3,
-    "question": "What is 'ownership' in Rust?",
-    "answer": "A system for managing memory without a garbage collector; each value has exactly one owner, and when the owner goes out of scope, the value is dropped",
-    "example": "fn main() {\n    let s = String::from(\"hello\");  // s owns the String\n    takes_ownership(s);              // s's value moves into function\n    // println!(\"{}\", s);           // Error: s no longer valid\n}\n\nfn takes_ownership(some_string: String) {\n    println!(\"{}\", some_string);\n}  // some_string goes out of scope and is dropped"
+    "question": "How do you define and call functions in Rust?",
+    "answer": "Functions are defined with `fn`, parameters require type annotations, and the return type is specified with `->`. The last expression without a semicolon is implicitly returned",
+    "example": "// Function with parameters and return type\nfn add(x: i32, y: i32) -> i32 {\n    x + y  // No semicolon = implicit return\n}\n\n// Explicit return\nfn absolute(x: i32) -> i32 {\n    if x < 0 {\n        return -x;  // Early return\n    }\n    x\n}\n\n// No return value (returns unit type ())\nfn greet(name: &str) {\n    println!(\"Hello, {}!\", name);\n}\n\nlet sum = add(5, 3);  // Call: sum = 8"
   },
   {
     "id": 4,
-    "question": "What is a 'borrow' in Rust?",
-    "answer": "Gaining temporary access to data without taking ownership; borrows can be immutable (&T) or mutable (&mut T)",
-    "example": "fn main() {\n    let s = String::from(\"hello\");\n    \n    // Immutable borrow - can have multiple\n    let len = calculate_length(&s);\n    println!(\"Length of '{}' is {}\", s, len);  // s still valid\n}\n\nfn calculate_length(s: &String) -> usize {\n    s.len()  // Borrowing, not owning\n}"
+    "question": "How do structs work in Rust?",
+    "answer": "Structs are custom data types that group related values. Rust has three kinds: named-field structs, tuple structs, and unit structs. Use `impl` blocks to add methods",
+    "example": "// Named-field struct\nstruct User {\n    username: String,\n    email: String,\n    active: bool,\n}\n\n// Tuple struct\nstruct Point(i32, i32, i32);\n\n// Unit struct (for traits)\nstruct AlwaysEqual;\n\n// Creating instances\nlet user = User {\n    username: String::from(\"alice\"),\n    email: String::from(\"alice@example.com\"),\n    active: true,\n};\n\nlet origin = Point(0, 0, 0);\nprintln!(\"x: {}\", origin.0);  // Access tuple struct field"
   },
   {
     "id": 5,
-    "question": "Which keyword is used to declare an immutable variable in Rust?",
-    "answer": "`let` declares an immutable variable by default in Rust",
-    "example": "let x = 5;       // Immutable by default\n// x = 6;        // Error: cannot assign twice\n\nlet mut y = 5;   // Mutable with 'mut'\ny = 6;           // OK\n\nconst MAX: u32 = 100;  // Compile-time constant\nstatic GLOBAL: &str = \"hello\";  // Static lifetime"
+    "question": "How do you add methods to a struct in Rust?",
+    "answer": "Methods are defined in `impl` blocks. Methods take `&self`, `&mut self`, or `self` as the first parameter. Associated functions (like constructors) don't take self",
+    "example": "struct Rectangle {\n    width: u32,\n    height: u32,\n}\n\nimpl Rectangle {\n    // Associated function (constructor)\n    fn new(width: u32, height: u32) -> Self {\n        Self { width, height }\n    }\n    \n    // Method - borrows self\n    fn area(&self) -> u32 {\n        self.width * self.height\n    }\n    \n    // Method - mutably borrows self\n    fn scale(&mut self, factor: u32) {\n        self.width *= factor;\n        self.height *= factor;\n    }\n}\n\nlet rect = Rectangle::new(10, 20);\nprintln!(\"Area: {}\", rect.area());"
   },
   {
     "id": 6,
-    "question": "Which keyword is used to declare a mutable variable in Rust?",
-    "answer": "`mut` is used with `let` to declare a mutable variable",
-    "example": "let mut counter = 0;\n\ncounter += 1;  // OK: counter is mutable\ncounter += 1;\n\nprintln!(\"Counter: {}\", counter);  // Prints: Counter: 2\n\n// Mutable references:\nlet mut s = String::from(\"hello\");\nlet r = &mut s;\nr.push_str(\", world\");"
+    "question": "What are enums in Rust and how do they differ from other languages?",
+    "answer": "Rust enums are algebraic data types where each variant can hold different types and amounts of data. They're more powerful than C-style enums and enable type-safe state modeling",
+    "example": "// Simple enum\nenum Direction {\n    North,\n    South,\n    East,\n    West,\n}\n\n// Enum with data in variants\nenum Message {\n    Quit,                       // No data\n    Move { x: i32, y: i32 },   // Named fields\n    Write(String),              // Single value\n    ChangeColor(u8, u8, u8),   // Multiple values\n}\n\n// Usage\nlet msg = Message::Move { x: 10, y: 20 };\nlet quit = Message::Quit;\n\n// Enums can have methods too\nimpl Message {\n    fn call(&self) { /* ... */ }\n}"
   },
   {
     "id": 7,
-    "question": "What is the purpose of 'Cargo' in Rust?",
-    "answer": "Cargo is Rust's build system and package manager, handling compilation, dependencies, testing, and documentation",
-    "example": "# Common Cargo commands:\ncargo new my_project    # Create new project\ncargo build             # Compile the project\ncargo run               # Compile and run\ncargo test              # Run tests\ncargo doc               # Generate documentation\ncargo publish           # Publish to crates.io\n\n# Cargo.toml manages dependencies:\n[dependencies]\nserde = \"1.0\""
+    "question": "How does pattern matching with `match` work in Rust?",
+    "answer": "`match` compares a value against patterns and executes the matching arm. It must be exhaustive (cover all cases) and can destructure values to extract data",
+    "example": "enum Coin {\n    Penny,\n    Nickel,\n    Dime,\n    Quarter(String),  // State name\n}\n\nfn value_in_cents(coin: Coin) -> u8 {\n    match coin {\n        Coin::Penny => {\n            println!(\"Lucky penny!\");\n            1\n        }\n        Coin::Nickel => 5,\n        Coin::Dime => 10,\n        Coin::Quarter(state) => {\n            println!(\"Quarter from {}\", state);\n            25\n        }\n    }\n}\n\n// Match with catch-all\nlet x = 5;\nmatch x {\n    1 => println!(\"one\"),\n    2 | 3 => println!(\"two or three\"),\n    4..=10 => println!(\"four to ten\"),\n    _ => println!(\"something else\"),  // Catch-all\n}"
   },
   {
     "id": 8,
-    "question": "What is a 'slice' in Rust?",
-    "answer": "A reference to a contiguous sequence of elements in a collection, allowing you to reference a portion without taking ownership",
-    "example": "let s = String::from(\"hello world\");\n\nlet hello: &str = &s[0..5];   // String slice\nlet world: &str = &s[6..11];\n\nlet arr = [1, 2, 3, 4, 5];\nlet slice: &[i32] = &arr[1..4];  // Array slice: [2, 3, 4]\n\nprintln!(\"First word: {}\", hello);"
+    "question": "What is `if let` and when should you use it?",
+    "answer": "`if let` is syntactic sugar for a `match` that only cares about one pattern. It's more concise when you only need to handle one case and ignore the rest",
+    "example": "let some_value: Option<i32> = Some(3);\n\n// Using match (verbose for single pattern)\nmatch some_value {\n    Some(x) => println!(\"Got: {}\", x),\n    None => (),\n}\n\n// Using if let (cleaner)\nif let Some(x) = some_value {\n    println!(\"Got: {}\", x);\n}\n\n// With else\nif let Some(x) = some_value {\n    println!(\"Got: {}\", x);\n} else {\n    println!(\"Got nothing\");\n}\n\n// while let for loops\nlet mut stack = vec![1, 2, 3];\nwhile let Some(top) = stack.pop() {\n    println!(\"{}\", top);\n}"
   },
   {
     "id": 9,
-    "question": "What does 'Result<T, E>' represent in Rust?",
-    "answer": "A type for representing success (Ok(T)) or failure (Err(E)), used for recoverable error handling",
-    "example": "use std::fs::File;\n\nfn read_file() -> Result<String, std::io::Error> {\n    let f = File::open(\"file.txt\")?;  // ? propagates error\n    // ... read file\n    Ok(contents)\n}\n\nmatch read_file() {\n    Ok(data) => println!(\"Contents: {}\", data),\n    Err(e) => println!(\"Error: {}\", e),\n}"
+    "question": "How do vectors work in Rust?",
+    "answer": "`Vec<T>` is a growable array type stored on the heap. Elements must be the same type. Use `vec![]` macro or `Vec::new()` to create, and various methods to manipulate",
+    "example": "// Creating vectors\nlet v1: Vec<i32> = Vec::new();\nlet v2 = vec![1, 2, 3];  // Macro with initial values\n\n// Adding elements\nlet mut v = Vec::new();\nv.push(5);\nv.push(6);\n\n// Accessing elements\nlet third = &v2[2];           // Panics if out of bounds\nlet third = v2.get(2);        // Returns Option<&T>\n\n// Iterating\nfor i in &v2 {\n    println!(\"{}\", i);\n}\n\n// Mutating while iterating\nlet mut v = vec![1, 2, 3];\nfor i in &mut v {\n    *i += 10;\n}"
   },
   {
     "id": 10,
-    "question": "What is 'Option<T>' used for in Rust?",
-    "answer": "To indicate the presence (Some(T)) or absence (None) of a value, replacing null pointers found in other languages",
-    "example": "fn find_user(id: u32) -> Option<User> {\n    if id == 1 {\n        Some(User { name: \"Alice\".into() })\n    } else {\n        None\n    }\n}\n\nmatch find_user(1) {\n    Some(user) => println!(\"Found: {}\", user.name),\n    None => println!(\"User not found\"),\n}\n\n// Or use if let:\nif let Some(user) = find_user(1) {\n    println!(\"Found: {}\", user.name);\n}"
+    "question": "What is the difference between `String` and `&str` in Rust?",
+    "answer": "`String` is an owned, heap-allocated, growable string. `&str` is a borrowed string slice - a view into string data. String literals are `&'static str`",
+    "example": "// &str - borrowed string slice\nlet s1: &str = \"hello\";  // String literal, static lifetime\n\n// String - owned, growable\nlet mut s2 = String::from(\"hello\");\ns2.push_str(\", world\");\ns2.push('!');\n\n// Converting between them\nlet s3: String = s1.to_string();  // &str -> String\nlet s4: String = \"hello\".into();  // Same thing\nlet s5: &str = &s2;               // String -> &str (deref coercion)\nlet s6: &str = &s2[0..5];         // Slice of String\n\n// Functions often take &str for flexibility\nfn greet(name: &str) {\n    println!(\"Hello, {}!\", name);\n}\ngreet(\"world\");      // &str works\ngreet(&s2);          // &String coerces to &str"
   },
   {
     "id": 11,
-    "question": "What is a 'trait' in Rust?",
-    "answer": "A way to share behavior across different types, similar to interfaces in other languages but with more flexibility",
-    "example": "trait Summary {\n    fn summarize(&self) -> String;\n    \n    // Default implementation\n    fn preview(&self) -> String {\n        format!(\"Read more: {}\", self.summarize())\n    }\n}\n\nstruct Article { title: String, content: String }\n\nimpl Summary for Article {\n    fn summarize(&self) -> String {\n        format!(\"{}: {}\", self.title, &self.content[..50])\n    }\n}"
+    "question": "What is ownership in Rust and why does it matter?",
+    "answer": "Ownership is Rust's system for memory management without garbage collection. Each value has one owner, and when the owner goes out of scope, the value is dropped (freed)",
+    "example": "fn main() {\n    let s1 = String::from(\"hello\");  // s1 owns the String\n    let s2 = s1;                      // Ownership moves to s2\n    // println!(\"{}\", s1);           // Error! s1 no longer valid\n    \n    let s3 = s2.clone();              // Deep copy, both valid\n    println!(\"{} and {}\", s2, s3);   // OK\n}\n\n// Ownership and functions\nfn takes_ownership(s: String) {\n    println!(\"{}\", s);\n}  // s is dropped here\n\nfn main() {\n    let s = String::from(\"hello\");\n    takes_ownership(s);\n    // println!(\"{}\", s);  // Error! s was moved\n}"
   },
   {
     "id": 12,
-    "question": "What is the 'match' control flow operator used for?",
-    "answer": "Conditional execution based on pattern matching; it must be exhaustive, covering all possible values",
-    "example": "enum Coin {\n    Penny,\n    Nickel,\n    Dime,\n    Quarter(UsState),\n}\n\nfn value_in_cents(coin: Coin) -> u8 {\n    match coin {\n        Coin::Penny => 1,\n        Coin::Nickel => 5,\n        Coin::Dime => 10,\n        Coin::Quarter(state) => {\n            println!(\"Quarter from {:?}\", state);\n            25\n        }\n    }\n}"
+    "question": "What are references and borrowing in Rust?",
+    "answer": "References allow you to use a value without taking ownership. `&T` is an immutable borrow (can have many), `&mut T` is a mutable borrow (only one at a time)",
+    "example": "fn main() {\n    let s = String::from(\"hello\");\n    \n    // Immutable borrow - multiple allowed\n    let len = calculate_length(&s);\n    println!(\"'{}' has length {}\", s, len);  // s still valid\n    \n    // Mutable borrow - only one at a time\n    let mut s = String::from(\"hello\");\n    change(&mut s);\n}\n\nfn calculate_length(s: &String) -> usize {\n    s.len()\n}  // s goes out of scope but doesn't drop (borrowed)\n\nfn change(s: &mut String) {\n    s.push_str(\", world\");\n}\n\n// Borrowing rules:\n// 1. Any number of immutable references OR\n// 2. Exactly one mutable reference\n// 3. References must always be valid"
   },
   {
     "id": 13,
-    "question": "What is the 'macro!' syntax used for in Rust?",
-    "answer": "Creating compile-time code generation; macros are expanded before the compiler interprets the code",
-    "example": "// Built-in macros:\nprintln!(\"Hello, {}!\", name);  // Formatted printing\nvec![1, 2, 3];                  // Vector creation\nassert_eq!(a, b);               // Testing assertion\n\n// Custom macro:\nmacro_rules! say_hello {\n    () => {\n        println!(\"Hello!\");\n    };\n    ($name:expr) => {\n        println!(\"Hello, {}!\", $name);\n    };\n}\n\nsay_hello!();           // Prints: Hello!\nsay_hello!(\"World\");    // Prints: Hello, World!"
+    "question": "What is the `Option` type and how do you use it?",
+    "answer": "`Option<T>` represents a value that may or may not exist: `Some(T)` contains a value, `None` represents absence. It replaces null and forces explicit handling",
+    "example": "fn find_word(s: &str, target: char) -> Option<usize> {\n    for (i, c) in s.chars().enumerate() {\n        if c == target {\n            return Some(i);\n        }\n    }\n    None\n}\n\nlet result = find_word(\"hello\", 'l');\n\n// Pattern matching\nmatch result {\n    Some(index) => println!(\"Found at {}\", index),\n    None => println!(\"Not found\"),\n}\n\n// Common methods\nlet x: Option<i32> = Some(5);\nx.unwrap();           // Returns 5, panics if None\nx.unwrap_or(0);       // Returns 5, or default if None\nx.unwrap_or_default();// Returns 5, or type's default\nx.map(|n| n * 2);     // Some(10)\nx.is_some();          // true\nx.is_none();          // false"
   },
   {
     "id": 14,
-    "question": "Which of these is a valid way to create a new, empty vector in Rust?",
-    "answer": "`Vec::new()` creates an empty vector; `vec![]` also works with the macro",
-    "example": "// Using Vec::new()\nlet v: Vec<i32> = Vec::new();\n\n// Using vec! macro (also valid for empty)\nlet v: Vec<i32> = vec![];\n\n// With initial values\nlet v = vec![1, 2, 3];\n\n// With capacity\nlet v: Vec<i32> = Vec::with_capacity(10);\n\n// Push elements\nlet mut v = Vec::new();\nv.push(1);\nv.push(2);"
+    "question": "What is the `Result` type and how do you handle errors?",
+    "answer": "`Result<T, E>` represents either success (`Ok(T)`) or failure (`Err(E)`). It's Rust's primary error handling mechanism for recoverable errors",
+    "example": "use std::fs::File;\nuse std::io::Read;\n\nfn read_file(path: &str) -> Result<String, std::io::Error> {\n    let mut file = File::open(path)?;  // ? propagates errors\n    let mut contents = String::new();\n    file.read_to_string(&mut contents)?;\n    Ok(contents)\n}\n\n// Handling results\nmatch read_file(\"hello.txt\") {\n    Ok(contents) => println!(\"{}\", contents),\n    Err(e) => eprintln!(\"Error: {}\", e),\n}\n\n// Common methods\nlet r: Result<i32, &str> = Ok(5);\nr.unwrap();              // Returns 5, panics on Err\nr.expect(\"custom msg\"); // Like unwrap with message\nr.unwrap_or(0);          // Returns 5, or default on Err\nr.is_ok();               // true\nr.ok();                  // Converts to Option<T>"
   },
   {
     "id": 15,
-    "question": "What is the purpose of the 'mod' keyword in Rust?",
-    "answer": "To organize code into modules, providing namespacing and privacy control",
-    "example": "// In lib.rs or main.rs:\nmod front_of_house {        // Inline module\n    pub mod hosting {\n        pub fn add_to_waitlist() {}\n    }\n}\n\nmod back_of_house;          // Load from back_of_house.rs\n\nuse front_of_house::hosting;\n\npub fn eat_at_restaurant() {\n    hosting::add_to_waitlist();\n}"
+    "question": "What does the `?` operator do in Rust?",
+    "answer": "The `?` operator propagates errors by returning early from a function if the Result is Err or Option is None. It's syntactic sugar for match with early return",
+    "example": "use std::fs::File;\nuse std::io::{self, Read};\n\n// Without ? operator (verbose)\nfn read_file_verbose(path: &str) -> Result<String, io::Error> {\n    let file = match File::open(path) {\n        Ok(f) => f,\n        Err(e) => return Err(e),\n    };\n    // ... continue\n    Ok(String::new())\n}\n\n// With ? operator (clean)\nfn read_file(path: &str) -> Result<String, io::Error> {\n    let mut file = File::open(path)?;  // Returns Err if fails\n    let mut contents = String::new();\n    file.read_to_string(&mut contents)?;\n    Ok(contents)\n}\n\n// Chaining with ?\nfn read_file_chain(path: &str) -> Result<String, io::Error> {\n    let mut contents = String::new();\n    File::open(path)?.read_to_string(&mut contents)?;\n    Ok(contents)\n}"
   },
   {
     "id": 16,
-    "question": "How do you handle errors in Rust?",
-    "answer": "Primarily with `Result<T, E>` for recoverable errors and `panic!` for unrecoverable errors; the `?` operator propagates errors",
-    "example": "use std::fs::File;\nuse std::io::{self, Read};\n\nfn read_username() -> Result<String, io::Error> {\n    let mut f = File::open(\"username.txt\")?;  // ? propagates Err\n    let mut s = String::new();\n    f.read_to_string(&mut s)?;\n    Ok(s)\n}\n\n// Or use unwrap/expect for quick prototyping:\nlet f = File::open(\"file.txt\").unwrap();  // Panics on Err\nlet f = File::open(\"file.txt\").expect(\"Failed to open\");"
+    "question": "How do you define and use traits in Rust?",
+    "answer": "Traits define shared behavior that types can implement. They're similar to interfaces but can have default implementations and work with generics for polymorphism",
+    "example": "// Define a trait\ntrait Summary {\n    fn summarize(&self) -> String;\n    \n    // Default implementation\n    fn preview(&self) -> String {\n        format!(\"Read more: {}...\", &self.summarize()[..20])\n    }\n}\n\n// Implement for a type\nstruct Article {\n    title: String,\n    content: String,\n}\n\nimpl Summary for Article {\n    fn summarize(&self) -> String {\n        format!(\"{}: {}\", self.title, self.content)\n    }\n}\n\n// Use trait as parameter (impl Trait syntax)\nfn notify(item: &impl Summary) {\n    println!(\"News: {}\", item.summarize());\n}\n\n// Or with trait bounds\nfn notify_bound<T: Summary>(item: &T) {\n    println!(\"News: {}\", item.summarize());\n}"
   },
   {
     "id": 17,
-    "question": "What is a 'closure' in Rust?",
-    "answer": "An anonymous function that can capture variables from its enclosing scope",
-    "example": "let x = 4;\n\n// Closure capturing x from environment\nlet equal_to_x = |z| z == x;\n\nassert!(equal_to_x(4));\n\n// Closure with type annotations\nlet add = |a: i32, b: i32| -> i32 { a + b };\n\n// Used with iterators\nlet v: Vec<i32> = vec![1, 2, 3];\nlet doubled: Vec<i32> = v.iter().map(|x| x * 2).collect();"
+    "question": "How do generics work in Rust?",
+    "answer": "Generics allow writing code that works with multiple types. The compiler generates specialized code for each concrete type used (monomorphization), so there's no runtime cost",
+    "example": "// Generic function\nfn largest<T: PartialOrd>(list: &[T]) -> &T {\n    let mut largest = &list[0];\n    for item in list {\n        if item > largest {\n            largest = item;\n        }\n    }\n    largest\n}\n\n// Generic struct\nstruct Point<T> {\n    x: T,\n    y: T,\n}\n\nimpl<T> Point<T> {\n    fn x(&self) -> &T {\n        &self.x\n    }\n}\n\n// Multiple generic types\nstruct Pair<T, U> {\n    first: T,\n    second: U,\n}\n\nlet int_point = Point { x: 5, y: 10 };\nlet float_point = Point { x: 1.0, y: 4.0 };"
   },
   {
     "id": 18,
-    "question": "What does 'lifetimes' in Rust ensure?",
-    "answer": "That references are always valid; lifetimes prevent dangling references by ensuring borrowed data outlives the borrower",
-    "example": "// Lifetime annotation: 'a\nfn longest<'a>(x: &'a str, y: &'a str) -> &'a str {\n    if x.len() > y.len() { x } else { y }\n}\n\n// The returned reference is valid as long as both inputs are\nlet s1 = String::from(\"long\");\nlet s2 = String::from(\"short\");\nlet result = longest(&s1, &s2);\nprintln!(\"Longest: {}\", result);\n\n// Lifetime in struct:\nstruct Excerpt<'a> {\n    part: &'a str,\n}"
+    "question": "How do you iterate over collections in Rust?",
+    "answer": "Use `for` loops with iterators. `iter()` borrows elements, `iter_mut()` borrows mutably, and `into_iter()` takes ownership. Iterator adapters chain operations lazily",
+    "example": "let v = vec![1, 2, 3, 4, 5];\n\n// Basic iteration (borrows)\nfor x in &v {\n    println!(\"{}\", x);\n}\n\n// Mutable iteration\nlet mut v = vec![1, 2, 3];\nfor x in &mut v {\n    *x *= 2;\n}\n\n// Iterator adapters (lazy, chainable)\nlet doubled: Vec<i32> = v.iter()\n    .map(|x| x * 2)\n    .collect();\n\nlet evens: Vec<i32> = v.iter()\n    .filter(|x| *x % 2 == 0)\n    .cloned()\n    .collect();\n\nlet sum: i32 = v.iter().sum();\nlet product: i32 = v.iter().product();\n\n// Enumerate for index\nfor (i, val) in v.iter().enumerate() {\n    println!(\"{}: {}\", i, val);\n}"
   },
   {
     "id": 19,
-    "question": "What is 'unsafe' Rust?",
-    "answer": "A block of code where the compiler cannot guarantee memory safety; allows dereferencing raw pointers, calling unsafe functions, and more",
-    "example": "// Unsafe allows:\n// - Dereference raw pointers\n// - Call unsafe functions\n// - Access mutable static variables\n// - Implement unsafe traits\n\nlet mut num = 5;\nlet r1 = &num as *const i32;      // Raw pointer\nlet r2 = &mut num as *mut i32;\n\nunsafe {\n    println!(\"r1 is: {}\", *r1);   // Dereference in unsafe block\n    *r2 = 10;\n}\n\n// Calling C functions:\nextern \"C\" {\n    fn abs(input: i32) -> i32;\n}\nunsafe { abs(-3); }"
+    "question": "How do you write and run tests in Rust?",
+    "answer": "Tests are functions annotated with `#[test]`. Use `assert!`, `assert_eq!`, and `assert_ne!` macros. Run with `cargo test`. Tests can be in the same file or a separate `tests/` directory",
+    "example": "// In src/lib.rs or any module\npub fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n\n#[cfg(test)]  // Only compile for tests\nmod tests {\n    use super::*;\n    \n    #[test]\n    fn test_add() {\n        assert_eq!(add(2, 2), 4);\n    }\n    \n    #[test]\n    fn test_add_negative() {\n        assert_eq!(add(-1, 1), 0);\n    }\n    \n    #[test]\n    #[should_panic(expected = \"overflow\")]\n    fn test_panic() {\n        panic!(\"overflow\");\n    }\n    \n    #[test]\n    fn test_result() -> Result<(), String> {\n        if add(2, 2) == 4 {\n            Ok(())\n        } else {\n            Err(String::from(\"math is broken\"))\n        }\n    }\n}"
   },
   {
     "id": 20,
-    "question": "Which command compiles a Rust program?",
-    "answer": "`cargo build` compiles a Cargo project; `rustc` compiles individual Rust files",
-    "example": "# Cargo commands (recommended):\ncargo build            # Debug build\ncargo build --release  # Optimized release build\ncargo run              # Build and run\ncargo check            # Fast syntax check without building\n\n# Direct rustc (for single files):\nrustc main.rs          # Compile main.rs\nrustc -O main.rs       # Optimized build\n\n# Output in target/debug or target/release"
+    "question": "What is shadowing in Rust and how does it differ from mutability?",
+    "answer": "Shadowing creates a new variable with the same name, allowing type changes and transformations. Unlike `mut`, shadowing creates a new binding rather than modifying the existing one",
+    "example": "// Shadowing - creates new variable\nlet x = 5;\nlet x = x + 1;       // New x shadows old x\nlet x = x * 2;       // Shadows again\nprintln!(\"{}\", x);   // 12\n\n// Can change types with shadowing\nlet spaces = \"   \";          // &str\nlet spaces = spaces.len();   // usize - different type!\n\n// Mutability - modifies same variable\nlet mut y = 5;\ny = 6;               // Same variable, same type\n// y = \"hello\";      // Error! Can't change type\n\n// Shadowing in inner scope\nlet x = 5;\n{\n    let x = 99;      // Shadows only in this scope\n    println!(\"{}\", x);  // 99\n}\nprintln!(\"{}\", x);      // 5 - outer x unchanged"
   },
   {
     "id": 21,
-    "question": "What is the default behavior of `clone()` in Rust for most types?",
-    "answer": "Performs a deep copy, creating a completely independent duplicate of the data",
-    "example": "let s1 = String::from(\"hello\");\nlet s2 = s1.clone();  // Deep copy - s1 and s2 are independent\n\nprintln!(\"s1 = {}, s2 = {}\", s1, s2);  // Both valid\n\n// For Copy types (stack-only), copies happen automatically:\nlet x = 5;\nlet y = x;  // Copy, not move - both valid\n\n// Clone for complex types:\n#[derive(Clone)]\nstruct Point { x: i32, y: i32 }\nlet p2 = p1.clone();"
+    "question": "What are tuples and arrays in Rust?",
+    "answer": "Tuples group values of different types with fixed length, accessed by index. Arrays are fixed-size collections of same-type elements, stored on the stack",
+    "example": "// Tuples - different types, fixed length\nlet tup: (i32, f64, char) = (500, 6.4, 'y');\n\n// Destructuring\nlet (x, y, z) = tup;\nprintln!(\"y is {}\", y);\n\n// Index access\nlet five_hundred = tup.0;\nlet six_point_four = tup.1;\n\n// Arrays - same type, fixed length, stack allocated\nlet arr: [i32; 5] = [1, 2, 3, 4, 5];\nlet first = arr[0];\n\n// Initialize with same value\nlet zeros = [0; 5];  // [0, 0, 0, 0, 0]\n\n// Slices from arrays\nlet slice: &[i32] = &arr[1..3];  // [2, 3]\n\n// For dynamic size, use Vec<T> instead\nlet mut vec = vec![1, 2, 3];\nvec.push(4);  // Can grow"
   },
   {
     "id": 22,
-    "question": "What is the primary use case for `Arc<T>` and `Mutex<T>` in Rust?",
-    "answer": "Concurrent shared state management; Arc provides thread-safe reference counting, Mutex provides mutual exclusion",
-    "example": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nlet counter = Arc::new(Mutex::new(0));\nlet mut handles = vec![];\n\nfor _ in 0..10 {\n    let counter = Arc::clone(&counter);\n    let handle = thread::spawn(move || {\n        let mut num = counter.lock().unwrap();\n        *num += 1;\n    });\n    handles.push(handle);\n}\n\nfor handle in handles { handle.join().unwrap(); }\nprintln!(\"Result: {}\", *counter.lock().unwrap());"
+    "question": "How does `HashMap` work in Rust?",
+    "answer": "`HashMap<K, V>` stores key-value pairs with O(1) average lookup. Keys must implement `Eq` and `Hash`. Values are owned, and accessing returns `Option<&V>`",
+    "example": "use std::collections::HashMap;\n\nlet mut scores = HashMap::new();\n\n// Insert\nscores.insert(String::from(\"Blue\"), 10);\nscores.insert(String::from(\"Red\"), 50);\n\n// Access - returns Option<&V>\nlet team = String::from(\"Blue\");\nlet score = scores.get(&team);  // Some(&10)\n\n// Iterate\nfor (key, value) in &scores {\n    println!(\"{}: {}\", key, value);\n}\n\n// Update only if key doesn't exist\nscores.entry(String::from(\"Yellow\")).or_insert(25);\n\n// Update based on old value\nlet text = \"hello world hello\";\nlet mut word_count = HashMap::new();\nfor word in text.split_whitespace() {\n    let count = word_count.entry(word).or_insert(0);\n    *count += 1;\n}"
   },
   {
     "id": 23,
-    "question": "Which of the following traits allows a type to be converted into an iterator?",
-    "answer": "`IntoIterator` trait allows a type to be converted into an iterator, enabling use in for loops",
-    "example": "// IntoIterator enables for loops:\nlet v = vec![1, 2, 3];\nfor x in v {           // v.into_iter() called implicitly\n    println!(\"{}\", x);\n}\n\n// Custom type implementing IntoIterator:\nimpl IntoIterator for MyCollection {\n    type Item = i32;\n    type IntoIter = std::vec::IntoIter<i32>;\n    \n    fn into_iter(self) -> Self::IntoIter {\n        self.items.into_iter()\n    }\n}"
+    "question": "What is the `derive` attribute and which traits can be automatically derived?",
+    "answer": "`#[derive]` automatically implements traits for structs and enums. Common derivable traits include Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, and Default",
+    "example": "#[derive(Debug, Clone, PartialEq, Eq, Hash, Default)]\nstruct Point {\n    x: i32,\n    y: i32,\n}\n\nlet p1 = Point { x: 1, y: 2 };\nlet p2 = p1.clone();       // Clone\nprintln!(\"{:?}\", p1);      // Debug\nassert_eq!(p1, p2);        // PartialEq\n\nlet default = Point::default();  // Default: Point { x: 0, y: 0 }\n\n// Copy - for stack-only data (implicit clone)\n#[derive(Copy, Clone)]\nstruct Small(i32);\n\nlet a = Small(5);\nlet b = a;  // Copy, not move\nprintln!(\"{}\", a.0);  // a still valid\n\n// Ord for full ordering\n#[derive(PartialEq, Eq, PartialOrd, Ord)]\nstruct Version(u32, u32, u32);"
   },
   {
     "id": 24,
