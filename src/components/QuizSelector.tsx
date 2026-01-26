@@ -7,9 +7,10 @@ import typescriptQuestions from '../data/typescriptQuizQuestions.json';
 import devopsQuestions from '../data/devopsQuizQuestions.json';
 import systemDesignQuestions from '../data/systemDesignQuizQuestions.json';
 import aiMlQuestions from '../data/aiMlQuizQuestions.json';
+import cybersecurityQuestions from '../data/cybersecurityQuizQuestions.json';
 import './Quiz.css';
 
-type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | 'aiMl' | null;
+type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | 'aiMl' | 'cybersecurity' | null;
 
 interface QuizConfig {
   questions: Question[];
@@ -44,6 +45,10 @@ const quizConfigs: Record<Exclude<QuizType, null>, QuizConfig> = {
   aiMl: {
     questions: aiMlQuestions as Question[],
     title: 'AI & Machine Learning Quiz',
+  },
+  cybersecurity: {
+    questions: cybersecurityQuestions as Question[],
+    title: 'Cybersecurity Quiz',
   },
 };
 
@@ -118,6 +123,13 @@ const QuizSelector: React.FC = () => {
         >
           <span className="quiz-select-title">AI & ML</span>
           <span className="quiz-select-count">{quizConfigs.aiMl.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('cybersecurity')}
+        >
+          <span className="quiz-select-title">Cybersecurity</span>
+          <span className="quiz-select-count">{quizConfigs.cybersecurity.questions.length} questions</span>
         </button>
       </div>
     </div>
