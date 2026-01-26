@@ -1,255 +1,332 @@
 [
   {
     "id": 1,
-    "question": "What is Rust primarily known for?",
-    "options": [
-      "Web development (frontend)",
-      "System programming (performance and safety)",
-      "Mobile app development (iOS/Android)",
-      "Data science and machine learning"
-    ],
-    "answer": "System programming (performance and safety)"
+    "question": "How do you declare variables in Rust and what is the default mutability?",
+    "answer": "Variables are declared with `let` and are immutable by default. Use `let mut` for mutable variables. This prevents accidental mutations and makes code safer",
+    "example": "// Immutable by default\nlet x = 5;\n// x = 6;  // Error: cannot assign twice to immutable variable\n\n// Explicitly mutable\nlet mut y = 5;\ny = 6;  // OK\n\n// Type annotation (optional due to inference)\nlet z: i32 = 10;\n\n// Shadowing - redeclare with same name\nlet x = x + 1;  // Creates new variable, shadows previous"
   },
   {
     "id": 2,
-    "question": "Which of the following is NOT a core principle of Rust?",
-    "options": [
-      "Memory safety",
-      "Concurrency",
-      "Garbage collection",
-      "Performance"
-    ],
-    "answer": "Garbage collection"
+    "question": "What are Rust's basic scalar types?",
+    "answer": "Rust has four scalar types: integers (i8-i128, u8-u128), floating-point (f32, f64), boolean (bool), and character (char, 4 bytes for Unicode)",
+    "example": "// Integers: signed (i) and unsigned (u)\nlet a: i32 = -42;      // 32-bit signed (default)\nlet b: u64 = 100;      // 64-bit unsigned\nlet c: usize = 10;     // Pointer-sized, for indexing\n\n// Floating-point\nlet d: f64 = 3.14;     // 64-bit (default)\nlet e: f32 = 2.5;      // 32-bit\n\n// Boolean and char\nlet t: bool = true;\nlet ch: char = 'z';    // Unicode scalar value\nlet emoji: char = '🦀';"
   },
   {
     "id": 3,
-    "question": "What is 'ownership' in Rust?",
-    "options": [
-      "A way to manage object-oriented inheritance",
-      "A system for managing memory without a garbage collector",
-      "A method for defining user permissions",
-      "A feature for defining data structures"
-    ],
-    "answer": "A system for managing memory without a garbage collector"
+    "question": "How do you define and call functions in Rust?",
+    "answer": "Functions are defined with `fn`, parameters require type annotations, and the return type is specified with `->`. The last expression without a semicolon is implicitly returned",
+    "example": "// Function with parameters and return type\nfn add(x: i32, y: i32) -> i32 {\n    x + y  // No semicolon = implicit return\n}\n\n// Explicit return\nfn absolute(x: i32) -> i32 {\n    if x < 0 {\n        return -x;  // Early return\n    }\n    x\n}\n\n// No return value (returns unit type ())\nfn greet(name: &str) {\n    println!(\"Hello, {}!\", name);\n}\n\nlet sum = add(5, 3);  // Call: sum = 8"
   },
   {
     "id": 4,
-    "question": "What is a 'borrow' in Rust?",
-    "options": [
-      "Creating a copy of data",
-      "Gaining temporary access to data without taking ownership",
-      "Moving data from one variable to another",
-      "Allocating new memory on the heap"
-    ],
-    "answer": "Gaining temporary access to data without taking ownership"
+    "question": "How do structs work in Rust?",
+    "answer": "Structs are custom data types that group related values. Rust has three kinds: named-field structs, tuple structs, and unit structs. Use `impl` blocks to add methods",
+    "example": "// Named-field struct\nstruct User {\n    username: String,\n    email: String,\n    active: bool,\n}\n\n// Tuple struct\nstruct Point(i32, i32, i32);\n\n// Unit struct (for traits)\nstruct AlwaysEqual;\n\n// Creating instances\nlet user = User {\n    username: String::from(\"alice\"),\n    email: String::from(\"alice@example.com\"),\n    active: true,\n};\n\nlet origin = Point(0, 0, 0);\nprintln!(\"x: {}\", origin.0);  // Access tuple struct field"
   },
   {
     "id": 5,
-    "question": "Which keyword is used to declare an immutable variable in Rust?",
-    "options": [
-      "var",
-      "let",
-      "const",
-      "static"
-    ],
-    "answer": "let"
+    "question": "How do you add methods to a struct in Rust?",
+    "answer": "Methods are defined in `impl` blocks. Methods take `&self`, `&mut self`, or `self` as the first parameter. Associated functions (like constructors) don't take self",
+    "example": "struct Rectangle {\n    width: u32,\n    height: u32,\n}\n\nimpl Rectangle {\n    // Associated function (constructor)\n    fn new(width: u32, height: u32) -> Self {\n        Self { width, height }\n    }\n    \n    // Method - borrows self\n    fn area(&self) -> u32 {\n        self.width * self.height\n    }\n    \n    // Method - mutably borrows self\n    fn scale(&mut self, factor: u32) {\n        self.width *= factor;\n        self.height *= factor;\n    }\n}\n\nlet rect = Rectangle::new(10, 20);\nprintln!(\"Area: {}\", rect.area());"
   },
   {
     "id": 6,
-    "question": "Which keyword is used to declare a mutable variable in Rust?",
-    "options": [
-      "mut",
-      "var",
-      "mutable",
-      "change"
-    ],
-    "answer": "mut"
+    "question": "What are enums in Rust and how do they differ from other languages?",
+    "answer": "Rust enums are algebraic data types where each variant can hold different types and amounts of data. They're more powerful than C-style enums and enable type-safe state modeling",
+    "example": "// Simple enum\nenum Direction {\n    North,\n    South,\n    East,\n    West,\n}\n\n// Enum with data in variants\nenum Message {\n    Quit,                       // No data\n    Move { x: i32, y: i32 },   // Named fields\n    Write(String),              // Single value\n    ChangeColor(u8, u8, u8),   // Multiple values\n}\n\n// Usage\nlet msg = Message::Move { x: 10, y: 20 };\nlet quit = Message::Quit;\n\n// Enums can have methods too\nimpl Message {\n    fn call(&self) { /* ... */ }\n}"
   },
   {
     "id": 7,
-    "question": "What is the purpose of 'Cargo' in Rust?",
-    "options": [
-      "A web framework",
-      "The Rust compiler",
-      "Rust's build system and package manager",
-      "A graphical user interface library"
-    ],
-    "answer": "Rust's build system and package manager"
+    "question": "How does pattern matching with `match` work in Rust?",
+    "answer": "`match` compares a value against patterns and executes the matching arm. It must be exhaustive (cover all cases) and can destructure values to extract data",
+    "example": "enum Coin {\n    Penny,\n    Nickel,\n    Dime,\n    Quarter(String),  // State name\n}\n\nfn value_in_cents(coin: Coin) -> u8 {\n    match coin {\n        Coin::Penny => {\n            println!(\"Lucky penny!\");\n            1\n        }\n        Coin::Nickel => 5,\n        Coin::Dime => 10,\n        Coin::Quarter(state) => {\n            println!(\"Quarter from {}\", state);\n            25\n        }\n    }\n}\n\n// Match with catch-all\nlet x = 5;\nmatch x {\n    1 => println!(\"one\"),\n    2 | 3 => println!(\"two or three\"),\n    4..=10 => println!(\"four to ten\"),\n    _ => println!(\"something else\"),  // Catch-all\n}"
   },
   {
     "id": 8,
-    "question": "What is a 'slice' in Rust?",
-    "options": [
-      "A fixed-size array",
-      "A reference to a contiguous sequence of elements in a collection",
-      "A data structure for key-value pairs",
-      "A type of smart pointer"
-    ],
-    "answer": "A reference to a contiguous sequence of elements in a collection"
+    "question": "What is `if let` and when should you use it?",
+    "answer": "`if let` is syntactic sugar for a `match` that only cares about one pattern. It's more concise when you only need to handle one case and ignore the rest",
+    "example": "let some_value: Option<i32> = Some(3);\n\n// Using match (verbose for single pattern)\nmatch some_value {\n    Some(x) => println!(\"Got: {}\", x),\n    None => (),\n}\n\n// Using if let (cleaner)\nif let Some(x) = some_value {\n    println!(\"Got: {}\", x);\n}\n\n// With else\nif let Some(x) = some_value {\n    println!(\"Got: {}\", x);\n} else {\n    println!(\"Got nothing\");\n}\n\n// while let for loops\nlet mut stack = vec![1, 2, 3];\nwhile let Some(top) = stack.pop() {\n    println!(\"{}\", top);\n}"
   },
   {
     "id": 9,
-    "question": "What does 'Result<T, E>' represent in Rust?",
-    "options": [
-      "A way to handle asynchronous operations",
-      "A type for representing success (T) or failure (E)",
-      "A generic data structure for lists",
-      "A mechanism for defining traits"
-    ],
-    "answer": "A type for representing success (T) or failure (E)"
+    "question": "How do vectors work in Rust?",
+    "answer": "`Vec<T>` is a growable array type stored on the heap. Elements must be the same type. Use `vec![]` macro or `Vec::new()` to create, and various methods to manipulate",
+    "example": "// Creating vectors\nlet v1: Vec<i32> = Vec::new();\nlet v2 = vec![1, 2, 3];  // Macro with initial values\n\n// Adding elements\nlet mut v = Vec::new();\nv.push(5);\nv.push(6);\n\n// Accessing elements\nlet third = &v2[2];           // Panics if out of bounds\nlet third = v2.get(2);        // Returns Option<&T>\n\n// Iterating\nfor i in &v2 {\n    println!(\"{}\", i);\n}\n\n// Mutating while iterating\nlet mut v = vec![1, 2, 3];\nfor i in &mut v {\n    *i += 10;\n}"
   },
   {
     "id": 10,
-    "question": "What is 'Option<T>' used for in Rust?",
-    "options": [
-      "To represent a boolean value",
-      "To indicate the presence (Some(T)) or absence (None) of a value",
-      "To store multiple possible values",
-      "To define optional function arguments"
-    ],
-    "answer": "To indicate the presence (Some(T)) or absence (None) of a value"
+    "question": "What is the difference between `String` and `&str` in Rust?",
+    "answer": "`String` is an owned, heap-allocated, growable string. `&str` is a borrowed string slice - a view into string data. String literals are `&'static str`",
+    "example": "// &str - borrowed string slice\nlet s1: &str = \"hello\";  // String literal, static lifetime\n\n// String - owned, growable\nlet mut s2 = String::from(\"hello\");\ns2.push_str(\", world\");\ns2.push('!');\n\n// Converting between them\nlet s3: String = s1.to_string();  // &str -> String\nlet s4: String = \"hello\".into();  // Same thing\nlet s5: &str = &s2;               // String -> &str (deref coercion)\nlet s6: &str = &s2[0..5];         // Slice of String\n\n// Functions often take &str for flexibility\nfn greet(name: &str) {\n    println!(\"Hello, {}!\", name);\n}\ngreet(\"world\");      // &str works\ngreet(&s2);          // &String coerces to &str"
   },
   {
     "id": 11,
-    "question": "What is a 'trait' in Rust?",
-    "options": [
-      "A concrete implementation of an interface",
-      "A way to share behavior across different types",
-      "A mechanism for defining macros",
-      "A type alias for complex types"
-    ],
-    "answer": "A way to share behavior across different types"
+    "question": "What is ownership in Rust and why does it matter?",
+    "answer": "Ownership is Rust's system for memory management without garbage collection. Each value has one owner, and when the owner goes out of scope, the value is dropped (freed)",
+    "example": "fn main() {\n    let s1 = String::from(\"hello\");  // s1 owns the String\n    let s2 = s1;                      // Ownership moves to s2\n    // println!(\"{}\", s1);           // Error! s1 no longer valid\n    \n    let s3 = s2.clone();              // Deep copy, both valid\n    println!(\"{} and {}\", s2, s3);   // OK\n}\n\n// Ownership and functions\nfn takes_ownership(s: String) {\n    println!(\"{}\", s);\n}  // s is dropped here\n\nfn main() {\n    let s = String::from(\"hello\");\n    takes_ownership(s);\n    // println!(\"{}\", s);  // Error! s was moved\n}"
   },
   {
     "id": 12,
-    "question": "What is the 'match' control flow operator used for?",
-    "options": [
-      "Looping through collections",
-      "Conditional execution based on pattern matching",
-      "Defining functions",
-      "Handling errors exclusively"
-    ],
-    "answer": "Conditional execution based on pattern matching"
+    "question": "What are references and borrowing in Rust?",
+    "answer": "References allow you to use a value without taking ownership. `&T` is an immutable borrow (can have many), `&mut T` is a mutable borrow (only one at a time)",
+    "example": "fn main() {\n    let s = String::from(\"hello\");\n    \n    // Immutable borrow - multiple allowed\n    let len = calculate_length(&s);\n    println!(\"'{}' has length {}\", s, len);  // s still valid\n    \n    // Mutable borrow - only one at a time\n    let mut s = String::from(\"hello\");\n    change(&mut s);\n}\n\nfn calculate_length(s: &String) -> usize {\n    s.len()\n}  // s goes out of scope but doesn't drop (borrowed)\n\nfn change(s: &mut String) {\n    s.push_str(\", world\");\n}\n\n// Borrowing rules:\n// 1. Any number of immutable references OR\n// 2. Exactly one mutable reference\n// 3. References must always be valid"
   },
   {
     "id": 13,
-    "question": "What is the 'macro!' syntax used for in Rust?",
-    "options": [
-      "Defining asynchronous functions",
-      "Creating compile-time code generation",
-      "Declaring modules",
-      "Importing external crates"
-    ],
-    "answer": "Creating compile-time code generation"
+    "question": "What is the `Option` type and how do you use it?",
+    "answer": "`Option<T>` represents a value that may or may not exist: `Some(T)` contains a value, `None` represents absence. It replaces null and forces explicit handling",
+    "example": "fn find_word(s: &str, target: char) -> Option<usize> {\n    for (i, c) in s.chars().enumerate() {\n        if c == target {\n            return Some(i);\n        }\n    }\n    None\n}\n\nlet result = find_word(\"hello\", 'l');\n\n// Pattern matching\nmatch result {\n    Some(index) => println!(\"Found at {}\", index),\n    None => println!(\"Not found\"),\n}\n\n// Common methods\nlet x: Option<i32> = Some(5);\nx.unwrap();           // Returns 5, panics if None\nx.unwrap_or(0);       // Returns 5, or default if None\nx.unwrap_or_default();// Returns 5, or type's default\nx.map(|n| n * 2);     // Some(10)\nx.is_some();          // true\nx.is_none();          // false"
   },
   {
     "id": 14,
-    "question": "Which of these is a valid way to create a new, empty vector in Rust?",
-    "options": [
-      "let v = Vec::new();",
-      "let v = vec![];",
-      "let v = Vector::new();",
-      "let v = new Vec();"
-    ],
-    "answer": "let v = Vec::new();"
+    "question": "What is the `Result` type and how do you handle errors?",
+    "answer": "`Result<T, E>` represents either success (`Ok(T)`) or failure (`Err(E)`). It's Rust's primary error handling mechanism for recoverable errors",
+    "example": "use std::fs::File;\nuse std::io::Read;\n\nfn read_file(path: &str) -> Result<String, std::io::Error> {\n    let mut file = File::open(path)?;  // ? propagates errors\n    let mut contents = String::new();\n    file.read_to_string(&mut contents)?;\n    Ok(contents)\n}\n\n// Handling results\nmatch read_file(\"hello.txt\") {\n    Ok(contents) => println!(\"{}\", contents),\n    Err(e) => eprintln!(\"Error: {}\", e),\n}\n\n// Common methods\nlet r: Result<i32, &str> = Ok(5);\nr.unwrap();              // Returns 5, panics on Err\nr.expect(\"custom msg\"); // Like unwrap with message\nr.unwrap_or(0);          // Returns 5, or default on Err\nr.is_ok();               // true\nr.ok();                  // Converts to Option<T>"
   },
   {
     "id": 15,
-    "question": "What is the purpose of the 'mod' keyword in Rust?",
-    "options": [
-      "To define a function",
-      "To declare a new variable",
-      "To organize code into modules",
-      "To import external libraries"
-    ],
-    "answer": "To organize code into modules"
+    "question": "What does the `?` operator do in Rust?",
+    "answer": "The `?` operator propagates errors by returning early from a function if the Result is Err or Option is None. It's syntactic sugar for match with early return",
+    "example": "use std::fs::File;\nuse std::io::{self, Read};\n\n// Without ? operator (verbose)\nfn read_file_verbose(path: &str) -> Result<String, io::Error> {\n    let file = match File::open(path) {\n        Ok(f) => f,\n        Err(e) => return Err(e),\n    };\n    // ... continue\n    Ok(String::new())\n}\n\n// With ? operator (clean)\nfn read_file(path: &str) -> Result<String, io::Error> {\n    let mut file = File::open(path)?;  // Returns Err if fails\n    let mut contents = String::new();\n    file.read_to_string(&mut contents)?;\n    Ok(contents)\n}\n\n// Chaining with ?\nfn read_file_chain(path: &str) -> Result<String, io::Error> {\n    let mut contents = String::new();\n    File::open(path)?.read_to_string(&mut contents)?;\n    Ok(contents)\n}"
   },
   {
     "id": 16,
-    "question": "How do you handle errors in Rust?",
-    "options": [
-      "Using try-catch blocks",
-      "With `panic!` for recoverable errors",
-      "Primarily with `Result<T, E>` and `Option<T>`",
-      "By ignoring them and letting the program crash"
-    ],
-    "answer": "Primarily with `Result<T, E>` and `Option<T>`"
+    "question": "How do you define and use traits in Rust?",
+    "answer": "Traits define shared behavior that types can implement. They're similar to interfaces but can have default implementations and work with generics for polymorphism",
+    "example": "// Define a trait\ntrait Summary {\n    fn summarize(&self) -> String;\n    \n    // Default implementation\n    fn preview(&self) -> String {\n        format!(\"Read more: {}...\", &self.summarize()[..20])\n    }\n}\n\n// Implement for a type\nstruct Article {\n    title: String,\n    content: String,\n}\n\nimpl Summary for Article {\n    fn summarize(&self) -> String {\n        format!(\"{}: {}\", self.title, self.content)\n    }\n}\n\n// Use trait as parameter (impl Trait syntax)\nfn notify(item: &impl Summary) {\n    println!(\"News: {}\", item.summarize());\n}\n\n// Or with trait bounds\nfn notify_bound<T: Summary>(item: &T) {\n    println!(\"News: {}\", item.summarize());\n}"
   },
   {
     "id": 17,
-    "question": "What is a 'closure' in Rust?",
-    "options": [
-      "A type of loop",
-      "An anonymous function that can capture its environment",
-      "A data structure for linked lists",
-      "A way to define interfaces"
-    ],
-    "answer": "An anonymous function that can capture its environment"
+    "question": "How do generics work in Rust?",
+    "answer": "Generics allow writing code that works with multiple types. The compiler generates specialized code for each concrete type used (monomorphization), so there's no runtime cost",
+    "example": "// Generic function\nfn largest<T: PartialOrd>(list: &[T]) -> &T {\n    let mut largest = &list[0];\n    for item in list {\n        if item > largest {\n            largest = item;\n        }\n    }\n    largest\n}\n\n// Generic struct\nstruct Point<T> {\n    x: T,\n    y: T,\n}\n\nimpl<T> Point<T> {\n    fn x(&self) -> &T {\n        &self.x\n    }\n}\n\n// Multiple generic types\nstruct Pair<T, U> {\n    first: T,\n    second: U,\n}\n\nlet int_point = Point { x: 5, y: 10 };\nlet float_point = Point { x: 1.0, y: 4.0 };"
   },
   {
     "id": 18,
-    "question": "What does ' lifetimes' in Rust ensure?",
-    "options": [
-      "How long a program runs",
-      "That references are always valid",
-      "The order of function execution",
-      "The size of data structures"
-    ],
-    "answer": "That references are always valid"
+    "question": "How do you iterate over collections in Rust?",
+    "answer": "Use `for` loops with iterators. `iter()` borrows elements, `iter_mut()` borrows mutably, and `into_iter()` takes ownership. Iterator adapters chain operations lazily",
+    "example": "let v = vec![1, 2, 3, 4, 5];\n\n// Basic iteration (borrows)\nfor x in &v {\n    println!(\"{}\", x);\n}\n\n// Mutable iteration\nlet mut v = vec![1, 2, 3];\nfor x in &mut v {\n    *x *= 2;\n}\n\n// Iterator adapters (lazy, chainable)\nlet doubled: Vec<i32> = v.iter()\n    .map(|x| x * 2)\n    .collect();\n\nlet evens: Vec<i32> = v.iter()\n    .filter(|x| *x % 2 == 0)\n    .cloned()\n    .collect();\n\nlet sum: i32 = v.iter().sum();\nlet product: i32 = v.iter().product();\n\n// Enumerate for index\nfor (i, val) in v.iter().enumerate() {\n    println!(\"{}: {}\", i, val);\n}"
   },
   {
     "id": 19,
-    "question": "What is 'unsafe' Rust?",
-    "options": [
-      "Code that is guaranteed to be buggy",
-      "A block of code where the compiler cannot guarantee memory safety",
-      "Deprecated syntax",
-      "A feature for interacting with JavaScript"
-    ],
-    "answer": "A block of code where the compiler cannot guarantee memory safety"
+    "question": "How do you write and run tests in Rust?",
+    "answer": "Tests are functions annotated with `#[test]`. Use `assert!`, `assert_eq!`, and `assert_ne!` macros. Run with `cargo test`. Tests can be in the same file or a separate `tests/` directory",
+    "example": "// In src/lib.rs or any module\npub fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n\n#[cfg(test)]  // Only compile for tests\nmod tests {\n    use super::*;\n    \n    #[test]\n    fn test_add() {\n        assert_eq!(add(2, 2), 4);\n    }\n    \n    #[test]\n    fn test_add_negative() {\n        assert_eq!(add(-1, 1), 0);\n    }\n    \n    #[test]\n    #[should_panic(expected = \"overflow\")]\n    fn test_panic() {\n        panic!(\"overflow\");\n    }\n    \n    #[test]\n    fn test_result() -> Result<(), String> {\n        if add(2, 2) == 4 {\n            Ok(())\n        } else {\n            Err(String::from(\"math is broken\"))\n        }\n    }\n}"
   },
   {
     "id": 20,
-    "question": "Which command compiles a Rust program?",
-    "options": [
-      "rust run",
-      "cargo build",
-      "rustc run",
-      "cargo execute"
-    ],
-    "answer": "cargo build"
+    "question": "What is shadowing in Rust and how does it differ from mutability?",
+    "answer": "Shadowing creates a new variable with the same name, allowing type changes and transformations. Unlike `mut`, shadowing creates a new binding rather than modifying the existing one",
+    "example": "// Shadowing - creates new variable\nlet x = 5;\nlet x = x + 1;       // New x shadows old x\nlet x = x * 2;       // Shadows again\nprintln!(\"{}\", x);   // 12\n\n// Can change types with shadowing\nlet spaces = \"   \";          // &str\nlet spaces = spaces.len();   // usize - different type!\n\n// Mutability - modifies same variable\nlet mut y = 5;\ny = 6;               // Same variable, same type\n// y = \"hello\";      // Error! Can't change type\n\n// Shadowing in inner scope\nlet x = 5;\n{\n    let x = 99;      // Shadows only in this scope\n    println!(\"{}\", x);  // 99\n}\nprintln!(\"{}\", x);      // 5 - outer x unchanged"
   },
   {
     "id": 21,
-    "question": "What is the default behavior of `clone()` in Rust for most types?",
-    "options": [
-      "Performs a shallow copy",
-      "Performs a deep copy",
-      "Moves ownership",
-      "Borrows a reference"
-    ],
-    "answer": "Performs a deep copy"
+    "question": "What are tuples and arrays in Rust?",
+    "answer": "Tuples group values of different types with fixed length, accessed by index. Arrays are fixed-size collections of same-type elements, stored on the stack",
+    "example": "// Tuples - different types, fixed length\nlet tup: (i32, f64, char) = (500, 6.4, 'y');\n\n// Destructuring\nlet (x, y, z) = tup;\nprintln!(\"y is {}\", y);\n\n// Index access\nlet five_hundred = tup.0;\nlet six_point_four = tup.1;\n\n// Arrays - same type, fixed length, stack allocated\nlet arr: [i32; 5] = [1, 2, 3, 4, 5];\nlet first = arr[0];\n\n// Initialize with same value\nlet zeros = [0; 5];  // [0, 0, 0, 0, 0]\n\n// Slices from arrays\nlet slice: &[i32] = &arr[1..3];  // [2, 3]\n\n// For dynamic size, use Vec<T> instead\nlet mut vec = vec![1, 2, 3];\nvec.push(4);  // Can grow"
   },
   {
     "id": 22,
-    "question": "What is the primary use case for `Arc<T>` and `Mutex<T>` in Rust?",
-    "options": [
-      "File I/O operations",
-      "Network programming",
-      "Concurrent shared state management",
-      "Database interactions"
-    ],
-    "answer": "Concurrent shared state management"
+    "question": "How does `HashMap` work in Rust?",
+    "answer": "`HashMap<K, V>` stores key-value pairs with O(1) average lookup. Keys must implement `Eq` and `Hash`. Values are owned, and accessing returns `Option<&V>`",
+    "example": "use std::collections::HashMap;\n\nlet mut scores = HashMap::new();\n\n// Insert\nscores.insert(String::from(\"Blue\"), 10);\nscores.insert(String::from(\"Red\"), 50);\n\n// Access - returns Option<&V>\nlet team = String::from(\"Blue\");\nlet score = scores.get(&team);  // Some(&10)\n\n// Iterate\nfor (key, value) in &scores {\n    println!(\"{}: {}\", key, value);\n}\n\n// Update only if key doesn't exist\nscores.entry(String::from(\"Yellow\")).or_insert(25);\n\n// Update based on old value\nlet text = \"hello world hello\";\nlet mut word_count = HashMap::new();\nfor word in text.split_whitespace() {\n    let count = word_count.entry(word).or_insert(0);\n    *count += 1;\n}"
   },
   {
     "id": 23,
-    "question": "Which of the following traits allows a type to be converted into an iterator?",
-    "options": [
-      "Convert",
-      "Iterator",
-      "IntoIterator",
-      "Enumerable"
-    ],
-    "answer": "IntoIterator"
+    "question": "What is the `derive` attribute and which traits can be automatically derived?",
+    "answer": "`#[derive]` automatically implements traits for structs and enums. Common derivable traits include Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, and Default",
+    "example": "#[derive(Debug, Clone, PartialEq, Eq, Hash, Default)]\nstruct Point {\n    x: i32,\n    y: i32,\n}\n\nlet p1 = Point { x: 1, y: 2 };\nlet p2 = p1.clone();       // Clone\nprintln!(\"{:?}\", p1);      // Debug\nassert_eq!(p1, p2);        // PartialEq\n\nlet default = Point::default();  // Default: Point { x: 0, y: 0 }\n\n// Copy - for stack-only data (implicit clone)\n#[derive(Copy, Clone)]\nstruct Small(i32);\n\nlet a = Small(5);\nlet b = a;  // Copy, not move\nprintln!(\"{}\", a.0);  // a still valid\n\n// Ord for full ordering\n#[derive(PartialEq, Eq, PartialOrd, Ord)]\nstruct Version(u32, u32, u32);"
+  },
+  {
+    "id": 24,
+    "question": "What is the difference between `Box<dyn Trait>` and generics with trait bounds?",
+    "answer": "Generics use static dispatch (monomorphization at compile time) with zero runtime cost, while `Box<dyn Trait>` uses dynamic dispatch via vtable lookup at runtime, enabling heterogeneous collections",
+    "example": "// Static dispatch - separate code generated for each type\nfn process<T: Summary>(item: T) {\n    println!(\"{}\", item.summarize());\n}\n\n// Dynamic dispatch - single code path, vtable lookup\nfn process_dyn(item: Box<dyn Summary>) {\n    println!(\"{}\", item.summarize());\n}\n\n// Heterogeneous collection only possible with dyn\nlet items: Vec<Box<dyn Summary>> = vec![\n    Box::new(Article { ... }),\n    Box::new(Tweet { ... }),\n];"
+  },
+  {
+    "id": 25,
+    "question": "What is `Send` and `Sync` in Rust?",
+    "answer": "`Send` means a type can be transferred across thread boundaries; `Sync` means a type can be shared between threads via references. Most types implement both automatically",
+    "example": "// Send: ownership can move between threads\n// Sync: &T can be shared between threads\n\n// Rc<T> is !Send and !Sync (not thread-safe)\nlet rc = Rc::new(5);\n// thread::spawn(move || { rc });  // Error!\n\n// Arc<T> is Send + Sync\nlet arc = Arc::new(5);\nthread::spawn(move || { println!(\"{}\", arc); });\n\n// RefCell<T> is Send but !Sync\n// Mutex<T> is Send + Sync"
+  },
+  {
+    "id": 26,
+    "question": "What is the difference between `Rc<T>` and `Arc<T>`?",
+    "answer": "`Rc<T>` is a single-threaded reference-counted pointer, while `Arc<T>` (Atomic Reference Counted) is thread-safe but has atomic operation overhead",
+    "example": "use std::rc::Rc;\nuse std::sync::Arc;\n\n// Rc: single-threaded, cheaper\nlet rc = Rc::new(vec![1, 2, 3]);\nlet rc2 = Rc::clone(&rc);  // Increments count\nprintln!(\"Count: {}\", Rc::strong_count(&rc));  // 2\n\n// Arc: thread-safe, atomic operations\nlet arc = Arc::new(vec![1, 2, 3]);\nlet arc2 = Arc::clone(&arc);\nthread::spawn(move || {\n    println!(\"{:?}\", arc2);\n});"
+  },
+  {
+    "id": 27,
+    "question": "What is `RefCell<T>` and when would you use it?",
+    "answer": "`RefCell<T>` provides interior mutability with runtime borrow checking, allowing mutation of data even when there are immutable references to the RefCell",
+    "example": "use std::cell::RefCell;\n\nlet data = RefCell::new(5);\n\n// Immutable borrow\nlet r1 = data.borrow();\nprintln!(\"Value: {}\", *r1);\ndrop(r1);  // Must drop before mutable borrow\n\n// Mutable borrow\n*data.borrow_mut() += 1;\n\n// Panics at runtime if rules violated:\n// let r1 = data.borrow();\n// let r2 = data.borrow_mut();  // Panic!"
+  },
+  {
+    "id": 28,
+    "question": "What is `Cow<T>` (Clone on Write) used for?",
+    "answer": "`Cow<T>` is a smart pointer that can hold either borrowed or owned data, only cloning when mutation is needed; useful for optimizing functions that may or may not need to modify data",
+    "example": "use std::borrow::Cow;\n\nfn process(input: &str) -> Cow<str> {\n    if input.contains(' ') {\n        // Need to modify - allocate new String\n        Cow::Owned(input.replace(' ', \"_\"))\n    } else {\n        // No modification needed - borrow\n        Cow::Borrowed(input)\n    }\n}\n\nlet result = process(\"hello\");      // Borrowed, no allocation\nlet result = process(\"hello world\"); // Owned, allocated"
+  },
+  {
+    "id": 29,
+    "question": "How does async/await work in Rust?",
+    "answer": "Async functions return a Future that must be polled by an executor (like Tokio); `await` yields control until the Future completes, enabling cooperative concurrency without OS threads",
+    "example": "use tokio;\n\nasync fn fetch_data(url: &str) -> Result<String, Error> {\n    let response = reqwest::get(url).await?;\n    response.text().await\n}\n\n#[tokio::main]\nasync fn main() {\n    // Concurrent execution\n    let (a, b) = tokio::join!(\n        fetch_data(\"https://api.example.com/a\"),\n        fetch_data(\"https://api.example.com/b\"),\n    );\n}"
+  },
+  {
+    "id": 30,
+    "question": "What is the difference between `tokio::spawn` and `tokio::join!`?",
+    "answer": "`tokio::spawn` creates a new task that runs concurrently and independently, while `tokio::join!` runs multiple futures concurrently but waits for all to complete before proceeding",
+    "example": "// spawn: fire-and-forget, returns JoinHandle\nlet handle = tokio::spawn(async {\n    expensive_operation().await\n});\n// Can continue without waiting\nlet result = handle.await?;  // Wait later if needed\n\n// join!: concurrent but waits for all\nlet (a, b, c) = tokio::join!(\n    fetch_user(),\n    fetch_posts(),\n    fetch_comments(),\n);  // All three run concurrently, waits for all"
+  },
+  {
+    "id": 31,
+    "question": "What is `Pin<T>` used for in Rust?",
+    "answer": "`Pin<T>` guarantees that the value will not be moved in memory, which is required for self-referential types like async Futures that store references to their own fields",
+    "example": "use std::pin::Pin;\nuse std::future::Future;\n\n// Futures are often self-referential\nasync fn example() {\n    let data = vec![1, 2, 3];\n    let reference = &data[0];  // Self-reference\n    some_async_op().await;     // Suspend point\n    println!(\"{}\", reference); // Reference must remain valid\n}\n\n// Pin prevents moving after creation\nfn poll_future(future: Pin<&mut dyn Future<Output = ()>>) {\n    // Future cannot be moved, references remain valid\n}"
+  },
+  {
+    "id": 32,
+    "question": "How do you create custom error types in Rust?",
+    "answer": "Define an enum for error variants, implement `std::error::Error`, `Display`, and optionally use the `thiserror` crate for deriving implementations",
+    "example": "use thiserror::Error;\n\n#[derive(Error, Debug)]\npub enum AppError {\n    #[error(\"Database error: {0}\")]\n    Database(#[from] sqlx::Error),\n    \n    #[error(\"Not found: {0}\")]\n    NotFound(String),\n    \n    #[error(\"Validation failed: {field}\")]\n    Validation { field: String },\n}\n\nfn find_user(id: i32) -> Result<User, AppError> {\n    Err(AppError::NotFound(format!(\"User {}\", id)))\n}"
+  },
+  {
+    "id": 33,
+    "question": "What is `anyhow` crate used for?",
+    "answer": "`anyhow` provides a flexible error type for application code that can hold any error, with easy error context chaining; best for applications rather than libraries",
+    "example": "use anyhow::{Context, Result};\n\nfn read_config() -> Result<Config> {\n    let content = std::fs::read_to_string(\"config.toml\")\n        .context(\"Failed to read config file\")?;\n    \n    let config: Config = toml::from_str(&content)\n        .context(\"Failed to parse config\")?;\n    \n    Ok(config)\n}\n\n// Error output:\n// Error: Failed to read config file\n// Caused by: No such file or directory"
+  },
+  {
+    "id": 34,
+    "question": "How do you structure an Axum web application?",
+    "answer": "Axum uses a Router with handlers that extract request data via extractors and return responses; state is shared via Extension or State layer",
+    "example": "use axum::{Router, routing::get, extract::State, Json};\nuse std::sync::Arc;\n\nstruct AppState { db: PgPool }\n\nasync fn get_users(\n    State(state): State<Arc<AppState>>,\n) -> Json<Vec<User>> {\n    let users = sqlx::query_as!(User, \"SELECT * FROM users\")\n        .fetch_all(&state.db).await.unwrap();\n    Json(users)\n}\n\n#[tokio::main]\nasync fn main() {\n    let state = Arc::new(AppState { db: pool });\n    let app = Router::new()\n        .route(\"/users\", get(get_users))\n        .with_state(state);\n    axum::serve(listener, app).await.unwrap();\n}"
+  },
+  {
+    "id": 35,
+    "question": "What is the Tower middleware ecosystem?",
+    "answer": "Tower provides composable middleware abstractions via the Service trait; used by Axum, Tonic, and Hyper for request/response processing like logging, timeouts, and rate limiting",
+    "example": "use tower::ServiceBuilder;\nuse tower_http::{trace::TraceLayer, timeout::TimeoutLayer};\nuse std::time::Duration;\n\nlet app = Router::new()\n    .route(\"/api\", get(handler))\n    .layer(\n        ServiceBuilder::new()\n            .layer(TraceLayer::new_for_http())\n            .layer(TimeoutLayer::new(Duration::from_secs(10)))\n            .layer(CompressionLayer::new())\n    );\n\n// Custom middleware:\nasync fn auth_middleware<B>(req: Request<B>, next: Next<B>) -> Response {\n    // Validate token...\n    next.run(req).await\n}"
+  },
+  {
+    "id": 36,
+    "question": "How does SQLx provide compile-time checked queries?",
+    "answer": "SQLx connects to your database at compile time to verify SQL queries and types; the `query!` and `query_as!` macros ensure type safety",
+    "example": "use sqlx::{PgPool, FromRow};\n\n#[derive(FromRow)]\nstruct User {\n    id: i32,\n    email: String,\n}\n\n// Compile-time verified against actual schema\nlet user = sqlx::query_as!(\n    User,\n    \"SELECT id, email FROM users WHERE id = $1\",\n    user_id\n)\n.fetch_one(&pool)\n.await?;\n\n// Also supports migrations:\n// sqlx migrate run"
+  },
+  {
+    "id": 37,
+    "question": "What is connection pooling and why is it important?",
+    "answer": "Connection pooling maintains a cache of database connections to avoid the overhead of establishing new connections for each request; crucial for backend performance",
+    "example": "use sqlx::postgres::PgPoolOptions;\n\n// Create a connection pool\nlet pool = PgPoolOptions::new()\n    .max_connections(20)\n    .min_connections(5)\n    .acquire_timeout(Duration::from_secs(3))\n    .idle_timeout(Duration::from_secs(600))\n    .connect(&database_url)\n    .await?;\n\n// Connections are automatically returned to pool\nasync fn get_user(pool: &PgPool, id: i32) -> Result<User> {\n    sqlx::query_as!(User, \"SELECT * FROM users WHERE id = $1\", id)\n        .fetch_one(pool)  // Acquires connection from pool\n        .await            // Returns connection when done\n}"
+  },
+  {
+    "id": 38,
+    "question": "How do you implement graceful shutdown in a Rust backend?",
+    "answer": "Use `tokio::signal` to listen for shutdown signals (SIGTERM/SIGINT), then use channels or cancellation tokens to notify tasks to complete their work",
+    "example": "use tokio::signal;\nuse tokio::sync::broadcast;\n\n#[tokio::main]\nasync fn main() {\n    let (shutdown_tx, _) = broadcast::channel(1);\n    \n    let server = axum::serve(listener, app)\n        .with_graceful_shutdown(shutdown_signal());\n    \n    server.await.unwrap();\n}\n\nasync fn shutdown_signal() {\n    let ctrl_c = signal::ctrl_c();\n    let mut sigterm = signal::unix::signal(SignalKind::terminate())\n        .unwrap();\n    \n    tokio::select! {\n        _ = ctrl_c => {},\n        _ = sigterm.recv() => {},\n    }\n    println!(\"Shutting down gracefully...\");\n}"
+  },
+  {
+    "id": 39,
+    "question": "What is Serde and how does it work?",
+    "answer": "Serde is a serialization/deserialization framework using derive macros to generate code at compile time; supports JSON, TOML, YAML, and many other formats",
+    "example": "use serde::{Deserialize, Serialize};\n\n#[derive(Serialize, Deserialize)]\nstruct User {\n    id: i32,\n    #[serde(rename = \"userName\")]\n    name: String,\n    #[serde(skip_serializing_if = \"Option::is_none\")]\n    email: Option<String>,\n    #[serde(default)]\n    active: bool,\n}\n\n// JSON\nlet json = serde_json::to_string(&user)?;\nlet user: User = serde_json::from_str(&json)?;\n\n// Also works with: toml, yaml, bincode, etc."
+  },
+  {
+    "id": 40,
+    "question": "How do you implement request validation in Rust backends?",
+    "answer": "Use the `validator` crate with derive macros to define validation rules, combined with custom extractors in web frameworks",
+    "example": "use validator::Validate;\nuse axum::extract::Json;\n\n#[derive(Deserialize, Validate)]\nstruct CreateUser {\n    #[validate(email)]\n    email: String,\n    #[validate(length(min = 8, max = 100))]\n    password: String,\n    #[validate(range(min = 18, max = 150))]\n    age: u8,\n}\n\nasync fn create_user(\n    Json(payload): Json<CreateUser>,\n) -> Result<Json<User>, AppError> {\n    payload.validate()?;\n    // Create user...\n}"
+  },
+  {
+    "id": 41,
+    "question": "What is the `tracing` crate used for?",
+    "answer": "`tracing` provides structured, context-aware logging with spans for tracking operations across async boundaries; better than traditional logging for observability",
+    "example": "use tracing::{info, instrument, span, Level};\n\n#[instrument(skip(pool))]\nasync fn get_user(pool: &PgPool, id: i32) -> Result<User> {\n    info!(user_id = id, \"Fetching user\");\n    \n    let user = sqlx::query_as!(User, \"...\")\n        .fetch_one(pool)\n        .await?;\n    \n    info!(email = %user.email, \"User found\");\n    Ok(user)\n}\n\n// Setup subscriber:\ntracing_subscriber::fmt()\n    .with_env_filter(\"info,sqlx=warn\")\n    .json()  // Structured JSON output\n    .init();"
+  },
+  {
+    "id": 42,
+    "question": "How do you manage configuration in Rust applications?",
+    "answer": "Use the `config` crate to layer configuration from files, environment variables, and defaults with strong typing via Serde",
+    "example": "use config::{Config, Environment, File};\nuse serde::Deserialize;\n\n#[derive(Deserialize)]\nstruct Settings {\n    database_url: String,\n    server: ServerConfig,\n}\n\n#[derive(Deserialize)]\nstruct ServerConfig {\n    host: String,\n    port: u16,\n}\n\nfn load_config() -> Result<Settings> {\n    Config::builder()\n        .add_source(File::with_name(\"config/default\"))\n        .add_source(File::with_name(\"config/local\").required(false))\n        .add_source(Environment::with_prefix(\"APP\"))\n        .build()?\n        .try_deserialize()\n}"
+  },
+  {
+    "id": 43,
+    "question": "What is the difference between `#[tokio::test]` and regular tests?",
+    "answer": "`#[tokio::test]` creates an async test runtime, allowing you to use `.await` in tests; essential for testing async code",
+    "example": "#[cfg(test)]\nmod tests {\n    use super::*;\n    \n    // Regular sync test\n    #[test]\n    fn test_sync() {\n        assert_eq!(2 + 2, 4);\n    }\n    \n    // Async test with Tokio runtime\n    #[tokio::test]\n    async fn test_async() {\n        let result = fetch_data().await;\n        assert!(result.is_ok());\n    }\n    \n    // Multi-threaded runtime\n    #[tokio::test(flavor = \"multi_thread\", worker_threads = 2)]\n    async fn test_concurrent() {\n        // ...\n    }\n}"
+  },
+  {
+    "id": 44,
+    "question": "How do you implement rate limiting in Rust backends?",
+    "answer": "Use middleware with algorithms like token bucket or sliding window; the `governor` crate provides production-ready rate limiting",
+    "example": "use governor::{Quota, RateLimiter};\nuse std::num::NonZeroU32;\n\n// Create rate limiter: 100 requests per minute\nlet limiter = RateLimiter::direct(\n    Quota::per_minute(NonZeroU32::new(100).unwrap())\n);\n\n// In middleware:\nasync fn rate_limit_middleware<B>(\n    State(limiter): State<Arc<RateLimiter>>,\n    req: Request<B>,\n    next: Next<B>,\n) -> Response {\n    match limiter.check() {\n        Ok(_) => next.run(req).await,\n        Err(_) => StatusCode::TOO_MANY_REQUESTS.into_response(),\n    }\n}"
+  },
+  {
+    "id": 45,
+    "question": "What is `once_cell` and when should you use it?",
+    "answer": "`once_cell` provides single-assignment containers for lazy initialization of statics; now partially included in std as `OnceLock` and `LazyLock`",
+    "example": "use std::sync::OnceLock;\n\n// Global config initialized once\nstatic CONFIG: OnceLock<Config> = OnceLock::new();\n\nfn get_config() -> &'static Config {\n    CONFIG.get_or_init(|| {\n        Config::load().expect(\"Failed to load config\")\n    })\n}\n\n// LazyLock for lazy statics (Rust 1.80+)\nuse std::sync::LazyLock;\n\nstatic REGEX: LazyLock<Regex> = LazyLock::new(|| {\n    Regex::new(r\"^\\d{4}-\\d{2}-\\d{2}$\").unwrap()\n});"
+  },
+  {
+    "id": 46,
+    "question": "How do you implement JWT authentication in Rust?",
+    "answer": "Use the `jsonwebtoken` crate to encode/decode JWTs with claims structs, combined with middleware extractors for protected routes",
+    "example": "use jsonwebtoken::{encode, decode, Header, Validation, EncodingKey, DecodingKey};\nuse serde::{Deserialize, Serialize};\n\n#[derive(Serialize, Deserialize)]\nstruct Claims {\n    sub: String,\n    exp: usize,\n}\n\nfn create_token(user_id: &str, secret: &[u8]) -> Result<String> {\n    let claims = Claims {\n        sub: user_id.to_owned(),\n        exp: (Utc::now() + Duration::hours(24)).timestamp() as usize,\n    };\n    encode(&Header::default(), &claims, &EncodingKey::from_secret(secret))\n}\n\nfn verify_token(token: &str, secret: &[u8]) -> Result<Claims> {\n    decode(token, &DecodingKey::from_secret(secret), &Validation::default())\n        .map(|data| data.claims)\n}"
+  },
+  {
+    "id": 47,
+    "question": "What is the difference between `&str` and `String`?",
+    "answer": "`&str` is an immutable borrowed string slice (view into string data), while `String` is an owned, heap-allocated, growable string",
+    "example": "// &str: borrowed, immutable view\nlet s1: &str = \"hello\";           // String literal (static)\nlet s2: &str = &some_string[0..5]; // Slice of String\n\n// String: owned, growable\nlet mut s = String::from(\"hello\");\ns.push_str(\", world\");\n\n// Conversion:\nlet owned: String = s1.to_string();  // &str -> String\nlet owned: String = s1.to_owned();   // Same\nlet borrowed: &str = &s;             // String -> &str (deref)\n\n// Function accepting both:\nfn process(s: &str) { ... }\nprocess(\"literal\");  // Works\nprocess(&my_string); // Works"
+  },
+  {
+    "id": 48,
+    "question": "How do you handle database migrations in Rust?",
+    "answer": "Use SQLx migrations or Diesel migrations; they track applied migrations and run pending ones on startup or via CLI",
+    "example": "// SQLx migrations in migrations/ directory:\n// migrations/20240101_create_users.sql\n\n// Run migrations programmatically:\nuse sqlx::migrate::Migrator;\n\nstatic MIGRATOR: Migrator = sqlx::migrate!();  // Embeds migrations\n\nasync fn run_migrations(pool: &PgPool) -> Result<()> {\n    MIGRATOR.run(pool).await?;\n    Ok(())\n}\n\n// Or via CLI:\n// sqlx migrate add create_users\n// sqlx migrate run\n// sqlx migrate revert"
+  },
+  {
+    "id": 49,
+    "question": "What is `tokio::select!` used for?",
+    "answer": "`tokio::select!` races multiple async operations and executes the branch of the first one to complete; useful for timeouts, cancellation, and multiplexing",
+    "example": "use tokio::time::{sleep, Duration};\n\nasync fn fetch_with_timeout() -> Result<Data> {\n    tokio::select! {\n        result = fetch_data() => {\n            result\n        }\n        _ = sleep(Duration::from_secs(5)) => {\n            Err(anyhow!(\"Request timed out\"))\n        }\n    }\n}\n\n// Cancellation pattern:\nasync fn cancellable_task(mut cancel: broadcast::Receiver<()>) {\n    tokio::select! {\n        _ = long_running_task() => {}\n        _ = cancel.recv() => {\n            println!(\"Task cancelled\");\n        }\n    }\n}"
+  },
+  {
+    "id": 50,
+    "question": "What is the purpose of `#[repr(C)]` in Rust?",
+    "answer": "`#[repr(C)]` ensures a struct has C-compatible memory layout, required for FFI interoperability with C libraries",
+    "example": "#[repr(C)]\nstruct Point {\n    x: f64,\n    y: f64,\n}\n\nextern \"C\" {\n    fn process_point(p: *const Point);\n}\n\n// Without repr(C), Rust may reorder/pad fields\n// differently than C expects\n\n// Other repr options:\n#[repr(transparent)]  // Same layout as single field\nstruct Wrapper(i32);\n\n#[repr(packed)]       // No padding (may cause UB)\n#[repr(align(16))]    // Custom alignment"
+  },
+  {
+    "id": 51,
+    "question": "How do you implement a background job worker in Rust?",
+    "answer": "Use channels for job queues with spawned worker tasks; for persistent jobs, use libraries like `sqlx` with a jobs table or Redis-backed queues",
+    "example": "use tokio::sync::mpsc;\n\n#[derive(Debug)]\nenum Job {\n    SendEmail { to: String, body: String },\n    ProcessImage { path: String },\n}\n\nasync fn worker(mut rx: mpsc::Receiver<Job>) {\n    while let Some(job) = rx.recv().await {\n        match job {\n            Job::SendEmail { to, body } => {\n                send_email(&to, &body).await;\n            }\n            Job::ProcessImage { path } => {\n                process_image(&path).await;\n            }\n        }\n    }\n}\n\n// Producer:\nlet (tx, rx) = mpsc::channel(100);\ntokio::spawn(worker(rx));\ntx.send(Job::SendEmail { ... }).await?;"
+  },
+  {
+    "id": 52,
+    "question": "What is the difference between `iter()`, `iter_mut()`, and `into_iter()`?",
+    "answer": "`iter()` borrows elements immutably, `iter_mut()` borrows mutably, and `into_iter()` takes ownership and consumes the collection",
+    "example": "let mut v = vec![1, 2, 3];\n\n// iter(): immutable borrows (&T)\nfor x in v.iter() {\n    println!(\"{}\", x);  // x is &i32\n}\n// v still usable\n\n// iter_mut(): mutable borrows (&mut T)\nfor x in v.iter_mut() {\n    *x *= 2;  // x is &mut i32\n}\n\n// into_iter(): takes ownership (T)\nfor x in v.into_iter() {\n    println!(\"{}\", x);  // x is i32\n}\n// v is consumed, no longer usable"
+  },
+  {
+    "id": 53,
+    "question": "How do you implement caching in a Rust backend?",
+    "answer": "Use in-memory caches like `moka` for local caching, or Redis via `redis-rs` for distributed caching; consider TTL and cache invalidation strategies",
+    "example": "use moka::future::Cache;\nuse std::time::Duration;\n\n// In-memory cache with TTL\nlet cache: Cache<String, User> = Cache::builder()\n    .max_capacity(10_000)\n    .time_to_live(Duration::from_secs(300))\n    .build();\n\nasync fn get_user(cache: &Cache<String, User>, id: &str) -> Result<User> {\n    if let Some(user) = cache.get(id).await {\n        return Ok(user);\n    }\n    \n    let user = fetch_user_from_db(id).await?;\n    cache.insert(id.to_string(), user.clone()).await;\n    Ok(user)\n}"
+  },
+  {
+    "id": 54,
+    "question": "What are procedural macros in Rust?",
+    "answer": "Procedural macros operate on Rust syntax at compile time to generate code; there are derive macros, attribute macros, and function-like macros",
+    "example": "// Derive macro usage:\n#[derive(Serialize, Deserialize, Debug)]\nstruct User { name: String }\n\n// Attribute macro:\n#[tokio::main]\nasync fn main() { }\n\n#[get(\"/users/{id}\")]\nasync fn get_user(id: Path<i32>) { }\n\n// Creating a derive macro (in proc-macro crate):\nuse proc_macro::TokenStream;\nuse quote::quote;\nuse syn::{parse_macro_input, DeriveInput};\n\n#[proc_macro_derive(MyTrait)]\npub fn my_trait_derive(input: TokenStream) -> TokenStream {\n    let input = parse_macro_input!(input as DeriveInput);\n    let name = input.ident;\n    quote! { impl MyTrait for #name {} }.into()\n}"
+  },
+  {
+    "id": 55,
+    "question": "What is `RwLock` and when should you use it over `Mutex`?",
+    "answer": "`RwLock` allows multiple readers OR one writer, while `Mutex` allows only one accessor at a time; use RwLock when reads vastly outnumber writes",
+    "example": "use std::sync::RwLock;\nuse tokio::sync::RwLock as AsyncRwLock;\n\nlet config = RwLock::new(Config::default());\n\n// Multiple concurrent readers\n{\n    let read_guard = config.read().unwrap();\n    println!(\"{:?}\", read_guard.setting);\n}  // Lock released\n\n// Exclusive writer\n{\n    let mut write_guard = config.write().unwrap();\n    write_guard.setting = new_value;\n}\n\n// Async version for tokio:\nlet config = AsyncRwLock::new(Config::default());\nlet guard = config.read().await;"
   }
 ]

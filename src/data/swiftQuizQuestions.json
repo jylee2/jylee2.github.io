@@ -1,0 +1,332 @@
+[
+  {
+    "id": 1,
+    "question": "How do you declare variables and constants in Swift?",
+    "answer": "Use `let` for constants (immutable) and `var` for variables (mutable). Swift encourages using `let` by default for safety and compiler optimizations",
+    "example": "// Constant - cannot be changed\nlet name = \"Alice\"\n// name = \"Bob\"  // Error: Cannot assign to 'let' constant\n\n// Variable - can be changed\nvar age = 25\nage = 26  // OK\n\n// Type annotation (optional due to inference)\nlet score: Double = 95.5\nvar items: [String] = []\n\n// Multiple declarations\nlet x = 1, y = 2, z = 3"
+  },
+  {
+    "id": 2,
+    "question": "What are Swift's basic data types?",
+    "answer": "Swift has Int, Double, Float, Bool, String, and Character as basic types. It also has typed arrays, dictionaries, sets, and optionals",
+    "example": "// Numbers\nlet integer: Int = 42\nlet decimal: Double = 3.14159\nlet float: Float = 2.5\n\n// Boolean\nlet isActive: Bool = true\n\n// Strings and Characters\nlet greeting: String = \"Hello\"\nlet letter: Character = \"A\"\n\n// Collections\nlet numbers: [Int] = [1, 2, 3]\nlet scores: [String: Int] = [\"Alice\": 95]\nlet uniqueIds: Set<Int> = [1, 2, 3]\n\n// Optional\nvar middleName: String? = nil"
+  },
+  {
+    "id": 3,
+    "question": "What are optionals in Swift and why are they important?",
+    "answer": "Optionals represent values that may or may not exist, using `?` syntax. They force explicit handling of nil cases at compile time, preventing null pointer crashes",
+    "example": "// Optional declaration\nvar name: String? = nil\nname = \"Alice\"\n\n// Unwrapping with if let (safe)\nif let unwrappedName = name {\n    print(\"Hello, \\(unwrappedName)\")\n}\n\n// Guard let (early exit)\nfunc greet(_ name: String?) {\n    guard let name = name else {\n        print(\"No name provided\")\n        return\n    }\n    print(\"Hello, \\(name)\")\n}\n\n// Force unwrap (dangerous - crashes if nil)\nlet forcedName = name!  // Only if certain it's not nil\n\n// Nil coalescing\nlet displayName = name ?? \"Anonymous\""
+  },
+  {
+    "id": 4,
+    "question": "How do you define functions in Swift?",
+    "answer": "Functions are defined with `func`, support argument labels, default parameters, and can return multiple values via tuples. Parameters are constants by default",
+    "example": "// Basic function\nfunc greet(name: String) -> String {\n    return \"Hello, \\(name)!\"\n}\n\n// Argument labels (external vs internal)\nfunc greet(person name: String) -> String {\n    return \"Hello, \\(name)!\"\n}\ngreet(person: \"Alice\")  // Called with 'person'\n\n// Omit argument label with _\nfunc add(_ a: Int, _ b: Int) -> Int {\n    return a + b\n}\nadd(5, 3)  // No labels needed\n\n// Default parameters\nfunc greet(name: String = \"World\") -> String {\n    return \"Hello, \\(name)!\"\n}\n\n// Multiple return values\nfunc minMax(_ array: [Int]) -> (min: Int, max: Int)? {\n    guard let min = array.min(), let max = array.max() else { return nil }\n    return (min, max)\n}"
+  },
+  {
+    "id": 5,
+    "question": "What are closures in Swift?",
+    "answer": "Closures are self-contained blocks of code that can capture values from their surrounding context. They're similar to lambdas or anonymous functions in other languages",
+    "example": "// Full closure syntax\nlet multiply: (Int, Int) -> Int = { (a: Int, b: Int) -> Int in\n    return a * b\n}\n\n// Shortened syntax (type inference)\nlet multiply = { (a: Int, b: Int) in a * b }\n\n// Trailing closure syntax\nlet numbers = [1, 2, 3, 4, 5]\nlet doubled = numbers.map { $0 * 2 }  // [2, 4, 6, 8, 10]\n\n// Capturing values\nfunc makeCounter() -> () -> Int {\n    var count = 0\n    return {\n        count += 1\n        return count\n    }\n}\nlet counter = makeCounter()\ncounter()  // 1\ncounter()  // 2"
+  },
+  {
+    "id": 6,
+    "question": "What is the difference between structs and classes in Swift?",
+    "answer": "Structs are value types (copied on assignment), classes are reference types (shared). Structs have automatic memberwise initializers and cannot inherit. Swift favors structs for most types",
+    "example": "// Struct - value type\nstruct Point {\n    var x: Int\n    var y: Int\n}\n\nvar p1 = Point(x: 0, y: 0)  // Memberwise init\nvar p2 = p1  // Copy\np2.x = 10\nprint(p1.x)  // 0 - unchanged\n\n// Class - reference type\nclass Person {\n    var name: String\n    init(name: String) {\n        self.name = name\n    }\n}\n\nlet person1 = Person(name: \"Alice\")\nlet person2 = person1  // Same reference\nperson2.name = \"Bob\"\nprint(person1.name)  // \"Bob\" - changed!\n\n// Classes support inheritance\nclass Employee: Person {\n    var salary: Double = 0\n}"
+  },
+  {
+    "id": 7,
+    "question": "How do enums work in Swift?",
+    "answer": "Swift enums are powerful algebraic data types that can have associated values, raw values, computed properties, and methods. They're value types like structs",
+    "example": "// Simple enum\nenum Direction {\n    case north, south, east, west\n}\n\n// Enum with associated values\nenum Barcode {\n    case upc(Int, Int, Int, Int)\n    case qrCode(String)\n}\nlet code = Barcode.qrCode(\"ABCD\")\n\n// Enum with raw values\nenum Planet: Int {\n    case mercury = 1, venus, earth, mars\n}\nlet earth = Planet.earth.rawValue  // 3\n\n// Enum with methods\nenum CompassPoint {\n    case north, south, east, west\n    \n    var description: String {\n        switch self {\n        case .north: return \"North\"\n        case .south: return \"South\"\n        case .east: return \"East\"\n        case .west: return \"West\"\n        }\n    }\n}"
+  },
+  {
+    "id": 8,
+    "question": "What is optional chaining in Swift?",
+    "answer": "Optional chaining lets you safely access properties, methods, and subscripts on optionals. If any link in the chain is nil, the entire expression returns nil",
+    "example": "class Person {\n    var residence: Residence?\n}\n\nclass Residence {\n    var address: Address?\n}\n\nclass Address {\n    var street: String = \"\"\n}\n\nlet person = Person()\n\n// Without optional chaining - verbose\nif let residence = person.residence {\n    if let address = residence.address {\n        print(address.street)\n    }\n}\n\n// With optional chaining - concise\nlet street = person.residence?.address?.street\n// street is String? - nil if any part is nil\n\n// Optional chaining with method calls\nperson.residence?.address?.street.uppercased()"
+  },
+  {
+    "id": 9,
+    "question": "What is the difference between `if let` and `guard let`?",
+    "answer": "`if let` creates a new scope where the unwrapped value is available. `guard let` requires early exit and makes the unwrapped value available in the remaining scope",
+    "example": "func processUser(name: String?) {\n    // if let - value only in inner scope\n    if let name = name {\n        print(\"Hello, \\(name)\")\n    }\n    // name is optional again here\n}\n\nfunc processUserGuard(name: String?) {\n    // guard let - must exit if nil\n    guard let name = name else {\n        print(\"No name\")\n        return  // Must exit: return, throw, break, etc.\n    }\n    // name is unwrapped String for rest of function\n    print(\"Hello, \\(name)\")\n    print(\"Name has \\(name.count) characters\")\n}\n\n// guard is preferred for:\n// - Precondition checking\n// - Early exit patterns\n// - Reducing nesting"
+  },
+  {
+    "id": 10,
+    "question": "How do protocols work in Swift?",
+    "answer": "Protocols define a blueprint of methods, properties, and requirements that conforming types must implement. They enable polymorphism and are central to Swift's design patterns",
+    "example": "// Define a protocol\nprotocol Drawable {\n    var color: String { get set }\n    func draw()\n}\n\n// Protocol with default implementation\nextension Drawable {\n    func draw() {\n        print(\"Drawing in \\(color)\")\n    }\n}\n\n// Conform to protocol\nstruct Circle: Drawable {\n    var color: String\n    var radius: Double\n    // Uses default draw() implementation\n}\n\n// Protocol as type\nfunc render(_ item: Drawable) {\n    item.draw()\n}\n\n// Protocol composition\nfunc process(_ item: Drawable & Equatable) { }\n\n// Protocol with associated type\nprotocol Container {\n    associatedtype Item\n    func add(_ item: Item)\n}"
+  },
+  {
+    "id": 11,
+    "question": "What are extensions in Swift?",
+    "answer": "Extensions add new functionality to existing types without subclassing. You can add computed properties, methods, initializers, and protocol conformance",
+    "example": "// Add computed property\nextension Int {\n    var squared: Int {\n        return self * self\n    }\n}\nlet num = 5.squared  // 25\n\n// Add methods\nextension String {\n    func trimmed() -> String {\n        return self.trimmingCharacters(in: .whitespaces)\n    }\n}\n\n// Add initializers\nextension CGRect {\n    init(center: CGPoint, size: CGSize) {\n        let origin = CGPoint(\n            x: center.x - size.width / 2,\n            y: center.y - size.height / 2\n        )\n        self.init(origin: origin, size: size)\n    }\n}\n\n// Add protocol conformance\nextension Int: Drawable {\n    var color: String { \"blue\" }\n    func draw() { print(\"Drawing \\(self)\") }\n}"
+  },
+  {
+    "id": 12,
+    "question": "What is the difference between `Any` and `AnyObject`?",
+    "answer": "`Any` represents any type at all including structs, enums, and functions. `AnyObject` represents any class instance only. Use sparingly as they bypass type safety",
+    "example": "// Any - any type\nvar items: [Any] = []\nitems.append(42)           // Int\nitems.append(\"Hello\")      // String\nitems.append({ print(\"Hi\") })  // Closure\nitems.append(CGPoint.zero) // Struct\n\n// AnyObject - class instances only\nvar objects: [AnyObject] = []\nobjects.append(NSString(\"Hello\"))\nobjects.append(NSNumber(42))\n// objects.append(CGPoint.zero)  // Error: struct\n\n// Type casting\nfor item in items {\n    if let number = item as? Int {\n        print(\"Int: \\(number)\")\n    } else if let string = item as? String {\n        print(\"String: \\(string)\")\n    }\n}\n\n// Prefer generics or protocols over Any/AnyObject"
+  },
+  {
+    "id": 13,
+    "question": "How does error handling work in Swift?",
+    "answer": "Swift uses `throw`, `try`, `catch` for error handling. Functions that can throw are marked with `throws`. Errors must conform to the `Error` protocol",
+    "example": "// Define error type\nenum NetworkError: Error {\n    case invalidURL\n    case noData\n    case decodingFailed(String)\n}\n\n// Throwing function\nfunc fetchData(from url: String) throws -> Data {\n    guard url.hasPrefix(\"https\") else {\n        throw NetworkError.invalidURL\n    }\n    // ... fetch data\n    return Data()\n}\n\n// Handle with do-catch\ndo {\n    let data = try fetchData(from: \"https://api.example.com\")\n    print(\"Got data: \\(data)\")\n} catch NetworkError.invalidURL {\n    print(\"Invalid URL\")\n} catch {\n    print(\"Error: \\(error)\")\n}\n\n// try? - returns optional, nil on error\nlet data = try? fetchData(from: \"invalid\")\n\n// try! - force try, crashes on error\nlet data = try! fetchData(from: \"https://safe.com\")"
+  },
+  {
+    "id": 14,
+    "question": "What are property wrappers in Swift?",
+    "answer": "Property wrappers encapsulate property storage and behavior. They're used extensively in SwiftUI (@State, @Binding) and can be custom-defined with @propertyWrapper",
+    "example": "// Define a property wrapper\n@propertyWrapper\nstruct Clamped {\n    var value: Int\n    let range: ClosedRange<Int>\n    \n    var wrappedValue: Int {\n        get { value }\n        set { value = min(max(newValue, range.lowerBound), range.upperBound) }\n    }\n    \n    init(wrappedValue: Int, _ range: ClosedRange<Int>) {\n        self.range = range\n        self.value = min(max(wrappedValue, range.lowerBound), range.upperBound)\n    }\n}\n\n// Use the wrapper\nstruct Player {\n    @Clamped(0...100) var health: Int = 100\n}\n\nvar player = Player()\nplayer.health = 150  // Clamped to 100\nplayer.health = -10  // Clamped to 0\n\n// Common SwiftUI wrappers:\n// @State, @Binding, @ObservedObject, @Published, @Environment"
+  },
+  {
+    "id": 15,
+    "question": "What is the difference between `weak` and `unowned` references?",
+    "answer": "`weak` references become nil when the object is deallocated (must be optional). `unowned` assumes the object always exists (non-optional, crashes if accessed after deallocation)",
+    "example": "class Person {\n    var apartment: Apartment?\n}\n\nclass Apartment {\n    weak var tenant: Person?  // Weak - optional, nil-able\n}\n\n// Prevents retain cycle:\nvar john: Person? = Person()\nvar apt: Apartment? = Apartment()\njohn?.apartment = apt\napt?.tenant = john\njohn = nil  // Apartment.tenant becomes nil\n\n// Unowned - use when reference is always valid\nclass Customer {\n    var card: CreditCard?\n}\n\nclass CreditCard {\n    unowned let customer: Customer  // Card can't exist without customer\n    init(customer: Customer) {\n        self.customer = customer\n    }\n}\n\n// Rule of thumb:\n// weak: when reference might become nil\n// unowned: when reference will never be nil during its lifetime"
+  },
+  {
+    "id": 16,
+    "question": "How do you handle retain cycles in closures?",
+    "answer": "Use capture lists with `[weak self]` or `[unowned self]` to prevent closures from strongly capturing self, which causes retain cycles and memory leaks",
+    "example": "class ViewController: UIViewController {\n    var completionHandler: (() -> Void)?\n    \n    func setupHandler() {\n        // Strong capture - creates retain cycle!\n        completionHandler = {\n            self.doSomething()  // self strongly captured\n        }\n        \n        // Weak capture - safe, self becomes optional\n        completionHandler = { [weak self] in\n            guard let self = self else { return }\n            self.doSomething()\n        }\n        \n        // Unowned - safe if closure won't outlive self\n        completionHandler = { [unowned self] in\n            self.doSomething()\n        }\n    }\n    \n    // Multiple captures\n    func example() {\n        let value = 42\n        completionHandler = { [weak self, value] in\n            self?.process(value)\n        }\n    }\n}"
+  },
+  {
+    "id": 17,
+    "question": "What is the difference between `map`, `compactMap`, and `flatMap`?",
+    "answer": "`map` transforms each element. `compactMap` transforms and removes nils. `flatMap` transforms and flattens nested collections",
+    "example": "let numbers = [\"1\", \"2\", \"three\", \"4\"]\n\n// map - transforms each element\nlet mapped = numbers.map { Int($0) }\n// [Optional(1), Optional(2), nil, Optional(4)]\n\n// compactMap - transforms and removes nils\nlet compacted = numbers.compactMap { Int($0) }\n// [1, 2, 4]\n\n// flatMap - transforms and flattens\nlet nested = [[1, 2], [3, 4], [5]]\nlet flattened = nested.flatMap { $0 }\n// [1, 2, 3, 4, 5]\n\n// flatMap on optionals (use compactMap instead)\nlet names: [String?] = [\"Alice\", nil, \"Bob\"]\nlet valid = names.compactMap { $0 }\n// [\"Alice\", \"Bob\"]\n\n// Chaining\nlet result = numbers\n    .compactMap { Int($0) }\n    .map { $0 * 2 }\n    .filter { $0 > 4 }\n// [4, 8]"
+  },
+  {
+    "id": 18,
+    "question": "What is a computed property vs a stored property?",
+    "answer": "Stored properties hold actual values in memory. Computed properties calculate values on access and don't store anything. Use computed properties for derived values",
+    "example": "struct Rectangle {\n    // Stored properties\n    var width: Double\n    var height: Double\n    \n    // Computed property (read-only)\n    var area: Double {\n        return width * height\n    }\n    \n    // Computed property (read-write)\n    var perimeter: Double {\n        get {\n            return 2 * (width + height)\n        }\n        set {\n            // Assuming square for simplicity\n            width = newValue / 4\n            height = newValue / 4\n        }\n    }\n}\n\nvar rect = Rectangle(width: 10, height: 5)\nprint(rect.area)       // 50.0 - computed on access\nrect.perimeter = 40    // Sets width and height\n\n// Lazy stored property - computed once on first access\nclass DataLoader {\n    lazy var data: Data = loadExpensiveData()\n}"
+  },
+  {
+    "id": 19,
+    "question": "What are property observers in Swift?",
+    "answer": "`willSet` is called before a property changes, `didSet` after. They let you respond to property changes without using computed properties",
+    "example": "class StepCounter {\n    var steps: Int = 0 {\n        willSet {\n            print(\"About to change from \\(steps) to \\(newValue)\")\n        }\n        didSet {\n            if steps > oldValue {\n                print(\"Added \\(steps - oldValue) steps\")\n            }\n        }\n    }\n}\n\nlet counter = StepCounter()\ncounter.steps = 100\n// \"About to change from 0 to 100\"\n// \"Added 100 steps\"\n\ncounter.steps = 150\n// \"About to change from 100 to 150\"\n// \"Added 50 steps\"\n\n// Common use cases:\n// - Validation\n// - UI updates\n// - Persistence\n// - Logging"
+  },
+  {
+    "id": 20,
+    "question": "What is type casting in Swift?",
+    "answer": "Type casting checks or converts types using `is` (check), `as?` (conditional cast returning optional), and `as!` (forced cast that crashes on failure)",
+    "example": "class Animal { }\nclass Dog: Animal { func bark() { } }\nclass Cat: Animal { func meow() { } }\n\nlet animals: [Animal] = [Dog(), Cat(), Dog()]\n\n// is - type check\nfor animal in animals {\n    if animal is Dog {\n        print(\"It's a dog\")\n    }\n}\n\n// as? - conditional downcast (safe)\nfor animal in animals {\n    if let dog = animal as? Dog {\n        dog.bark()\n    }\n}\n\n// as! - forced downcast (crashes if wrong type)\nlet firstDog = animals[0] as! Dog\n\n// as - upcast (always succeeds)\nlet pet: Animal = Dog() as Animal\n\n// Pattern matching with case let\nfor case let dog as Dog in animals {\n    dog.bark()\n}"
+  },
+  {
+    "id": 21,
+    "question": "How does Swift handle memory management?",
+    "answer": "Swift uses Automatic Reference Counting (ARC) which automatically tracks and manages memory. Reference counts increase when references are created and decrease when removed",
+    "example": "class Person {\n    let name: String\n    init(name: String) {\n        self.name = name\n        print(\"\\(name) is initialized\")\n    }\n    deinit {\n        print(\"\\(name) is deinitialized\")\n    }\n}\n\nvar ref1: Person? = Person(name: \"Alice\")  // Count: 1\nvar ref2: Person? = ref1  // Count: 2\nvar ref3: Person? = ref1  // Count: 3\n\nref1 = nil  // Count: 2\nref2 = nil  // Count: 1\nref3 = nil  // Count: 0 -> deinit called\n\n// ARC doesn't handle retain cycles automatically\n// Use weak/unowned to break cycles\nclass Node {\n    var next: Node?      // Strong reference\n    weak var prev: Node? // Weak reference - breaks cycle\n}"
+  },
+  {
+    "id": 22,
+    "question": "What is the difference between `static` and `class` properties/methods?",
+    "answer": "`static` members cannot be overridden in subclasses. `class` members can be overridden. Both are type-level (not instance-level) members",
+    "example": "class Animal {\n    // static - cannot be overridden\n    static var kingdom = \"Animalia\"\n    \n    static func describe() {\n        print(\"Animals are living beings\")\n    }\n    \n    // class - can be overridden\n    class var defaultSound: String {\n        return \"...\"\n    }\n    \n    class func makeSound() {\n        print(defaultSound)\n    }\n}\n\nclass Dog: Animal {\n    // Override class property\n    override class var defaultSound: String {\n        return \"Woof!\"\n    }\n    \n    // Override class method\n    override class func makeSound() {\n        print(\"Dog says: \\(defaultSound)\")\n    }\n    \n    // Cannot override static members\n    // override static func describe() { }  // Error!\n}\n\nDog.makeSound()  // \"Dog says: Woof!\""
+  },
+  {
+    "id": 23,
+    "question": "How do you use generics in Swift?",
+    "answer": "Generics let you write flexible, reusable code that works with any type. Use type parameters like `<T>` and constrain them with protocols",
+    "example": "// Generic function\nfunc swap<T>(_ a: inout T, _ b: inout T) {\n    let temp = a\n    a = b\n    b = temp\n}\n\n// Generic type\nstruct Stack<Element> {\n    private var items: [Element] = []\n    \n    mutating func push(_ item: Element) {\n        items.append(item)\n    }\n    \n    mutating func pop() -> Element? {\n        return items.popLast()\n    }\n}\n\nvar intStack = Stack<Int>()\nintStack.push(1)\n\n// Type constraints\nfunc findIndex<T: Equatable>(of value: T, in array: [T]) -> Int? {\n    for (index, item) in array.enumerated() {\n        if item == value {\n            return index\n        }\n    }\n    return nil\n}\n\n// Multiple constraints\nfunc process<T: Comparable & Hashable>(_ value: T) { }"
+  },
+  {
+    "id": 24,
+    "question": "What is `@escaping` closure and when do you need it?",
+    "answer": "An `@escaping` closure can outlive the function it's passed to (stored or called asynchronously). Non-escaping closures are called within the function's lifetime",
+    "example": "class NetworkManager {\n    var completionHandlers: [() -> Void] = []\n    \n    // Escaping - closure stored for later\n    func fetchData(completion: @escaping () -> Void) {\n        completionHandlers.append(completion)\n        // Called later, after function returns\n    }\n    \n    // Escaping - async callback\n    func loadData(completion: @escaping (Data?) -> Void) {\n        DispatchQueue.global().async {\n            // ... fetch data\n            completion(data)\n        }\n    }\n    \n    // Non-escaping (default) - called immediately\n    func processData(using transform: (Data) -> Data) {\n        let result = transform(data)\n        // Closure called before function returns\n    }\n}\n\n// @escaping requires explicit self capture\nclass ViewController {\n    var name = \"Test\"\n    \n    func load() {\n        NetworkManager().fetchData { [weak self] in\n            print(self?.name ?? \"\")  // Must capture self\n        }\n    }\n}"
+  },
+  {
+    "id": 25,
+    "question": "What is the `Result` type in Swift?",
+    "answer": "`Result<Success, Failure>` represents either success with a value or failure with an error. It's useful for async operations and provides cleaner error handling than optionals",
+    "example": "enum NetworkError: Error {\n    case invalidURL\n    case noData\n}\n\n// Function returning Result\nfunc fetchUser(id: Int) -> Result<User, NetworkError> {\n    guard id > 0 else {\n        return .failure(.invalidURL)\n    }\n    return .success(User(id: id, name: \"Alice\"))\n}\n\n// Handle with switch\nlet result = fetchUser(id: 1)\nswitch result {\ncase .success(let user):\n    print(\"Got user: \\(user.name)\")\ncase .failure(let error):\n    print(\"Error: \\(error)\")\n}\n\n// Use get() - throws on failure\ndo {\n    let user = try result.get()\n    print(user.name)\n} catch {\n    print(error)\n}\n\n// Map and flatMap\nlet userName = result.map { $0.name }  // Result<String, NetworkError>"
+  },
+  {
+    "id": 26,
+    "question": "What is the App lifecycle in iOS?",
+    "answer": "iOS apps have states: Not Running, Inactive, Active, Background, Suspended. The AppDelegate/SceneDelegate receive lifecycle callbacks for state transitions",
+    "example": "// SceneDelegate (iOS 13+)\nclass SceneDelegate: UIResponder, UIWindowSceneDelegate {\n    \n    func sceneDidBecomeActive(_ scene: UIScene) {\n        // App is in foreground and receiving events\n    }\n    \n    func sceneWillResignActive(_ scene: UIScene) {\n        // About to move to inactive state\n    }\n    \n    func sceneDidEnterBackground(_ scene: UIScene) {\n        // Save data, release shared resources\n    }\n    \n    func sceneWillEnterForeground(_ scene: UIScene) {\n        // Undo background changes\n    }\n}\n\n// SwiftUI App lifecycle\n@main\nstruct MyApp: App {\n    @Environment(\\.scenePhase) var scenePhase\n    \n    var body: some Scene {\n        WindowGroup {\n            ContentView()\n        }\n        .onChange(of: scenePhase) { phase in\n            switch phase {\n            case .active: print(\"Active\")\n            case .inactive: print(\"Inactive\")\n            case .background: print(\"Background\")\n            }\n        }\n    }\n}"
+  },
+  {
+    "id": 27,
+    "question": "What is the difference between frame and bounds in UIKit?",
+    "answer": "`frame` is the view's position and size in its superview's coordinate system. `bounds` is the view's position and size in its own coordinate system (usually origin 0,0)",
+    "example": "let parentView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 400))\n\nlet childView = UIView(frame: CGRect(x: 100, y: 100, width: 200, height: 200))\nparentView.addSubview(childView)\n\n// Frame - relative to superview\nprint(childView.frame)  // (100, 100, 200, 200)\n\n// Bounds - view's own coordinate system\nprint(childView.bounds) // (0, 0, 200, 200)\n\n// Changing bounds origin affects subview positioning\nchildView.bounds.origin = CGPoint(x: 50, y: 50)\n// Subviews of childView shift by (-50, -50)\n\n// Transform affects frame but not bounds\nchildView.transform = CGAffineTransform(rotationAngle: .pi / 4)\nprint(childView.frame)  // Larger bounding box\nprint(childView.bounds) // Still (0, 0, 200, 200)\n\n// Use bounds for:\n// - Drawing within the view\n// - Positioning subviews\n// Use frame for:\n// - Positioning view in superview"
+  },
+  {
+    "id": 28,
+    "question": "How does Auto Layout work in iOS?",
+    "answer": "Auto Layout uses constraints to define relationships between views. The system solves these constraints to determine view frames. Constraints have priorities and can be activated/deactivated",
+    "example": "let label = UILabel()\nlabel.translatesAutoresizingMaskIntoConstraints = false\nview.addSubview(label)\n\n// Activate constraints\nNSLayoutConstraint.activate([\n    label.centerXAnchor.constraint(equalTo: view.centerXAnchor),\n    label.centerYAnchor.constraint(equalTo: view.centerYAnchor),\n    label.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, multiplier: 0.8),\n    label.heightAnchor.constraint(equalToConstant: 44)\n])\n\n// Priority (1-1000, 1000 = required)\nlet width = label.widthAnchor.constraint(equalToConstant: 200)\nwidth.priority = .defaultHigh  // 750\nwidth.isActive = true\n\n// Content hugging and compression resistance\nlabel.setContentHuggingPriority(.required, for: .horizontal)\nlabel.setContentCompressionResistancePriority(.required, for: .vertical)\n\n// Intrinsic content size\n// Labels, buttons have natural size based on content"
+  },
+  {
+    "id": 29,
+    "question": "What is the responder chain in iOS?",
+    "answer": "The responder chain is a hierarchy of objects that can respond to events. Events travel up the chain until handled. UIResponder subclasses (views, view controllers) participate",
+    "example": "// Responder chain for a button in a view controller:\n// Button -> Superview -> ... -> View -> ViewController -> Window -> Application\n\nclass CustomView: UIView {\n    // Handle touch\n    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {\n        // Handle or pass to next responder\n        super.touchesBegan(touches, with: event)\n    }\n    \n    // Determine if view should handle touch\n    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {\n        guard isUserInteractionEnabled, !isHidden, alpha > 0.01 else {\n            return nil\n        }\n        guard self.point(inside: point, with: event) else {\n            return nil\n        }\n        // Check subviews in reverse order\n        for subview in subviews.reversed() {\n            let convertedPoint = subview.convert(point, from: self)\n            if let hitView = subview.hitTest(convertedPoint, with: event) {\n                return hitView\n            }\n        }\n        return self\n    }\n}"
+  },
+  {
+    "id": 30,
+    "question": "How do you implement delegation pattern in Swift?",
+    "answer": "Delegation passes responsibility to another object via a protocol. The delegate property is typically weak to avoid retain cycles. It's a core iOS pattern",
+    "example": "// 1. Define protocol\nprotocol DownloadManagerDelegate: AnyObject {\n    func downloadDidStart()\n    func downloadDidProgress(_ progress: Float)\n    func downloadDidComplete(data: Data)\n    func downloadDidFail(error: Error)\n}\n\n// 2. Class with delegate\nclass DownloadManager {\n    weak var delegate: DownloadManagerDelegate?  // Weak to avoid retain cycle\n    \n    func startDownload() {\n        delegate?.downloadDidStart()\n        \n        // ... download logic\n        delegate?.downloadDidProgress(0.5)\n        \n        // On completion\n        delegate?.downloadDidComplete(data: data)\n    }\n}\n\n// 3. Implement delegate\nclass ViewController: UIViewController, DownloadManagerDelegate {\n    let manager = DownloadManager()\n    \n    override func viewDidLoad() {\n        super.viewDidLoad()\n        manager.delegate = self\n    }\n    \n    func downloadDidStart() { print(\"Started\") }\n    func downloadDidProgress(_ progress: Float) { print(\"Progress: \\(progress)\") }\n    func downloadDidComplete(data: Data) { print(\"Done\") }\n    func downloadDidFail(error: Error) { print(\"Failed\") }\n}"
+  },
+  {
+    "id": 31,
+    "question": "What is Grand Central Dispatch (GCD) and how do you use it?",
+    "answer": "GCD manages concurrent code execution using dispatch queues. Main queue runs on main thread (UI). Global queues have different QoS levels for background work",
+    "example": "// Main queue - UI updates\nDispatchQueue.main.async {\n    self.label.text = \"Updated\"\n}\n\n// Global queue - background work\nDispatchQueue.global(qos: .userInitiated).async {\n    let result = self.processData()\n    DispatchQueue.main.async {\n        self.updateUI(with: result)\n    }\n}\n\n// Custom serial queue\nlet serialQueue = DispatchQueue(label: \"com.app.serial\")\nserialQueue.async { /* Task 1 */ }\nserialQueue.async { /* Task 2 - waits for Task 1 */ }\n\n// Custom concurrent queue\nlet concurrentQueue = DispatchQueue(label: \"com.app.concurrent\", attributes: .concurrent)\n\n// Delay execution\nDispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {\n    print(\"After 2 seconds\")\n}\n\n// Dispatch group - wait for multiple tasks\nlet group = DispatchGroup()\ngroup.enter()\nfetchData { group.leave() }\ngroup.enter()\nfetchMore { group.leave() }\ngroup.notify(queue: .main) {\n    print(\"All tasks completed\")\n}"
+  },
+  {
+    "id": 32,
+    "question": "What is async/await in Swift and how does it work?",
+    "answer": "Swift's structured concurrency uses async/await for cleaner asynchronous code. `async` marks functions that can suspend, `await` suspends execution until result is ready",
+    "example": "// Async function\nfunc fetchUser() async throws -> User {\n    let url = URL(string: \"https://api.example.com/user\")!\n    let (data, _) = try await URLSession.shared.data(from: url)\n    return try JSONDecoder().decode(User.self, from: data)\n}\n\n// Calling async functions\nTask {\n    do {\n        let user = try await fetchUser()\n        print(user.name)\n    } catch {\n        print(error)\n    }\n}\n\n// Parallel execution\nasync let user = fetchUser()\nasync let posts = fetchPosts()\nlet (u, p) = try await (user, posts)  // Run in parallel\n\n// Task groups\nlet results = await withTaskGroup(of: Data.self) { group in\n    for url in urls {\n        group.addTask {\n            try? await fetchData(from: url)\n        }\n    }\n    return await group.reduce(into: [Data]()) { $0.append($1) }\n}\n\n// MainActor for UI\n@MainActor\nfunc updateUI() {\n    label.text = \"Updated\"\n}"
+  },
+  {
+    "id": 33,
+    "question": "What is the difference between `Task` and `Task.detached`?",
+    "answer": "`Task` inherits the current actor context and priority. `Task.detached` creates an independent task with no inherited context, useful when you don't want actor isolation",
+    "example": "class ViewModel {\n    @MainActor\n    func updateUI() {\n        // Regular Task inherits MainActor context\n        Task {\n            // Still on MainActor\n            await fetchData()\n            label.text = \"Done\"  // Safe UI update\n        }\n        \n        // Detached Task - no inherited context\n        Task.detached {\n            // Not on MainActor\n            let data = await self.fetchData()\n            await MainActor.run {\n                self.label.text = \"Done\"  // Must explicitly switch\n            }\n        }\n        \n        // Detached with specific priority\n        Task.detached(priority: .background) {\n            await self.processLargeFile()\n        }\n    }\n}\n\n// Use Task for:\n// - UI-related async work\n// - Work that should inherit context\n\n// Use Task.detached for:\n// - Independent background work\n// - When you need different priority\n// - Avoiding actor inheritance"
+  },
+  {
+    "id": 34,
+    "question": "What are actors in Swift concurrency?",
+    "answer": "Actors protect mutable state from data races by ensuring only one task accesses their state at a time. Access from outside requires `await`. They're reference types like classes",
+    "example": "// Define an actor\nactor BankAccount {\n    private var balance: Double = 0\n    \n    func deposit(_ amount: Double) {\n        balance += amount\n    }\n    \n    func withdraw(_ amount: Double) -> Bool {\n        guard balance >= amount else { return false }\n        balance -= amount\n        return true\n    }\n    \n    func getBalance() -> Double {\n        return balance\n    }\n}\n\n// Using an actor\nlet account = BankAccount()\n\nTask {\n    await account.deposit(100)  // Must await\n    let balance = await account.getBalance()\n    print(\"Balance: \\(balance)\")\n}\n\n// nonisolated - opt out of actor isolation\nactor DataStore {\n    nonisolated let id: UUID = UUID()  // Can access without await\n    \n    nonisolated func description() -> String {\n        return \"Store \\(id)\"  // No await needed\n    }\n}\n\n// @MainActor - special actor for main thread\n@MainActor\nclass ViewController: UIViewController { }"
+  },
+  {
+    "id": 35,
+    "question": "How does URLSession work for networking?",
+    "answer": "URLSession is iOS's networking API. It supports data tasks, download/upload tasks, and WebSocket. Use async/await for cleaner code or completion handlers",
+    "example": "// Async/await (preferred)\nfunc fetchData() async throws -> [User] {\n    let url = URL(string: \"https://api.example.com/users\")!\n    let (data, response) = try await URLSession.shared.data(from: url)\n    \n    guard let httpResponse = response as? HTTPURLResponse,\n          httpResponse.statusCode == 200 else {\n        throw NetworkError.invalidResponse\n    }\n    \n    return try JSONDecoder().decode([User].self, from: data)\n}\n\n// With completion handler\nfunc fetchDataOld(completion: @escaping (Result<[User], Error>) -> Void) {\n    let url = URL(string: \"https://api.example.com/users\")!\n    \n    URLSession.shared.dataTask(with: url) { data, response, error in\n        if let error = error {\n            completion(.failure(error))\n            return\n        }\n        guard let data = data else {\n            completion(.failure(NetworkError.noData))\n            return\n        }\n        do {\n            let users = try JSONDecoder().decode([User].self, from: data)\n            completion(.success(users))\n        } catch {\n            completion(.failure(error))\n        }\n    }.resume()  // Don't forget to start the task!\n}"
+  },
+  {
+    "id": 36,
+    "question": "How do you use Codable for JSON encoding/decoding?",
+    "answer": "Codable (Encodable & Decodable) provides automatic JSON serialization. Use CodingKeys for custom mappings. JSONEncoder/JSONDecoder handle the conversion",
+    "example": "// Basic Codable\nstruct User: Codable {\n    let id: Int\n    let name: String\n    let email: String\n}\n\n// Decode JSON\nlet json = \"\"\"{\"id\": 1, \"name\": \"Alice\", \"email\": \"alice@test.com\"}\"\"\"\nlet data = json.data(using: .utf8)!\nlet user = try JSONDecoder().decode(User.self, from: data)\n\n// Encode to JSON\nlet encoded = try JSONEncoder().encode(user)\n\n// Custom key mapping\nstruct Post: Codable {\n    let id: Int\n    let title: String\n    let createdAt: Date\n    \n    enum CodingKeys: String, CodingKey {\n        case id\n        case title\n        case createdAt = \"created_at\"  // Map snake_case\n    }\n}\n\n// Configure decoder\nlet decoder = JSONDecoder()\ndecoder.keyDecodingStrategy = .convertFromSnakeCase\ndecoder.dateDecodingStrategy = .iso8601\n\n// Nested objects work automatically\nstruct Response: Codable {\n    let status: String\n    let data: User\n}"
+  },
+  {
+    "id": 37,
+    "question": "What is Core Data and when should you use it?",
+    "answer": "Core Data is Apple's object graph and persistence framework. It handles object lifecycle, relationships, and storage. Use for complex data models with relationships; UserDefaults for simple data",
+    "example": "// Define model in .xcdatamodeld file\n// Entity: Person with attributes: name (String), age (Int16)\n\n// Managed object subclass\n@objc(Person)\nclass Person: NSManagedObject {\n    @NSManaged var name: String?\n    @NSManaged var age: Int16\n}\n\n// Core Data stack (simplified)\nlet container = NSPersistentContainer(name: \"Model\")\ncontainer.loadPersistentStores { _, error in\n    if let error = error { fatalError(\"Failed: \\(error)\") }\n}\n\nlet context = container.viewContext\n\n// Create\nlet person = Person(context: context)\nperson.name = \"Alice\"\nperson.age = 30\ntry context.save()\n\n// Fetch\nlet request: NSFetchRequest<Person> = Person.fetchRequest()\nrequest.predicate = NSPredicate(format: \"age > %d\", 25)\nrequest.sortDescriptors = [NSSortDescriptor(key: \"name\", ascending: true)]\nlet people = try context.fetch(request)\n\n// Delete\ncontext.delete(person)\ntry context.save()"
+  },
+  {
+    "id": 38,
+    "question": "What is SwiftUI's declarative syntax and how does it differ from UIKit?",
+    "answer": "SwiftUI uses declarative syntax - you describe what the UI should look like, not how to build it step by step. The framework handles updates automatically when state changes",
+    "example": "// SwiftUI - Declarative\nstruct ContentView: View {\n    @State private var count = 0\n    \n    var body: some View {\n        VStack {\n            Text(\"Count: \\(count)\")\n                .font(.title)\n            \n            Button(\"Increment\") {\n                count += 1  // UI updates automatically\n            }\n        }\n        .padding()\n    }\n}\n\n// UIKit - Imperative (equivalent)\nclass ViewController: UIViewController {\n    var count = 0\n    let label = UILabel()\n    \n    override func viewDidLoad() {\n        super.viewDidLoad()\n        setupViews()  // Manual setup\n    }\n    \n    func setupViews() {\n        label.text = \"Count: \\(count)\"\n        // Add to view, set constraints...\n    }\n    \n    @objc func increment() {\n        count += 1\n        label.text = \"Count: \\(count)\"  // Manual update\n    }\n}"
+  },
+  {
+    "id": 39,
+    "question": "What are @State, @Binding, and @ObservedObject in SwiftUI?",
+    "answer": "@State owns local view state. @Binding creates two-way connection to state owned elsewhere. @ObservedObject observes external ObservableObject for changes",
+    "example": "// @State - view owns the data\nstruct ParentView: View {\n    @State private var isOn = false\n    \n    var body: some View {\n        ToggleView(isOn: $isOn)  // Pass binding\n    }\n}\n\n// @Binding - reference to state owned elsewhere\nstruct ToggleView: View {\n    @Binding var isOn: Bool\n    \n    var body: some View {\n        Toggle(\"Switch\", isOn: $isOn)  // Two-way binding\n    }\n}\n\n// @ObservedObject - external observable\nclass UserViewModel: ObservableObject {\n    @Published var name = \"\"  // Triggers UI updates\n    @Published var score = 0\n}\n\nstruct ProfileView: View {\n    @ObservedObject var viewModel: UserViewModel\n    \n    var body: some View {\n        Text(viewModel.name)  // Updates when name changes\n    }\n}\n\n// @StateObject - view creates and owns observable\nstruct RootView: View {\n    @StateObject var viewModel = UserViewModel()  // Created once\n    \n    var body: some View {\n        ProfileView(viewModel: viewModel)\n    }\n}"
+  },
+  {
+    "id": 40,
+    "question": "What is the @Environment property wrapper in SwiftUI?",
+    "answer": "@Environment accesses values from the environment like color scheme, locale, or custom values. It enables dependency injection without passing through every view",
+    "example": "// Access system environment values\nstruct ContentView: View {\n    @Environment(\\.colorScheme) var colorScheme\n    @Environment(\\.locale) var locale\n    @Environment(\\.dismiss) var dismiss\n    \n    var body: some View {\n        VStack {\n            if colorScheme == .dark {\n                Text(\"Dark Mode\")\n            }\n            Button(\"Close\") {\n                dismiss()\n            }\n        }\n    }\n}\n\n// Custom environment values\nstruct ThemeKey: EnvironmentKey {\n    static let defaultValue: Theme = .light\n}\n\nextension EnvironmentValues {\n    var theme: Theme {\n        get { self[ThemeKey.self] }\n        set { self[ThemeKey.self] = newValue }\n    }\n}\n\n// Inject custom value\nstruct AppView: View {\n    var body: some View {\n        ContentView()\n            .environment(\\.theme, .dark)\n    }\n}\n\n// Use custom value\nstruct ThemedView: View {\n    @Environment(\\.theme) var theme\n}"
+  },
+  {
+    "id": 41,
+    "question": "How do you handle navigation in SwiftUI?",
+    "answer": "SwiftUI uses NavigationStack (iOS 16+) or NavigationView with NavigationLink. Programmatic navigation uses path binding or navigation state",
+    "example": "// NavigationStack (iOS 16+)\nstruct ContentView: View {\n    @State private var path = NavigationPath()\n    \n    var body: some View {\n        NavigationStack(path: $path) {\n            List {\n                NavigationLink(\"Go to Detail\", value: \"detail\")\n                NavigationLink(\"User 1\", value: User(id: 1))\n            }\n            .navigationDestination(for: String.self) { value in\n                Text(\"Detail: \\(value)\")\n            }\n            .navigationDestination(for: User.self) { user in\n                UserDetailView(user: user)\n            }\n        }\n    }\n    \n    // Programmatic navigation\n    func navigateToUser(_ user: User) {\n        path.append(user)\n    }\n}\n\n// Sheet presentation\nstruct SheetExample: View {\n    @State private var showSheet = false\n    \n    var body: some View {\n        Button(\"Show Sheet\") {\n            showSheet = true\n        }\n        .sheet(isPresented: $showSheet) {\n            DetailView()\n        }\n    }\n}"
+  },
+  {
+    "id": 42,
+    "question": "What is Combine framework and how does it work?",
+    "answer": "Combine is Apple's reactive framework for handling asynchronous events. Publishers emit values over time, operators transform them, and subscribers receive results",
+    "example": "import Combine\n\nclass SearchViewModel: ObservableObject {\n    @Published var searchText = \"\"\n    @Published var results: [String] = []\n    \n    private var cancellables = Set<AnyCancellable>()\n    \n    init() {\n        // React to search text changes\n        $searchText\n            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)\n            .removeDuplicates()\n            .filter { !$0.isEmpty }\n            .sink { [weak self] text in\n                self?.search(text)\n            }\n            .store(in: &cancellables)\n    }\n    \n    func search(_ query: String) { /* ... */ }\n}\n\n// Network request with Combine\nfunc fetchUsers() -> AnyPublisher<[User], Error> {\n    URLSession.shared.dataTaskPublisher(for: url)\n        .map(\\.data)\n        .decode(type: [User].self, decoder: JSONDecoder())\n        .receive(on: DispatchQueue.main)\n        .eraseToAnyPublisher()\n}\n\n// Subscribe\nfetchUsers()\n    .sink(\n        receiveCompletion: { completion in\n            if case .failure(let error) = completion {\n                print(error)\n            }\n        },\n        receiveValue: { users in\n            self.users = users\n        }\n    )\n    .store(in: &cancellables)"
+  },
+  {
+    "id": 43,
+    "question": "What are the SOLID principles and how do they apply to iOS?",
+    "answer": "SOLID: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion. They guide object-oriented design for maintainable code",
+    "example": "// Single Responsibility - one reason to change\nclass UserRepository {\n    func fetchUser() -> User { }  // Only data fetching\n}\n\nclass UserPresenter {\n    func format(_ user: User) -> String { }  // Only formatting\n}\n\n// Open/Closed - open for extension, closed for modification\nprotocol PaymentMethod {\n    func processPayment(amount: Double)\n}\n\nclass CreditCard: PaymentMethod { }\nclass ApplePay: PaymentMethod { }  // Extend without modifying\n\n// Interface Segregation - small, specific protocols\nprotocol Readable { func read() -> Data }\nprotocol Writable { func write(_ data: Data) }\n// Not one big FileOperations protocol\n\n// Dependency Inversion - depend on abstractions\nclass UserViewModel {\n    private let repository: UserRepositoryProtocol  // Protocol, not concrete\n    \n    init(repository: UserRepositoryProtocol) {\n        self.repository = repository\n    }\n}\n\n// Liskov Substitution - subtypes replaceable for base types\nclass Bird { func move() { } }\nclass Sparrow: Bird { override func move() { fly() } }\nclass Penguin: Bird { override func move() { swim() } }  // Still moves"
+  },
+  {
+    "id": 44,
+    "question": "What is the Coordinator pattern in iOS?",
+    "answer": "Coordinators handle navigation flow, removing navigation logic from view controllers. Each coordinator manages a flow and can have child coordinators for sub-flows",
+    "example": "// Coordinator protocol\nprotocol Coordinator: AnyObject {\n    var childCoordinators: [Coordinator] { get set }\n    var navigationController: UINavigationController { get set }\n    func start()\n}\n\n// Main coordinator\nclass MainCoordinator: Coordinator {\n    var childCoordinators: [Coordinator] = []\n    var navigationController: UINavigationController\n    \n    init(navigationController: UINavigationController) {\n        self.navigationController = navigationController\n    }\n    \n    func start() {\n        let vc = HomeViewController()\n        vc.coordinator = self\n        navigationController.pushViewController(vc, animated: false)\n    }\n    \n    func showDetail(for item: Item) {\n        let vc = DetailViewController(item: item)\n        vc.coordinator = self\n        navigationController.pushViewController(vc, animated: true)\n    }\n    \n    func startLogin() {\n        let loginCoordinator = LoginCoordinator(navigationController: navigationController)\n        childCoordinators.append(loginCoordinator)\n        loginCoordinator.start()\n    }\n}"
+  },
+  {
+    "id": 45,
+    "question": "What is dependency injection and how do you implement it in Swift?",
+    "answer": "Dependency injection provides dependencies to objects rather than having them create their own. It improves testability and decoupling through constructor, property, or method injection",
+    "example": "// Protocol for abstraction\nprotocol NetworkService {\n    func fetch<T: Decodable>(from url: URL) async throws -> T\n}\n\n// Concrete implementation\nclass URLSessionNetworkService: NetworkService {\n    func fetch<T: Decodable>(from url: URL) async throws -> T {\n        let (data, _) = try await URLSession.shared.data(from: url)\n        return try JSONDecoder().decode(T.self, from: data)\n    }\n}\n\n// Constructor injection (preferred)\nclass UserViewModel {\n    private let networkService: NetworkService\n    \n    init(networkService: NetworkService) {\n        self.networkService = networkService\n    }\n}\n\n// Usage\nlet viewModel = UserViewModel(networkService: URLSessionNetworkService())\n\n// Testing with mock\nclass MockNetworkService: NetworkService {\n    var mockData: Any?\n    func fetch<T: Decodable>(from url: URL) async throws -> T {\n        return mockData as! T\n    }\n}\n\nlet testVM = UserViewModel(networkService: MockNetworkService())\n\n// DI Container\nclass Container {\n    static let shared = Container()\n    lazy var networkService: NetworkService = URLSessionNetworkService()\n}"
+  },
+  {
+    "id": 46,
+    "question": "What is MVVM architecture and how does it work with SwiftUI?",
+    "answer": "MVVM separates Model (data), View (UI), and ViewModel (presentation logic). In SwiftUI, ViewModel is typically an ObservableObject that the View observes",
+    "example": "// Model\nstruct User: Codable {\n    let id: Int\n    let name: String\n    let email: String\n}\n\n// ViewModel\nclass UserListViewModel: ObservableObject {\n    @Published var users: [User] = []\n    @Published var isLoading = false\n    @Published var errorMessage: String?\n    \n    private let repository: UserRepository\n    \n    init(repository: UserRepository = UserRepository()) {\n        self.repository = repository\n    }\n    \n    @MainActor\n    func fetchUsers() async {\n        isLoading = true\n        defer { isLoading = false }\n        \n        do {\n            users = try await repository.getUsers()\n        } catch {\n            errorMessage = error.localizedDescription\n        }\n    }\n}\n\n// View\nstruct UserListView: View {\n    @StateObject var viewModel = UserListViewModel()\n    \n    var body: some View {\n        List(viewModel.users, id: \\.id) { user in\n            Text(user.name)\n        }\n        .overlay {\n            if viewModel.isLoading {\n                ProgressView()\n            }\n        }\n        .task {\n            await viewModel.fetchUsers()\n        }\n    }\n}"
+  },
+  {
+    "id": 47,
+    "question": "How do you handle deep linking and universal links in iOS?",
+    "answer": "Deep links open specific content via URL schemes. Universal links use HTTPS URLs associated with your domain. Handle in SceneDelegate or SwiftUI's onOpenURL",
+    "example": "// URL Scheme (custom://path)\n// Info.plist: CFBundleURLSchemes = [\"myapp\"]\n\n// SceneDelegate handling\nfunc scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {\n    guard let url = URLContexts.first?.url else { return }\n    handleDeepLink(url)\n}\n\nfunc handleDeepLink(_ url: URL) {\n    // myapp://product/123\n    guard url.scheme == \"myapp\" else { return }\n    \n    let pathComponents = url.pathComponents\n    if pathComponents.contains(\"product\"),\n       let id = pathComponents.last {\n        navigateToProduct(id: id)\n    }\n}\n\n// SwiftUI handling\n@main\nstruct MyApp: App {\n    var body: some Scene {\n        WindowGroup {\n            ContentView()\n                .onOpenURL { url in\n                    handleDeepLink(url)\n                }\n        }\n    }\n}\n\n// Universal Links\n// 1. Add apple-app-site-association file to domain\n// 2. Add Associated Domains capability: applinks:example.com\n// 3. Handle in scene(_:continue:) for NSUserActivity"
+  },
+  {
+    "id": 48,
+    "question": "What is the difference between synchronous and asynchronous operations?",
+    "answer": "Synchronous operations block the current thread until complete. Asynchronous operations return immediately and notify when done, keeping the UI responsive",
+    "example": "// Synchronous - BLOCKS main thread (BAD for UI)\nfunc loadDataSync() -> Data {\n    let data = try! Data(contentsOf: url)  // Blocks until complete\n    return data  // UI frozen during load\n}\n\n// Asynchronous with completion handler\nfunc loadDataAsync(completion: @escaping (Data?) -> Void) {\n    DispatchQueue.global().async {\n        let data = try? Data(contentsOf: url)\n        DispatchQueue.main.async {\n            completion(data)  // Called later, UI responsive\n        }\n    }\n}\n\n// Asynchronous with async/await (preferred)\nfunc loadDataAsync() async throws -> Data {\n    return try await withCheckedThrowingContinuation { continuation in\n        URLSession.shared.dataTask(with: url) { data, _, error in\n            if let error = error {\n                continuation.resume(throwing: error)\n            } else if let data = data {\n                continuation.resume(returning: data)\n            }\n        }.resume()\n    }\n}\n\n// Usage\nTask {\n    let data = try await loadDataAsync()  // Doesn't block UI\n    updateUI(with: data)\n}"
+  },
+  {
+    "id": 49,
+    "question": "How do you implement local notifications in iOS?",
+    "answer": "Use UNUserNotificationCenter to request permission, create notification content and triggers, and handle notification responses",
+    "example": "import UserNotifications\n\nclass NotificationManager {\n    static let shared = NotificationManager()\n    \n    func requestPermission() async -> Bool {\n        do {\n            return try await UNUserNotificationCenter.current()\n                .requestAuthorization(options: [.alert, .badge, .sound])\n        } catch {\n            return false\n        }\n    }\n    \n    func scheduleNotification(title: String, body: String, delay: TimeInterval) {\n        let content = UNMutableNotificationContent()\n        content.title = title\n        content.body = body\n        content.sound = .default\n        \n        let trigger = UNTimeIntervalNotificationTrigger(\n            timeInterval: delay,\n            repeats: false\n        )\n        \n        let request = UNNotificationRequest(\n            identifier: UUID().uuidString,\n            content: content,\n            trigger: trigger\n        )\n        \n        UNUserNotificationCenter.current().add(request)\n    }\n    \n    // Daily notification at specific time\n    func scheduleDailyReminder(hour: Int, minute: Int) {\n        var dateComponents = DateComponents()\n        dateComponents.hour = hour\n        dateComponents.minute = minute\n        \n        let trigger = UNCalendarNotificationTrigger(\n            dateMatching: dateComponents,\n            repeats: true\n        )\n        // Create and add request...\n    }\n}"
+  },
+  {
+    "id": 50,
+    "question": "What is keychain and how do you securely store sensitive data?",
+    "answer": "Keychain is iOS's secure storage for sensitive data like passwords and tokens. It's encrypted and persists across app reinstalls. Use wrapper libraries or Security framework",
+    "example": "import Security\n\nclass KeychainManager {\n    enum KeychainError: Error {\n        case duplicateItem\n        case itemNotFound\n        case unexpectedStatus(OSStatus)\n    }\n    \n    func save(password: String, for account: String) throws {\n        let data = password.data(using: .utf8)!\n        \n        let query: [String: Any] = [\n            kSecClass as String: kSecClassGenericPassword,\n            kSecAttrAccount as String: account,\n            kSecValueData as String: data\n        ]\n        \n        let status = SecItemAdd(query as CFDictionary, nil)\n        \n        guard status == errSecSuccess else {\n            if status == errSecDuplicateItem {\n                throw KeychainError.duplicateItem\n            }\n            throw KeychainError.unexpectedStatus(status)\n        }\n    }\n    \n    func getPassword(for account: String) throws -> String {\n        let query: [String: Any] = [\n            kSecClass as String: kSecClassGenericPassword,\n            kSecAttrAccount as String: account,\n            kSecReturnData as String: true\n        ]\n        \n        var result: AnyObject?\n        let status = SecItemCopyMatching(query as CFDictionary, &result)\n        \n        guard status == errSecSuccess,\n              let data = result as? Data,\n              let password = String(data: data, encoding: .utf8) else {\n            throw KeychainError.itemNotFound\n        }\n        \n        return password\n    }\n}"
+  },
+  {
+    "id": 51,
+    "question": "What are XCTest best practices for unit testing?",
+    "answer": "Write focused tests with clear naming (test_method_condition_expectedResult), use setup/teardown, mock dependencies, test edge cases, and aim for fast, isolated tests",
+    "example": "import XCTest\n@testable import MyApp\n\nclass UserViewModelTests: XCTestCase {\n    var sut: UserViewModel!  // System Under Test\n    var mockRepository: MockUserRepository!\n    \n    override func setUp() {\n        super.setUp()\n        mockRepository = MockUserRepository()\n        sut = UserViewModel(repository: mockRepository)\n    }\n    \n    override func tearDown() {\n        sut = nil\n        mockRepository = nil\n        super.tearDown()\n    }\n    \n    // Test naming: test_[method]_[condition]_[expected]\n    func test_fetchUsers_success_updatesUsersList() async {\n        // Arrange\n        let expectedUsers = [User(id: 1, name: \"Alice\")]\n        mockRepository.mockUsers = expectedUsers\n        \n        // Act\n        await sut.fetchUsers()\n        \n        // Assert\n        XCTAssertEqual(sut.users, expectedUsers)\n        XCTAssertFalse(sut.isLoading)\n        XCTAssertNil(sut.errorMessage)\n    }\n    \n    func test_fetchUsers_failure_setsErrorMessage() async {\n        // Arrange\n        mockRepository.shouldFail = true\n        \n        // Act\n        await sut.fetchUsers()\n        \n        // Assert\n        XCTAssertTrue(sut.users.isEmpty)\n        XCTAssertNotNil(sut.errorMessage)\n    }\n}"
+  },
+  {
+    "id": 52,
+    "question": "How do you optimize app performance and memory usage?",
+    "answer": "Use Instruments to profile, lazy load resources, reuse cells in lists, compress images, avoid retain cycles, use value types, and minimize main thread work",
+    "example": "// 1. Lazy loading\nclass ViewController: UIViewController {\n    lazy var expensiveView: UIView = {\n        // Created only when first accessed\n        return createExpensiveView()\n    }()\n}\n\n// 2. Image optimization\nfunc loadOptimizedImage(named: String) -> UIImage? {\n    guard let url = Bundle.main.url(forResource: named, withExtension: \"jpg\"),\n          let data = try? Data(contentsOf: url) else { return nil }\n    \n    // Downsample large images\n    let options: [CFString: Any] = [\n        kCGImageSourceThumbnailMaxPixelSize: 300,\n        kCGImageSourceCreateThumbnailFromImageAlways: true\n    ]\n    \n    guard let source = CGImageSourceCreateWithData(data as CFData, nil),\n          let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)\n    else { return nil }\n    \n    return UIImage(cgImage: cgImage)\n}\n\n// 3. TableView cell reuse\nfunc tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {\n    let cell = tableView.dequeueReusableCell(withIdentifier: \"Cell\", for: indexPath)\n    // Configure cell\n    return cell\n}\n\n// 4. Avoid main thread blocking\nTask.detached(priority: .userInitiated) {\n    let processed = await self.heavyProcessing()\n    await MainActor.run {\n        self.updateUI(with: processed)\n    }\n}"
+  },
+  {
+    "id": 53,
+    "question": "What is App Transport Security (ATS) and how do you configure it?",
+    "answer": "ATS enforces secure HTTPS connections by default. Configure exceptions in Info.plist for specific domains or disable (not recommended) for development",
+    "example": "<!-- Info.plist -->\n\n<!-- Allow specific HTTP domain -->\n<key>NSAppTransportSecurity</key>\n<dict>\n    <key>NSExceptionDomains</key>\n    <dict>\n        <key>example.com</key>\n        <dict>\n            <key>NSExceptionAllowsInsecureHTTPLoads</key>\n            <true/>\n            <key>NSIncludesSubdomains</key>\n            <true/>\n        </dict>\n    </dict>\n</dict>\n\n<!-- Allow all HTTP (NEVER in production) -->\n<key>NSAppTransportSecurity</key>\n<dict>\n    <key>NSAllowsArbitraryLoads</key>\n    <true/>\n</dict>\n\n// Best practice: Always use HTTPS\nfunc fetchData() async throws -> Data {\n    let url = URL(string: \"https://api.example.com/data\")!  // HTTPS\n    let (data, response) = try await URLSession.shared.data(from: url)\n    \n    guard let httpResponse = response as? HTTPURLResponse,\n          httpResponse.statusCode == 200 else {\n        throw NetworkError.invalidResponse\n    }\n    \n    return data\n}"
+  },
+  {
+    "id": 54,
+    "question": "How do you implement background tasks in iOS?",
+    "answer": "Use BGTaskScheduler for deferrable work, background URLSession for downloads, and specific modes (audio, location, VOIP) for continuous background execution",
+    "example": "import BackgroundTasks\n\n// 1. Register in AppDelegate\nfunc application(_ application: UIApplication, didFinishLaunchingWithOptions...) {\n    BGTaskScheduler.shared.register(\n        forTaskWithIdentifier: \"com.app.refresh\",\n        using: nil\n    ) { task in\n        self.handleAppRefresh(task: task as! BGAppRefreshTask)\n    }\n}\n\n// 2. Schedule task\nfunc scheduleAppRefresh() {\n    let request = BGAppRefreshTaskRequest(identifier: \"com.app.refresh\")\n    request.earliestBeginDate = Date(timeIntervalSinceNow: 15 * 60)\n    \n    do {\n        try BGTaskScheduler.shared.submit(request)\n    } catch {\n        print(\"Failed to schedule: \\(error)\")\n    }\n}\n\n// 3. Handle task\nfunc handleAppRefresh(task: BGAppRefreshTask) {\n    scheduleAppRefresh()  // Schedule next\n    \n    let operation = RefreshOperation()\n    \n    task.expirationHandler = {\n        operation.cancel()\n    }\n    \n    operation.completionBlock = {\n        task.setTaskCompleted(success: !operation.isCancelled)\n    }\n    \n    OperationQueue.main.addOperation(operation)\n}\n\n// Background URLSession for downloads\nlet config = URLSessionConfiguration.background(withIdentifier: \"com.app.download\")\nlet session = URLSession(configuration: config, delegate: self, delegateQueue: nil)"
+  },
+  {
+    "id": 55,
+    "question": "What is Swift Package Manager and how do you use it?",
+    "answer": "SPM is Swift's built-in dependency manager integrated with Xcode. Add packages via URL or create your own Package.swift manifest for distributable modules",
+    "example": "// Package.swift for creating a package\n// swift-tools-version:5.9\nimport PackageDescription\n\nlet package = Package(\n    name: \"MyLibrary\",\n    platforms: [\n        .iOS(.v15),\n        .macOS(.v12)\n    ],\n    products: [\n        .library(\n            name: \"MyLibrary\",\n            targets: [\"MyLibrary\"]\n        )\n    ],\n    dependencies: [\n        .package(url: \"https://github.com/Alamofire/Alamofire.git\", from: \"5.0.0\")\n    ],\n    targets: [\n        .target(\n            name: \"MyLibrary\",\n            dependencies: [\"Alamofire\"]\n        ),\n        .testTarget(\n            name: \"MyLibraryTests\",\n            dependencies: [\"MyLibrary\"]\n        )\n    ]\n)\n\n// In Xcode:\n// 1. File > Add Packages\n// 2. Enter package URL\n// 3. Select version rules\n// 4. Add to target\n\n// Import and use\nimport Alamofire\nimport MyLibrary"
+  }
+]

@@ -15,7 +15,7 @@ import ExportPriceIndexNonmonetaryGold from './components/exportPriceIndexNonmon
 import MedianSalesPriceHousesSold from './components/medianSalesPriceHousesSold';
 import CrudeOilPricesWTI from './components/crudeOilPricesWTI';
 import AveragePriceDozenEggs from './components/averagePriceDozenEggs';
-import Quiz from './components/Quiz';
+import QuizSelector from './components/QuizSelector';
 
 const App = () => {
   return (
@@ -41,7 +41,7 @@ const App = () => {
             <AveragePriceDozenEggs />
           </>
         } />
-        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz" element={<QuizSelector />} />
       </Routes>
     </div>
   )
