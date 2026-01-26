@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import questions from '../data/androidQuizQuestions.json';
 import './Quiz.css';
 
-interface Question {
+export interface Question {
   id: number;
   question: string;
   answer: string;
   example: string;
 }
 
-const Quiz: React.FC = () => {
+interface QuizProps {
+  questions: Question[];
+  title: string;
+  onBack: () => void;
+}
+
+const Quiz: React.FC<QuizProps> = ({ questions, title, onBack }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
 
@@ -35,7 +40,10 @@ const Quiz: React.FC = () => {
 
   return (
     <div className="quiz-container">
-      <h2>Software Engineer Quiz</h2>
+      <button className="back-button" onClick={onBack}>
+        Back to Quiz Selection
+      </button>
+      <h2>{title}</h2>
       <p className="question-counter">Question {currentQuestionIndex + 1} of {questions.length}</p>
       <h3 className="question-text">{currentQuestion.question}</h3>
 
