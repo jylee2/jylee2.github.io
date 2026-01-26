@@ -3,9 +3,12 @@ import Quiz, { Question } from './Quiz';
 import androidQuestions from '../data/androidQuizQuestions.json';
 import rustQuestions from '../data/rustQuizQuestions.json';
 import swiftQuestions from '../data/swiftQuizQuestions.json';
+import typescriptQuestions from '../data/typescriptQuizQuestions.json';
+import devopsQuestions from '../data/devopsQuizQuestions.json';
+import systemDesignQuestions from '../data/systemDesignQuizQuestions.json';
 import './Quiz.css';
 
-type QuizType = 'android' | 'rust' | 'swift' | null;
+type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | null;
 
 interface QuizConfig {
   questions: Question[];
@@ -24,6 +27,18 @@ const quizConfigs: Record<Exclude<QuizType, null>, QuizConfig> = {
   swift: {
     questions: swiftQuestions as Question[],
     title: 'Swift iOS Quiz',
+  },
+  typescript: {
+    questions: typescriptQuestions as Question[],
+    title: 'TypeScript React Quiz',
+  },
+  devops: {
+    questions: devopsQuestions as Question[],
+    title: 'DevOps Quiz',
+  },
+  systemDesign: {
+    questions: systemDesignQuestions as Question[],
+    title: 'System Design Quiz',
   },
 };
 
@@ -70,6 +85,27 @@ const QuizSelector: React.FC = () => {
         >
           <span className="quiz-select-title">Rust Backend</span>
           <span className="quiz-select-count">{quizConfigs.rust.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('typescript')}
+        >
+          <span className="quiz-select-title">TypeScript React</span>
+          <span className="quiz-select-count">{quizConfigs.typescript.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('devops')}
+        >
+          <span className="quiz-select-title">DevOps</span>
+          <span className="quiz-select-count">{quizConfigs.devops.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('systemDesign')}
+        >
+          <span className="quiz-select-title">System Design</span>
+          <span className="quiz-select-count">{quizConfigs.systemDesign.questions.length} questions</span>
         </button>
       </div>
     </div>
