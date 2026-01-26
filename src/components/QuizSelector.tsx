@@ -6,9 +6,10 @@ import swiftQuestions from '../data/swiftQuizQuestions.json';
 import typescriptQuestions from '../data/typescriptQuizQuestions.json';
 import devopsQuestions from '../data/devopsQuizQuestions.json';
 import systemDesignQuestions from '../data/systemDesignQuizQuestions.json';
+import aiMlQuestions from '../data/aiMlQuizQuestions.json';
 import './Quiz.css';
 
-type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | null;
+type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | 'aiMl' | null;
 
 interface QuizConfig {
   questions: Question[];
@@ -39,6 +40,10 @@ const quizConfigs: Record<Exclude<QuizType, null>, QuizConfig> = {
   systemDesign: {
     questions: systemDesignQuestions as Question[],
     title: 'System Design Quiz',
+  },
+  aiMl: {
+    questions: aiMlQuestions as Question[],
+    title: 'AI & Machine Learning Quiz',
   },
 };
 
@@ -106,6 +111,13 @@ const QuizSelector: React.FC = () => {
         >
           <span className="quiz-select-title">System Design</span>
           <span className="quiz-select-count">{quizConfigs.systemDesign.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('aiMl')}
+        >
+          <span className="quiz-select-title">AI & ML</span>
+          <span className="quiz-select-count">{quizConfigs.aiMl.questions.length} questions</span>
         </button>
       </div>
     </div>
