@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "question": "What is the Single Responsibility Principle (SRP)?",
+    "answer": "A class or module should have only one reason to change - meaning it should have only one job or responsibility. This improves maintainability, testability, and reduces coupling",
+    "example": "Bad: UserService handles authentication, email sending, and database operations\n\nGood: Separate into focused classes:\n- AuthenticationService: handles login/logout\n- EmailService: handles sending emails\n- UserRepository: handles database operations\n\nReal-world example:\nTwitter's notification system is separate from tweet storage.\nChanging how notifications work shouldn't affect how tweets are stored."
+  },
+  {
+    "id": 2,
+    "question": "What is the Open/Closed Principle (OCP)?",
+    "answer": "Software entities should be open for extension but closed for modification. Add new functionality by adding new code, not changing existing code. Achieved through abstraction and polymorphism",
+    "example": "Scenario: Payment processing system\n\nBad: Adding PayPal requires modifying PaymentProcessor class\nif (type == 'stripe') { ... }\nelse if (type == 'paypal') { ... }  // Must modify existing code\n\nGood: Use abstractions\n- PaymentGateway interface with process() method\n- StripeGateway implements PaymentGateway\n- PayPalGateway implements PaymentGateway (new file, no changes to existing)\n\nAdding Apple Pay = create new ApplePayGateway class.\nExisting code remains untouched."
+  },
+  {
+    "id": 3,
+    "question": "What is the Liskov Substitution Principle (LSP)?",
+    "answer": "Subtypes must be substitutable for their base types without altering program correctness. If S is a subtype of T, objects of type T can be replaced with objects of type S without breaking the application",
+    "example": "Classic violation: Square extends Rectangle\n\nRectangle has setWidth() and setHeight() independently.\nSquare overrides them to keep width == height.\n\nProblem:\nrectangle.setWidth(5)\nrectangle.setHeight(10)\nassert rectangle.area() == 50  // Fails for Square!\n\nBetter design:\n- Shape interface with area() method\n- Rectangle and Square are separate implementations\n- Don't force inheritance where behavior differs\n\nReal-world: A \"ReadOnlyUser\" shouldn't extend \"User\" if User has save() method."
+  },
+  {
+    "id": 4,
+    "question": "What is the Interface Segregation Principle (ISP)?",
+    "answer": "Clients should not be forced to depend on interfaces they don't use. Prefer many small, specific interfaces over one large, general-purpose interface",
+    "example": "Bad: One large interface\nInterface Worker {\n  work()\n  eat()\n  sleep()\n}\n\nRobotWorker must implement eat() and sleep() - makes no sense!\n\nGood: Segregated interfaces\n- Workable { work() }\n- Eatable { eat() }\n- Sleepable { sleep() }\n\nHumanWorker implements Workable, Eatable, Sleepable\nRobotWorker implements Workable only\n\nReal-world: Twitter API\n- ReadAPI: getTweets(), getUser()\n- WriteAPI: postTweet(), deleteTweet()\n- AdminAPI: banUser(), getAnalytics()\n\nMobile app only needs Read + Write, not Admin."
+  },
+  {
+    "id": 5,
+    "question": "What is the Dependency Inversion Principle (DIP)?",
+    "answer": "High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions",
+    "example": "Bad: Direct dependency on implementation\nclass OrderService {\n  private MySQLDatabase db = new MySQLDatabase();\n  // Tightly coupled to MySQL\n}\n\nGood: Depend on abstraction\nclass OrderService {\n  private Database db;  // Interface\n  constructor(Database db) { this.db = db; }  // Injected\n}\n\nNow OrderService works with MySQL, PostgreSQL, MongoDB...\n\nReal-world: E-commerce checkout\n- CheckoutService depends on PaymentGateway interface\n- Can swap Stripe for Adyen without changing CheckoutService\n- Enables easy testing with mock payment gateway"
+  },
+  {
+    "id": 6,
+    "question": "What is Domain-Driven Design (DDD)?",
+    "answer": "A software design approach focusing on modeling the core business domain. Uses ubiquitous language shared by developers and domain experts. Organizes code around business concepts, not technical layers",
+    "example": "E-commerce domain concepts:\n\nEntities (identity matters):\n- Order (has unique ID, lifecycle)\n- Customer (has unique ID, persists over time)\n\nValue Objects (identity doesn't matter):\n- Money (amount + currency, interchangeable)\n- Address (street, city, zip)\n\nAggregates (consistency boundary):\n- Order aggregate contains OrderItems\n- Can't modify OrderItems without going through Order\n\nDomain Events:\n- OrderPlaced, PaymentReceived, OrderShipped\n\nBounded Contexts:\n- Sales context: Customer means \"buyer\"\n- Support context: Customer means \"ticket requester\"\n- Same word, different models"
+  },
+  {
+    "id": 7,
+    "question": "What is Test-Driven Development (TDD)?",
+    "answer": "Write tests before implementation code. Red-Green-Refactor cycle: write a failing test (red), write minimal code to pass (green), then refactor. Ensures testable design and high coverage",
+    "example": "Building a shopping cart:\n\n1. RED - Write failing test:\ntest('empty cart has zero total') {\n  cart = new Cart()\n  assert cart.total() == 0\n}\n// Fails: Cart doesn't exist\n\n2. GREEN - Minimal implementation:\nclass Cart {\n  total() { return 0 }\n}\n// Test passes\n\n3. RED - Next test:\ntest('cart with one item') {\n  cart = new Cart()\n  cart.add(Item(price: 10))\n  assert cart.total() == 10\n}\n// Fails\n\n4. GREEN - Implement:\nclass Cart {\n  items = []\n  add(item) { items.push(item) }\n  total() { return items.sum(i => i.price) }\n}\n\n5. REFACTOR - Improve design without changing behavior"
+  },
+  {
+    "id": 8,
+    "question": "What is Clean Architecture?",
+    "answer": "Architecture with dependencies pointing inward toward business logic. Inner layers (entities, use cases) don't know about outer layers (frameworks, databases). Enables technology-agnostic business rules",
+    "example": "Layers (inner to outer):\n\n1. Entities (innermost)\n   - Pure business objects: User, Order, Product\n   - No framework dependencies\n\n2. Use Cases / Application\n   - Business rules: PlaceOrder, ProcessPayment\n   - Orchestrates entities\n\n3. Interface Adapters\n   - Controllers, Presenters, Gateways\n   - Converts data between layers\n\n4. Frameworks & Drivers (outermost)\n   - Database, Web framework, UI\n   - Implementation details\n\nDependency Rule:\n- Inner layers know nothing about outer layers\n- Database can change from MySQL to MongoDB\n- Web framework can change from Express to Fastify\n- Business logic remains unchanged"
+  },
+  {
+    "id": 9,
+    "question": "What is the difference between horizontal and vertical scaling?",
+    "answer": "Vertical scaling (scale up): add more power to existing machine (CPU, RAM). Horizontal scaling (scale out): add more machines. Horizontal is preferred for high availability and unlimited growth",
+    "example": "Twitter-like application:\n\nVertical Scaling:\n- Upgrade server: 8GB RAM → 128GB RAM\n- Limits: hardware maximums, single point of failure\n- Downtime during upgrades\n\nHorizontal Scaling:\n- Add more servers: 1 → 10 → 100 servers\n- Load balancer distributes traffic\n- No single point of failure\n- Scale infinitely (in theory)\n\nChallenges with horizontal:\n- Session management (use Redis)\n- Database becomes bottleneck\n- Need for data partitioning\n\nReal-world:\n- Instagram: horizontally scaled web servers\n- Database: vertically scaled initially, then sharded horizontally"
+  },
+  {
+    "id": 10,
+    "question": "What is database sharding?",
+    "answer": "Horizontal partitioning of data across multiple database servers. Each shard holds a subset of data. Enables scaling beyond single-server limits but adds complexity for cross-shard queries",
+    "example": "Twitter DMs sharding strategy:\n\nShard by user_id:\n- Shard 0: users 1-1M\n- Shard 1: users 1M-2M\n- Shard 2: users 2M-3M\n\nBenefits:\n- Each shard handles fewer users\n- Queries for one user hit one shard\n- Can add shards as users grow\n\nChallenges:\n- Conversation between users on different shards?\n- Solution: store in both shards or use conversation_id\n\nShard key selection is critical:\n- user_id: good for user-centric queries\n- timestamp: good for time-series, but hot shards\n- geographic region: good for latency\n\nResharding (adding shards) is painful - plan ahead!"
+  },
+  {
+    "id": 11,
+    "question": "What is CQRS (Command Query Responsibility Segregation)?",
+    "answer": "Separate read (query) and write (command) operations into different models. Write model optimized for consistency, read model optimized for queries. Enables independent scaling and optimization",
+    "example": "Twitter timeline design:\n\nWithout CQRS:\n- Read timeline: JOIN tweets, followers, users...\n- Slow, complex query on every load\n\nWith CQRS:\n\nWrite Model (commands):\n- PostTweet command → store in Tweets table\n- Optimized for writes, normalized\n\nRead Model (queries):\n- Pre-computed timeline per user\n- Denormalized, optimized for fast reads\n- When tweet posted → fan-out to followers' timelines\n\nSync between models:\n- Event-driven: TweetPosted event updates read model\n- Eventually consistent (acceptable for timelines)\n\nBenefits:\n- Scale reads and writes independently\n- Optimize each for its purpose\n- 1000x more reads than writes? Scale read replicas."
+  },
+  {
+    "id": 12,
+    "question": "What is Event Sourcing?",
+    "answer": "Store state as a sequence of events rather than current state. Events are immutable facts. Current state is derived by replaying events. Provides complete audit trail and enables temporal queries",
+    "example": "Bank account with Event Sourcing:\n\nTraditional: Store current balance = $500\n\nEvent Sourcing: Store events\n1. AccountOpened { id: 123 }\n2. MoneyDeposited { amount: 1000 }\n3. MoneyWithdrawn { amount: 200 }\n4. MoneyWithdrawn { amount: 300 }\n\nCurrent balance = replay events = $500\n\nBenefits:\n- Full audit trail (compliance, debugging)\n- \"What was balance on March 15?\" - replay to that point\n- Rebuild read models from events\n- Fix bugs by replaying with corrected logic\n\nReal-world uses:\n- Banking transactions\n- Shopping cart changes\n- Document collaboration (like Google Docs)\n- Git (commits are events)"
+  },
+  {
+    "id": 13,
+    "question": "How would you design a rate limiter?",
+    "answer": "Control request rate per user/IP to prevent abuse. Algorithms: Token Bucket (bursty), Leaky Bucket (smooth), Fixed Window, Sliding Window. Consider distributed rate limiting for multiple servers",
+    "example": "Twitter API rate limiting:\n\nRequirements:\n- 100 requests per 15 minutes per user\n- Return 429 Too Many Requests when exceeded\n\nToken Bucket Algorithm:\n- Bucket holds max 100 tokens\n- Refills at 100 tokens / 15 min\n- Each request consumes 1 token\n- Allow bursts up to bucket size\n\nDistributed implementation:\nRedis for shared state:\n  MULTI\n  INCR user:123:requests\n  EXPIRE user:123:requests 900\n  EXEC\n\nSliding Window (more accurate):\n- Track timestamp of each request\n- Count requests in last 15 minutes\n- More memory but smoother limiting\n\nResponse headers:\nX-RateLimit-Limit: 100\nX-RateLimit-Remaining: 45\nX-RateLimit-Reset: 1234567890"
+  },
+  {
+    "id": 14,
+    "question": "What is the CAP theorem?",
+    "answer": "Distributed systems can only guarantee two of three properties: Consistency (all nodes see same data), Availability (every request gets response), Partition tolerance (system works despite network failures). Must choose CP or AP",
+    "example": "Real-world trade-offs:\n\nCP Systems (Consistency + Partition Tolerance):\n- Bank transactions: balance must be accurate\n- Inventory: can't oversell\n- During partition: refuse requests rather than risk inconsistency\n- Examples: MongoDB (default), HBase, Redis Cluster\n\nAP Systems (Availability + Partition Tolerance):\n- Social media likes: ok if count is slightly off\n- DNS: better to serve stale data than nothing\n- During partition: serve requests, sync later\n- Examples: Cassandra, DynamoDB, CouchDB\n\nTwitter example:\n- Tweet storage: AP (eventual consistency ok)\n- User authentication: CP (must be correct)\n- Like counts: AP (approximate is fine)\n- Direct messages: CP (can't lose messages)"
+  },
+  {
+    "id": 15,
+    "question": "What is database replication and what are the strategies?",
+    "answer": "Copying data across multiple database servers for availability, fault tolerance, and read scaling. Strategies: master-slave (single writer), master-master (multiple writers), synchronous vs asynchronous",
+    "example": "E-commerce database replication:\n\nMaster-Slave (Primary-Replica):\n- 1 master: handles all writes\n- N slaves: handle reads (scale horizontally)\n- Async replication: slight lag acceptable for product pages\n- Failover: promote slave to master if master dies\n\nMaster-Master:\n- Both accept writes\n- Conflict resolution needed\n- Use case: multi-region active-active\n\nSync vs Async:\n- Synchronous: write confirmed after all replicas ACK\n  - Stronger consistency, higher latency\n  - Critical data: payments, inventory\n- Asynchronous: write confirmed after master ACK\n  - Lower latency, risk of data loss\n  - Less critical: product views, recommendations\n\nRead-your-writes consistency:\n- After user posts, read from master briefly\n- Then safe to read from replicas"
+  },
+  {
+    "id": 16,
+    "question": "What is a Message Queue and when would you use it?",
+    "answer": "Asynchronous communication between services via messages stored in a queue. Decouples producers from consumers. Use for: background jobs, traffic spikes, service decoupling, event distribution",
+    "example": "Instagram post upload:\n\nWithout queue (synchronous):\n1. Upload image\n2. Wait for resize (multiple sizes)\n3. Wait for face detection\n4. Wait for storage\n5. Wait for CDN propagation\n6. Finally return to user (30 seconds!)\n\nWith queue (asynchronous):\n1. Upload image to temp storage\n2. Return success to user immediately\n3. Queue message: \"process image abc123\"\n\nBackground workers consume queue:\n- Worker 1: resize images\n- Worker 2: face detection\n- Worker 3: upload to CDN\n- Worker 4: update database\n- Notify user when complete\n\nBenefits:\n- Fast user response\n- Retry failed jobs\n- Scale workers independently\n- Handle traffic spikes (queue buffers)\n\nTools: RabbitMQ, Kafka, SQS, Redis Streams"
+  },
+  {
+    "id": 17,
+    "question": "What is a CDN and how does it improve performance?",
+    "answer": "Content Delivery Network caches content at edge locations worldwide. Reduces latency by serving from nearby servers. Used for static assets, videos, and sometimes dynamic content",
+    "example": "Netflix streaming architecture:\n\nWithout CDN:\n- All users fetch from origin in Virginia\n- User in Tokyo: 200ms latency per request\n- Origin server overloaded\n\nWith CDN:\n- Content cached at 100+ edge locations\n- User in Tokyo: served from Tokyo edge (10ms)\n- Origin only handles cache misses\n\nWhat to cache:\n- Static: images, CSS, JS, videos (long TTL)\n- Semi-static: product pages (short TTL)\n- Dynamic: personalized content (don't cache or edge compute)\n\nCache invalidation strategies:\n- TTL expiration\n- Purge API (instant invalidation)\n- Versioned URLs: style.v2.css\n\nCDN providers: CloudFlare, Akamai, CloudFront, Fastly\n\nTwitter uses CDN for:\n- Profile images\n- Media attachments\n- Static web assets"
+  },
+  {
+    "id": 18,
+    "question": "What is the Repository pattern?",
+    "answer": "Abstracts data access behind a collection-like interface. Hides database implementation details from business logic. Enables switching databases and simplifies testing with in-memory implementations",
+    "example": "E-commerce order management:\n\nRepository Interface:\nOrderRepository {\n  findById(id): Order\n  findByCustomer(customerId): Order[]\n  save(order): void\n  delete(id): void\n}\n\nImplementations:\n- PostgresOrderRepository: production database\n- InMemoryOrderRepository: unit tests\n- CachedOrderRepository: wraps real repo with cache\n\nUsage in business logic:\nclass OrderService {\n  constructor(orderRepo: OrderRepository) {}\n  \n  cancelOrder(id) {\n    order = orderRepo.findById(id)\n    order.cancel()\n    orderRepo.save(order)\n  }\n}\n\nBenefits:\n- Business logic doesn't know about SQL/MongoDB\n- Easy to test with fake repository\n- Can swap database without changing business code\n- Single place for query optimization"
+  },
+  {
+    "id": 19,
+    "question": "How would you design a URL shortener like bit.ly?",
+    "answer": "Generate short codes for long URLs, redirect on access. Key decisions: encoding scheme, collision handling, analytics tracking, expiration. Scale with caching and database sharding",
+    "example": "Requirements:\n- Shorten: long URL → short code\n- Redirect: short code → original URL\n- 100M URLs/month, 10B redirects/month\n\nDesign:\n\n1. Short code generation:\n- Base62 encoding (a-z, A-Z, 0-9)\n- 7 characters = 62^7 = 3.5 trillion combinations\n- Counter-based: ID 1 → \"0000001\" encoded\n- Or random + collision check\n\n2. Storage:\n- Key-value store: shortCode → {longUrl, created, expires}\n- Shard by short code prefix\n\n3. Read path (hot):\n- Check cache (Redis) first\n- 99% cache hit rate for popular links\n- Fallback to database\n- 301 redirect (cacheable) vs 302 (trackable)\n\n4. Write path:\n- Generate code, check uniqueness\n- Store in DB, add to cache\n\n5. Analytics:\n- Async logging to Kafka\n- Batch process for click stats"
+  },
+  {
+    "id": 20,
+    "question": "What is the difference between REST and GraphQL?",
+    "answer": "REST uses fixed endpoints returning predetermined data. GraphQL uses single endpoint where client specifies exact data needed. GraphQL reduces over/under-fetching but adds complexity",
+    "example": "Fetching user profile with posts:\n\nREST:\nGET /users/123           → {id, name, email}\nGET /users/123/posts     → [{id, title, body}, ...]\nGET /users/123/followers → [{id, name}, ...]\n\n3 requests, might return unused fields\n\nGraphQL:\nPOST /graphql\nquery {\n  user(id: 123) {\n    name\n    posts(limit: 5) {\n      title\n    }\n    followersCount\n  }\n}\n\n1 request, exact fields needed\n\nWhen to use REST:\n- Simple CRUD APIs\n- Caching important (HTTP caching easy)\n- Team familiar with REST\n\nWhen to use GraphQL:\n- Mobile apps (bandwidth sensitive)\n- Multiple clients with different data needs\n- Rapidly evolving frontend requirements\n\nTwitter/Facebook use GraphQL for mobile apps."
+  },
+  {
+    "id": 21,
+    "question": "What is the Saga pattern for distributed transactions?",
+    "answer": "Manage distributed transactions as a sequence of local transactions with compensating actions for rollback. Each service completes its transaction and triggers the next. If one fails, execute compensations in reverse",
+    "example": "E-commerce order flow:\n\nTraditional transaction (doesn't work distributed):\nBEGIN\n  deduct inventory\n  charge payment\n  create shipping\nCOMMIT\n\nSaga pattern:\n\n1. Order Service: Create order (pending)\n2. Inventory Service: Reserve items\n   - Compensation: Release reservation\n3. Payment Service: Charge card\n   - Compensation: Refund payment\n4. Shipping Service: Schedule delivery\n   - Compensation: Cancel shipment\n5. Order Service: Mark complete\n\nIf Payment fails:\n- Execute compensations in reverse\n- Release inventory reservation\n- Cancel order\n\nOrchestration vs Choreography:\n- Orchestrator: central coordinator manages saga\n- Choreography: services react to events, no coordinator\n\nReal-world: Uber ride booking, Airbnb reservations"
+  },
+  {
+    "id": 22,
+    "question": "What is the Circuit Breaker pattern?",
+    "answer": "Prevent cascading failures by failing fast when a service is unhealthy. States: Closed (normal), Open (failing fast), Half-Open (testing recovery). Protects system resources and enables graceful degradation",
+    "example": "Payment service calling fraud detection:\n\nWithout circuit breaker:\n- Fraud service down\n- Payment requests timeout (30s each)\n- Thread pool exhausted\n- Payment service becomes unresponsive\n- Cascading failure to checkout, cart...\n\nWith circuit breaker:\n\nClosed state (normal):\n- Requests pass through\n- Track failure rate\n\nOpen state (after 5 failures in 1 minute):\n- Fail immediately, don't call fraud service\n- Return fallback: \"approve with limit\" or queue for later\n- Users not blocked\n\nHalf-open state (after 30 seconds):\n- Allow one test request\n- If succeeds → Closed\n- If fails → Open again\n\nConfiguration:\n- Failure threshold: 5 failures\n- Timeout: 30 seconds\n- Half-open requests: 1\n\nTools: Hystrix, Resilience4j, Polly"
+  },
+  {
+    "id": 23,
+    "question": "How would you design a notification system?",
+    "answer": "Multi-channel delivery (push, email, SMS) with user preferences, rate limiting, and delivery tracking. Use message queues for async processing and handle retries for failed deliveries",
+    "example": "Instagram notification system:\n\nRequirements:\n- Push, email, SMS channels\n- User preferences (per channel, per type)\n- Don't spam users\n- Track delivery/read status\n\nArchitecture:\n\n1. Event occurs (new like, comment, follow)\n   → Publish to notification queue\n\n2. Notification Service consumes:\n   - Check user preferences\n   - Apply rate limiting (max 10/hour)\n   - Aggregate similar notifications (\"5 people liked...\")\n\n3. Route to channel services:\n   - Push Service → APNs/FCM\n   - Email Service → SendGrid\n   - SMS Service → Twilio\n\n4. Delivery tracking:\n   - Store: sent, delivered, read timestamps\n   - Retry failed deliveries with backoff\n\nPriority handling:\n- Security alerts: immediate, all channels\n- Likes: batched, push only\n- Marketing: respect quiet hours"
+  },
+  {
+    "id": 24,
+    "question": "What is the Strangler Fig pattern for migration?",
+    "answer": "Incrementally replace legacy system by routing features to new system one by one. Facade intercepts requests and routes to old or new system. Eventually legacy is completely replaced (strangled)",
+    "example": "Migrating monolith to microservices:\n\nLegacy monolith handles:\n- User management\n- Products\n- Orders\n- Payments\n\nPhase 1: Add facade/API gateway\n- All traffic goes through gateway\n- Gateway routes everything to monolith\n\nPhase 2: Extract User service\n- Build new User microservice\n- Gateway routes /users/* to new service\n- Everything else still goes to monolith\n\nPhase 3: Extract Products service\n- Gateway: /products/* → Products service\n- /users/* → Users service\n- /orders/*, /payments/* → monolith\n\nPhase 4, 5...: Continue extracting\n\nFinal: Monolith is empty, decommission it\n\nBenefits:\n- Zero big-bang risk\n- Rollback: just change routing\n- Team learns incrementally\n- Production validation at each step"
+  },
+  {
+    "id": 25,
+    "question": "How would you design Twitter's like/unlike feature?",
+    "answer": "Idempotent operations, eventual consistency for counts, fan-out for notifications. Store likes in normalized table, cache counts. Handle race conditions and prevent duplicate likes",
+    "example": "Requirements:\n- Like/unlike tweets\n- Show like count on tweets\n- Show if current user liked\n- Handle millions of likes per minute\n\nData model:\nLikes table: (user_id, tweet_id, created_at)\nPrimary key: (user_id, tweet_id) - prevents duplicates\n\nTweets table: like_count (denormalized)\n\nLike operation:\n1. INSERT INTO likes (user_id, tweet_id)\n   ON CONFLICT DO NOTHING (idempotent)\n2. If inserted (not duplicate):\n   - Increment tweet.like_count (async)\n   - Queue notification to author\n\nRead path:\n- like_count: cached in Redis\n- \"Did I like?\": check cache or DB\n\nScale considerations:\n- Hot tweets (viral): like_count updated frequently\n- Solution: buffer increments, batch update\n- Or: approximate counts (Redis INCR, periodic sync)\n\nConsistency:\n- Exact count not critical\n- User's own like status must be consistent (read-your-writes)"
+  },
+  {
+    "id": 26,
+    "question": "What is the difference between optimistic and pessimistic locking?",
+    "answer": "Pessimistic: lock resource before access, block others until done. Optimistic: no locks, detect conflicts at write time using version numbers. Optimistic scales better for read-heavy workloads",
+    "example": "Inventory management during flash sale:\n\nPessimistic locking:\nBEGIN\nSELECT stock FROM products WHERE id=1 FOR UPDATE\n-- Row is locked, others wait\nUPDATE products SET stock = stock - 1\nCOMMIT\n-- Lock released\n\nProblem: 10,000 concurrent users = massive contention\n\nOptimistic locking:\n1. Read: stock=100, version=5\n2. User modifies locally\n3. Write: UPDATE products \n   SET stock=99, version=6\n   WHERE id=1 AND version=5\n4. If affected rows = 0, version changed → retry\n\nWhen to use:\n- Pessimistic: high contention, short transactions\n  Example: bank transfer between accounts\n  \n- Optimistic: low contention, long transactions\n  Example: editing a document (conflict rare)\n  \nE-commerce: often hybrid\n- Optimistic for cart updates\n- Pessimistic for final checkout"
+  },
+  {
+    "id": 27,
+    "question": "What is the Bulkhead pattern?",
+    "answer": "Isolate components into pools so failure in one doesn't exhaust resources for others. Like ship bulkheads that contain flooding. Apply to thread pools, connections, and services",
+    "example": "Microservices with shared thread pool:\n\nProblem without bulkhead:\n- Payment service slow (3rd party issue)\n- All threads waiting on payment\n- No threads left for product, search, cart\n- Entire system unresponsive\n\nWith bulkhead pattern:\n\nSeparate thread pools:\n- Payment pool: 20 threads max\n- Product pool: 50 threads max\n- Search pool: 30 threads max\n\nPayment service slow:\n- Payment pool exhausted (20 threads blocked)\n- Product and search pools unaffected\n- Users can still browse and add to cart\n\nImplementation levels:\n- Thread pool bulkhead (Hystrix)\n- Connection pool per service\n- Separate containers/pods per service\n- Separate clusters for critical vs non-critical\n\nReal-world: Netflix isolates recommendations\nfrom core playback functionality."
+  },
+  {
+    "id": 28,
+    "question": "How do you handle idempotency in distributed systems?",
+    "answer": "Ensure operations produce same result regardless of how many times executed. Critical for retries and at-least-once delivery. Use idempotency keys, unique constraints, and conditional updates",
+    "example": "Payment processing (must not double-charge):\n\nProblem:\n1. Client sends payment request\n2. Server processes, charges card\n3. Response lost (network issue)\n4. Client retries\n5. Customer charged twice!\n\nSolution - Idempotency key:\n\n1. Client generates unique key: \"pay_abc123\"\n2. Request: POST /payments {idempotency_key: \"pay_abc123\", amount: 100}\n\nServer logic:\n- Check if idempotency_key exists in DB\n- If exists: return stored result (no processing)\n- If not: process payment, store result with key\n\nDatabase:\nCREATE TABLE payments (\n  idempotency_key VARCHAR PRIMARY KEY,\n  result JSONB,\n  created_at TIMESTAMP\n)\n\nOther patterns:\n- Conditional updates: UPDATE WHERE version = X\n- Natural idempotency: DELETE (deleting twice = same result)\n- Unique constraints: prevent duplicate inserts"
+  },
+  {
+    "id": 29,
+    "question": "What are the trade-offs between SQL and NoSQL databases?",
+    "answer": "SQL: ACID transactions, structured schemas, complex queries, vertical scaling. NoSQL: flexible schemas, horizontal scaling, eventual consistency, optimized for specific access patterns. Choose based on requirements",
+    "example": "Choosing database for different use cases:\n\nUser accounts → SQL (PostgreSQL)\n- Structured data (name, email, password)\n- Transactions for balance updates\n- Complex queries for admin\n- Strong consistency required\n\nUser sessions → Key-Value NoSQL (Redis)\n- Simple lookup by session_id\n- Auto-expiration (TTL)\n- High read/write throughput\n- No relationships needed\n\nProduct catalog → Document NoSQL (MongoDB)\n- Varying attributes per product type\n- Embedded reviews for fast reads\n- Flexible schema evolution\n- Horizontal scaling\n\nSocial graph → Graph NoSQL (Neo4j)\n- \"Friends of friends\" queries\n- Relationship traversal\n- Not possible efficiently in SQL\n\nTime-series metrics → Time-series DB (InfluxDB)\n- Optimized for time-range queries\n- Automatic downsampling\n- High write throughput\n\nMany apps use multiple databases (polyglot persistence)."
+  },
+  {
+    "id": 30,
+    "question": "What is the API Gateway pattern?",
+    "answer": "Single entry point for all client requests. Handles cross-cutting concerns: authentication, rate limiting, routing, load balancing, request transformation. Simplifies clients by aggregating microservices",
+    "example": "E-commerce mobile app:\n\nWithout gateway:\n- App calls 10 different services directly\n- Each service handles auth separately\n- Mobile handles failures, retries, aggregation\n- Chattiness kills mobile battery/bandwidth\n\nWith API Gateway:\n\nClient → Gateway → Microservices\n\nGateway responsibilities:\n1. Authentication\n   - Validate JWT once\n   - Pass user context to services\n\n2. Request routing\n   - /users/* → User Service\n   - /products/* → Product Service\n\n3. Request aggregation\n   - GET /app/home\n   - Gateway calls: users, products, recommendations\n   - Returns single combined response\n\n4. Rate limiting\n   - 100 requests/minute per user\n\n5. Protocol translation\n   - REST for mobile\n   - gRPC for internal services\n\nTools: Kong, AWS API Gateway, Nginx, Envoy\n\nBackends for Frontends (BFF):\n- Separate gateways for web, mobile, IoT"
+  }
+]
