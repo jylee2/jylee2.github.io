@@ -10,9 +10,10 @@ import aiMlQuestions from '../data/aiMlQuizQuestions.json';
 import cybersecurityQuestions from '../data/cybersecurityQuizQuestions.json';
 import embeddedSystemsQuestions from '../data/embeddedSystemsQuizQuestions.json';
 import productDesignQuestions from '../data/productDesignQuizQuestions.json';
+import dsaQuestions from '../data/dsaQuizQuestions.json';
 import './Quiz.css';
 
-type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | 'aiMl' | 'cybersecurity' | 'embeddedSystems' | 'productDesign' | null;
+type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | 'aiMl' | 'cybersecurity' | 'embeddedSystems' | 'productDesign' | 'dsa' | null;
 
 interface QuizConfig {
   questions: Question[];
@@ -59,6 +60,10 @@ const quizConfigs: Record<Exclude<QuizType, null>, QuizConfig> = {
   productDesign: {
     questions: productDesignQuestions as Question[],
     title: 'Product Design Quiz',
+  },
+  dsa: {
+    questions: dsaQuestions as Question[],
+    title: 'Data Structures & Algorithms Quiz',
   },
 };
 
@@ -154,6 +159,13 @@ const QuizSelector: React.FC = () => {
         >
           <span className="quiz-select-title">Product Design</span>
           <span className="quiz-select-count">{quizConfigs.productDesign.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button"
+          onClick={() => setSelectedQuiz('dsa')}
+        >
+          <span className="quiz-select-title">DSA</span>
+          <span className="quiz-select-count">{quizConfigs.dsa.questions.length} questions</span>
         </button>
       </div>
     </div>
