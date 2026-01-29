@@ -157,12 +157,66 @@ h2 {
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, filter 0.3s ease;
 }
 
 .quiz-select-button:hover {
-  background-color: #0056b3;
+  filter: brightness(0.85);
   transform: translateY(-2px);
+}
+
+.quiz-select-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+/* Quiz button colors */
+.quiz-btn-android {
+  background-color: #3DDC84;
+}
+
+.quiz-btn-swift {
+  background-color: #F05138;
+}
+
+.quiz-btn-rust {
+  background-color: #DEA584;
+}
+
+.quiz-btn-typescript {
+  background-color: #3178C6;
+}
+
+.quiz-btn-devops {
+  background-color: #6C63FF;
+}
+
+.quiz-btn-systemdesign {
+  background-color: #00ACC1;
+}
+
+.quiz-btn-aiml {
+  background-color: #E91E63;
+}
+
+.quiz-btn-cybersecurity {
+  background-color: #D32F2F;
+}
+
+.quiz-btn-embedded {
+  background-color: #607D8B;
+}
+
+.quiz-btn-productdesign {
+  background-color: #9C27B0;
+}
+
+.quiz-btn-dsa {
+  background-color: #3F51B5;
+}
+
+.quiz-btn-networking {
+  background-color: #00BCD4;
 }
 
 .quiz-select-title {

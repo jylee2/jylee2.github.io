@@ -96,86 +96,98 @@ const QuizSelector: React.FC = () => {
       <p className="quiz-selector-subtitle">Select a quiz to begin</p>
       <div className="quiz-selector-buttons">
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-android"
           onClick={() => setSelectedQuiz('android')}
         >
+          <span className="quiz-select-icon">🤖</span>
           <span className="quiz-select-title">Kotlin Android</span>
           <span className="quiz-select-count">{quizConfigs.android.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-swift"
           onClick={() => setSelectedQuiz('swift')}
         >
+          <span className="quiz-select-icon">🐦</span>
           <span className="quiz-select-title">Swift iOS</span>
           <span className="quiz-select-count">{quizConfigs.swift.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-rust"
           onClick={() => setSelectedQuiz('rust')}
         >
+          <span className="quiz-select-icon">⚙️</span>
           <span className="quiz-select-title">Rust Backend</span>
           <span className="quiz-select-count">{quizConfigs.rust.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-typescript"
           onClick={() => setSelectedQuiz('typescript')}
         >
+          <span className="quiz-select-icon">📘</span>
           <span className="quiz-select-title">TypeScript React</span>
           <span className="quiz-select-count">{quizConfigs.typescript.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-devops"
           onClick={() => setSelectedQuiz('devops')}
         >
+          <span className="quiz-select-icon">🔄</span>
           <span className="quiz-select-title">DevOps</span>
           <span className="quiz-select-count">{quizConfigs.devops.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-systemdesign"
           onClick={() => setSelectedQuiz('systemDesign')}
         >
+          <span className="quiz-select-icon">🏗️</span>
           <span className="quiz-select-title">System Design</span>
           <span className="quiz-select-count">{quizConfigs.systemDesign.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-aiml"
           onClick={() => setSelectedQuiz('aiMl')}
         >
+          <span className="quiz-select-icon">🧠</span>
           <span className="quiz-select-title">AI & ML</span>
           <span className="quiz-select-count">{quizConfigs.aiMl.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-cybersecurity"
           onClick={() => setSelectedQuiz('cybersecurity')}
         >
+          <span className="quiz-select-icon">🛡️</span>
           <span className="quiz-select-title">Cybersecurity</span>
           <span className="quiz-select-count">{quizConfigs.cybersecurity.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-embedded"
           onClick={() => setSelectedQuiz('embeddedSystems')}
         >
+          <span className="quiz-select-icon">🔌</span>
           <span className="quiz-select-title">Embedded Systems</span>
           <span className="quiz-select-count">{quizConfigs.embeddedSystems.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-productdesign"
           onClick={() => setSelectedQuiz('productDesign')}
         >
+          <span className="quiz-select-icon">🎨</span>
           <span className="quiz-select-title">Product Design</span>
           <span className="quiz-select-count">{quizConfigs.productDesign.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-dsa"
           onClick={() => setSelectedQuiz('dsa')}
         >
+          <span className="quiz-select-icon">🌳</span>
           <span className="quiz-select-title">DSA</span>
           <span className="quiz-select-count">{quizConfigs.dsa.questions.length} questions</span>
         </button>
         <button
-          className="quiz-select-button"
+          className="quiz-select-button quiz-btn-networking"
           onClick={() => setSelectedQuiz('networking')}
         >
+          <span className="quiz-select-icon">🌐</span>
           <span className="quiz-select-title">Networking</span>
           <span className="quiz-select-count">{quizConfigs.networking.questions.length} questions</span>
         </button>

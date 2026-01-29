@@ -328,5 +328,275 @@
     "question": "What is `produceState` in Jetpack Compose?",
     "answer": "A composable that launches a coroutine scoped to the composition and allows producing State values over time, useful for converting non-Compose async sources to State",
     "example": "@Composable\nfun UserScreen(userId: String) {\n    val user by produceState<User?>(null, userId) {\n        value = repository.getUser(userId)\n    }\n    \n    // Combines remember + LaunchedEffect\n    // Coroutine cancels when leaving composition\n    // or when userId changes\n}"
+  },
+  {
+    "id": 56,
+    "question": "What is the difference between `catch` and `onCompletion` in Kotlin Flow?",
+    "answer": "`catch` handles upstream exceptions and can emit recovery values, while `onCompletion` runs after the flow completes (successfully or with exception) but cannot emit values",
+    "example": "flow { emit(fetchData()) }\n    .catch { e ->\n        emit(cachedData)  // Can emit fallback\n        // Only catches UPSTREAM exceptions\n    }\n    .onCompletion { cause ->\n        // cause is non-null if flow failed\n        // Cannot emit values here\n        hideLoading()\n    }\n    .collect { ... }"
+  },
+  {
+    "id": 57,
+    "question": "What is `stateIn` in Kotlin Flow and what are its sharing strategies?",
+    "answer": "Converts a cold Flow to a hot StateFlow with sharing strategies: `Eagerly` starts immediately, `Lazily` starts on first subscriber, and `WhileSubscribed` starts/stops based on active subscribers",
+    "example": "val uiState: StateFlow<UiState> = repository.dataFlow\n    .map { UiState(it) }\n    .stateIn(\n        scope = viewModelScope,\n        started = SharingStarted.WhileSubscribed(5000),\n        initialValue = UiState.Loading\n    )\n\n// WhileSubscribed(5000): stops 5s after last subscriber\n// Useful for surviving configuration changes"
+  },
+  {
+    "id": 58,
+    "question": "What is `flatMapLatest` in Kotlin Flow?",
+    "answer": "Transforms each emitted value into a new Flow and cancels the previous inner Flow when a new value arrives, keeping only the latest transformation active",
+    "example": "searchQuery\n    .debounce(300)\n    .flatMapLatest { query ->\n        repository.search(query)  // New search cancels previous\n    }\n    .collect { results ->\n        showResults(results)\n    }\n\n// User types: \"a\" -> \"ab\" -> \"abc\"\n// Only \"abc\" search completes, others cancelled"
+  },
+  {
+    "id": 59,
+    "question": "What is the purpose of `Modifier.weight()` in Jetpack Compose?",
+    "answer": "Distributes available space proportionally among siblings in a Row or Column based on weight values, similar to LinearLayout weight in XML",
+    "example": "Row(Modifier.fillMaxWidth()) {\n    Box(Modifier.weight(1f).background(Color.Red))\n    Box(Modifier.weight(2f).background(Color.Blue))\n}\n\n// Red gets 1/3, Blue gets 2/3 of width\n\n// fill parameter controls cross-axis:\nModifier.weight(1f, fill = false)  // Only takes needed height"
+  },
+  {
+    "id": 60,
+    "question": "What is `WindowInsets` in Jetpack Compose and why is it important?",
+    "answer": "Represents system UI areas like status bar, navigation bar, and keyboard that overlap with app content; handling insets properly ensures content isn't obscured",
+    "example": "Scaffold(\n    modifier = Modifier.fillMaxSize()\n) { innerPadding ->\n    LazyColumn(\n        contentPadding = innerPadding\n    ) { ... }\n}\n\n// Or handle manually:\nModifier.windowInsetsPadding(WindowInsets.systemBars)\nModifier.imePadding()  // Keyboard insets"
+  },
+  {
+    "id": 61,
+    "question": "What is the difference between `combine` and `zip` in Kotlin Flow?",
+    "answer": "`combine` emits when any source flow emits using the latest values from all flows, while `zip` pairs emissions from flows and only emits when all flows have a new value",
+    "example": "// combine: emits on any emission\ncombine(flow1, flow2) { a, b -> a + b }\n// flow1: 1--2--3\n// flow2: --A----B\n// out:   -1A-2A-3B\n\n// zip: pairs emissions\nflow1.zip(flow2) { a, b -> a + b }\n// flow1: 1--2--3\n// flow2: --A----B\n// out:   --1A---2B (3 waits for next)"
+  },
+  {
+    "id": 62,
+    "question": "What is `LazyVerticalGrid` in Jetpack Compose?",
+    "answer": "A composable that displays items in a scrollable grid layout, supporting fixed column counts or adaptive columns that adjust based on available width",
+    "example": "// Fixed columns:\nLazyVerticalGrid(\n    columns = GridCells.Fixed(2)\n) { items(photos) { PhotoCard(it) } }\n\n// Adaptive: as many columns as fit with min width\nLazyVerticalGrid(\n    columns = GridCells.Adaptive(minSize = 128.dp)\n) { items(photos) { PhotoCard(it) } }"
+  },
+  {
+    "id": 63,
+    "question": "What is a `CoroutineExceptionHandler` and when should you use it?",
+    "answer": "A context element that handles uncaught exceptions in coroutines; used as a last resort for logging or crash reporting, but doesn't prevent coroutine cancellation",
+    "example": "val handler = CoroutineExceptionHandler { _, exception ->\n    Log.e(\"App\", \"Uncaught exception\", exception)\n    crashReporter.report(exception)\n}\n\nval scope = CoroutineScope(\n    SupervisorJob() + Dispatchers.Main + handler\n)\n\n// Note: handler only works with launch, not async"
+  },
+  {
+    "id": 64,
+    "question": "What is `ensureActive()` in Kotlin coroutines?",
+    "answer": "Checks if the current coroutine is still active and throws CancellationException if cancelled; used in long-running loops to make cancellation cooperative",
+    "example": "suspend fun processLargeList(items: List<Item>) {\n    items.forEach { item ->\n        ensureActive()  // Throws if cancelled\n        processItem(item)\n    }\n}\n\n// Alternative: check isActive\nwhile (isActive) {\n    doWork()\n}"
+  },
+  {
+    "id": 65,
+    "question": "What is `NonCancellable` in Kotlin coroutines?",
+    "answer": "A Job that cannot be cancelled; used with withContext to ensure cleanup code runs even when the coroutine is cancelled",
+    "example": "suspend fun closeResources() {\n    try {\n        doWork()\n    } finally {\n        // This code MUST run even if cancelled\n        withContext(NonCancellable) {\n            saveState()  // Suspend function in finally\n            closeConnection()\n        }\n    }\n}"
+  },
+  {
+    "id": 66,
+    "question": "What is Android App Startup library and when should you use it?",
+    "answer": "A library that initializes components at app startup in a defined order with lazy initialization support; use it to reduce startup time and manage initialization dependencies",
+    "example": "class WorkManagerInitializer : Initializer<WorkManager> {\n    override fun create(context: Context): WorkManager {\n        val config = Configuration.Builder().build()\n        WorkManager.initialize(context, config)\n        return WorkManager.getInstance(context)\n    }\n    \n    override fun dependencies() = emptyList<Class<Initializer<*>>>()\n}"
+  },
+  {
+    "id": 67,
+    "question": "What is the difference between `Modifier.clickable` and `Modifier.pointerInput` in Jetpack Compose?",
+    "answer": "`clickable` is a high-level modifier for tap handling with accessibility support, while `pointerInput` provides low-level gesture detection for custom interactions",
+    "example": "// clickable: simple taps with accessibility\nBox(Modifier.clickable { onClick() })\n\n// pointerInput: custom gestures\nBox(Modifier.pointerInput(Unit) {\n    detectTapGestures(\n        onLongPress = { offset -> },\n        onDoubleTap = { offset -> },\n        onTap = { offset -> }\n    )\n})"
+  },
+  {
+    "id": 68,
+    "question": "What is `rememberCoroutineScope` in Jetpack Compose?",
+    "answer": "Returns a CoroutineScope bound to the composition that's cancelled when the composable leaves composition; used to launch coroutines from callbacks",
+    "example": "@Composable\nfun MyScreen() {\n    val scope = rememberCoroutineScope()\n    val snackbarHostState = remember { SnackbarHostState() }\n    \n    Button(onClick = {\n        scope.launch {\n            snackbarHostState.showSnackbar(\"Message\")\n        }\n    }) { Text(\"Show Snackbar\") }\n}"
+  },
+  {
+    "id": 69,
+    "question": "What is the purpose of `@Immutable` annotation in Jetpack Compose?",
+    "answer": "Promises to the Compose compiler that all public properties will never change after construction, enabling aggressive recomposition skipping for performance",
+    "example": "@Immutable\ndata class Theme(\n    val primary: Color,\n    val background: Color\n)\n\n// All properties must be val (not var)\n// Collections must be immutable (List, not MutableList)\n// Nested objects must also be @Immutable or @Stable"
+  },
+  {
+    "id": 70,
+    "question": "What is `Channel` in Kotlin coroutines and how does it differ from Flow?",
+    "answer": "A hot stream for one-time events between coroutines with send/receive semantics; unlike Flow, channels are consumed exactly once and support buffering strategies",
+    "example": "// Channel: one-time events (navigation, snackbar)\nval events = Channel<UiEvent>(Channel.BUFFERED)\n\n// Send:\nevents.send(UiEvent.NavigateBack)\n\n// Receive:\nfor (event in events) { handleEvent(event) }\n\n// Flow: state/data streams (can have multiple collectors)"
+  },
+  {
+    "id": 71,
+    "question": "What are the different Channel buffer overflow strategies?",
+    "answer": "`SUSPEND` blocks sender when full, `DROP_OLDEST` discards oldest element, `DROP_LATEST` discards newest element, and `BUFFERED` uses default buffer size",
+    "example": "// SUSPEND: sender waits (default for Channel())\nChannel<Int>(capacity = 10, onBufferOverflow = BufferOverflow.SUSPEND)\n\n// DROP_OLDEST: like conflated, keeps latest\nChannel<Int>(Channel.CONFLATED)  // or onBufferOverflow = DROP_OLDEST\n\n// DROP_LATEST: discards new values when full\nChannel<Int>(capacity = 1, onBufferOverflow = BufferOverflow.DROP_LATEST)"
+  },
+  {
+    "id": 72,
+    "question": "What is `Mutex` in Kotlin coroutines?",
+    "answer": "A mutual exclusion primitive for coroutines that ensures only one coroutine can execute a critical section at a time; unlike synchronized blocks, it suspends instead of blocking",
+    "example": "class Counter {\n    private val mutex = Mutex()\n    private var count = 0\n    \n    suspend fun increment() {\n        mutex.withLock {\n            count++  // Only one coroutine at a time\n        }\n    }\n}\n\n// Never use synchronized in coroutines - it blocks threads!"
+  },
+  {
+    "id": 73,
+    "question": "What is the purpose of `@TypeConverter` in Room?",
+    "answer": "Converts complex types to/from types Room can persist; annotate methods that convert between the custom type and a primitive type like String or Long",
+    "example": "class Converters {\n    @TypeConverter\n    fun fromTimestamp(value: Long?): Date? =\n        value?.let { Date(it) }\n    \n    @TypeConverter\n    fun dateToTimestamp(date: Date?): Long? =\n        date?.time\n}\n\n@Database(entities = [User::class], version = 1)\n@TypeConverters(Converters::class)\nabstract class AppDatabase : RoomDatabase()"
+  },
+  {
+    "id": 74,
+    "question": "What is `@Embedded` in Room?",
+    "answer": "Allows nested objects to be flattened into the same table as the parent entity, with the nested object's fields becoming columns in the parent's table",
+    "example": "data class Address(\n    val street: String,\n    val city: String\n)\n\n@Entity\ndata class User(\n    @PrimaryKey val id: Int,\n    val name: String,\n    @Embedded val address: Address  // Columns: street, city\n)\n\n// Use prefix to avoid column name conflicts:\n@Embedded(prefix = \"home_\") val homeAddress: Address"
+  },
+  {
+    "id": 75,
+    "question": "What is `@Relation` in Room?",
+    "answer": "Defines a relationship between entities for queries that need to load related objects; Room automatically performs the join query",
+    "example": "@Entity\ndata class User(@PrimaryKey val userId: Long)\n\n@Entity\ndata class Book(\n    @PrimaryKey val bookId: Long,\n    val userOwnerId: Long\n)\n\ndata class UserWithBooks(\n    @Embedded val user: User,\n    @Relation(\n        parentColumn = \"userId\",\n        entityColumn = \"userOwnerId\"\n    )\n    val books: List<Book>\n)"
+  },
+  {
+    "id": 76,
+    "question": "What is a BroadcastReceiver and when should you use it?",
+    "answer": "A component that responds to system-wide broadcast announcements like battery low, screen off, or custom broadcasts; use for reacting to system events or inter-app communication",
+    "example": "class NetworkReceiver : BroadcastReceiver() {\n    override fun onReceive(context: Context, intent: Intent) {\n        if (intent.action == ConnectivityManager.CONNECTIVITY_ACTION) {\n            handleConnectivityChange()\n        }\n    }\n}\n\n// Register in manifest or dynamically:\nregisterReceiver(receiver, IntentFilter(...))"
+  },
+  {
+    "id": 77,
+    "question": "What is the difference between manifest-declared and context-registered BroadcastReceivers?",
+    "answer": "Manifest-declared receivers are always active and can receive broadcasts even when app is stopped, while context-registered receivers are active only while the registering component is alive",
+    "example": "// Manifest-declared (limited since Android 8.0):\n<receiver android:name=\".BootReceiver\">\n    <intent-filter>\n        <action android:name=\"android.intent.action.BOOT_COMPLETED\"/>\n    </intent-filter>\n</receiver>\n\n// Context-registered (recommended):\nregisterReceiver(receiver, filter)\nunregisterReceiver(receiver)  // Don't forget!"
+  },
+  {
+    "id": 78,
+    "question": "What is `AnimatedVisibility` in Jetpack Compose?",
+    "answer": "A composable that animates the appearance and disappearance of its content using enter and exit transitions",
+    "example": "AnimatedVisibility(\n    visible = isVisible,\n    enter = fadeIn() + expandVertically(),\n    exit = fadeOut() + shrinkVertically()\n) {\n    Card { Text(\"Content\") }\n}\n\n// Also: slideInVertically, scaleIn, etc.\n// Combine with + operator"
+  },
+  {
+    "id": 79,
+    "question": "What is the difference between `animate*AsState` and `Animatable` in Compose?",
+    "answer": "`animate*AsState` is declarative and animates when target changes, while `Animatable` is imperative with more control over animation lifecycle and snap/stop capabilities",
+    "example": "// animate*AsState: declarative\nval alpha by animateFloatAsState(if (visible) 1f else 0f)\n\n// Animatable: imperative control\nval alpha = remember { Animatable(0f) }\nLaunchedEffect(visible) {\n    alpha.animateTo(if (visible) 1f else 0f)\n    // Can also: alpha.snapTo(1f), alpha.stop()\n}"
+  },
+  {
+    "id": 80,
+    "question": "What is `updateTransition` in Jetpack Compose?",
+    "answer": "Manages multiple animation values that change together based on a target state, keeping them synchronized during state transitions",
+    "example": "val transition = updateTransition(targetState = selected)\n\nval backgroundColor by transition.animateColor { state ->\n    if (state) Color.Blue else Color.Gray\n}\nval borderWidth by transition.animateDp { state ->\n    if (state) 2.dp else 0.dp\n}\n\n// Both animations run in sync during transition"
+  },
+  {
+    "id": 81,
+    "question": "What is the purpose of `@AssistedInject` in Hilt?",
+    "answer": "Allows injection of dependencies where some parameters come from Hilt and others are provided at runtime through a factory",
+    "example": "class UserViewModel @AssistedInject constructor(\n    private val repo: UserRepository,  // From Hilt\n    @Assisted private val userId: String  // From runtime\n) : ViewModel()\n\n@AssistedFactory\ninterface UserViewModelFactory {\n    fun create(userId: String): UserViewModel\n}\n\n// Usage: factory.create(\"user123\")"
+  },
+  {
+    "id": 82,
+    "question": "What is `@EntryPoint` in Hilt?",
+    "answer": "Provides access to Hilt dependencies from classes that Hilt doesn't directly inject, like ContentProviders or classes instantiated by libraries",
+    "example": "@EntryPoint\n@InstallIn(SingletonComponent::class)\ninterface MyEntryPoint {\n    fun getAnalytics(): Analytics\n}\n\n// In ContentProvider:\nclass MyProvider : ContentProvider() {\n    override fun onCreate(): Boolean {\n        val entryPoint = EntryPointAccessors\n            .fromApplication(context, MyEntryPoint::class.java)\n        val analytics = entryPoint.getAnalytics()\n    }\n}"
+  },
+  {
+    "id": 83,
+    "question": "What is the Navigation component's Safe Args plugin?",
+    "answer": "A Gradle plugin that generates type-safe classes for navigating between destinations and passing arguments, eliminating runtime errors from incorrect argument types or keys",
+    "example": "// Generated from nav graph:\nval action = HomeFragmentDirections\n    .actionHomeToDetail(userId = \"123\")\nfindNavController().navigate(action)\n\n// Receive in destination:\nval args: DetailFragmentArgs by navArgs()\nval userId = args.userId"
+  },
+  {
+    "id": 84,
+    "question": "What is `popUpTo` in Navigation component?",
+    "answer": "Specifies a destination to pop back to when navigating, optionally removing the destination itself with `inclusive = true`; used to clear back stack",
+    "example": "// Pop everything up to home, keeping home:\nnavController.navigate(\"profile\") {\n    popUpTo(\"home\")\n}\n\n// Pop everything INCLUDING home (clear back stack):\nnavController.navigate(\"login\") {\n    popUpTo(\"home\") { inclusive = true }\n}\n\n// Pop all:\npopUpTo(0) { inclusive = true }"
+  },
+  {
+    "id": 85,
+    "question": "What is `launchSingleTop` in Navigation?",
+    "answer": "Prevents creating multiple instances of a destination on the back stack when navigating to it multiple times; if already at top, just reuse it",
+    "example": "navController.navigate(\"settings\") {\n    launchSingleTop = true\n}\n\n// Without: Home -> Settings -> Settings -> Settings\n// With:    Home -> Settings (only one instance)\n\n// Commonly combined with popUpTo for tabs:\npopUpTo(navController.graph.findStartDestination().id) {\n    saveState = true\n}\nlaunchSingleTop = true\nrestoreState = true"
+  },
+  {
+    "id": 86,
+    "question": "What is `ConstraintLayout` in Jetpack Compose and when should you use it?",
+    "answer": "A layout composable for complex UIs with many interdependent constraints; use when Row/Column/Box nesting becomes too complex or for guideline-based layouts",
+    "example": "ConstraintLayout {\n    val (button, text) = createRefs()\n    \n    Button(\n        modifier = Modifier.constrainAs(button) {\n            top.linkTo(parent.top, margin = 16.dp)\n        }\n    ) { Text(\"Button\") }\n    \n    Text(\n        modifier = Modifier.constrainAs(text) {\n            top.linkTo(button.bottom, margin = 8.dp)\n            start.linkTo(button.start)\n        }\n    )\n}"
+  },
+  {
+    "id": 87,
+    "question": "What is `runBlocking` and why should you avoid it in Android?",
+    "answer": "A coroutine builder that blocks the current thread until completion; avoid on the main thread as it causes ANRs, use only in tests or main functions",
+    "example": "// DON'T do this on main thread:\nrunBlocking {\n    delay(1000)  // Blocks main thread - ANR!\n}\n\n// DO use proper coroutine launching:\nlifecycleScope.launch {\n    delay(1000)  // Suspends, doesn't block\n}\n\n// OK in tests:\n@Test\nfun testSuspendFunction() = runBlocking {\n    val result = suspendingFunction()\n}"
+  },
+  {
+    "id": 88,
+    "question": "What is the difference between `GlobalScope` and `viewModelScope`?",
+    "answer": "`GlobalScope` lives for the entire app lifetime and coroutines aren't cancelled automatically, while `viewModelScope` is tied to ViewModel lifecycle and cancels coroutines when cleared",
+    "example": "// BAD: GlobalScope - no lifecycle management\nGlobalScope.launch {\n    // Continues even if Activity destroyed - memory leak!\n}\n\n// GOOD: viewModelScope - automatic cancellation\nviewModelScope.launch {\n    // Cancelled when ViewModel cleared\n}\n\n// In Activity/Fragment use lifecycleScope"
+  },
+  {
+    "id": 89,
+    "question": "What is `DataStore` and how does it differ from SharedPreferences?",
+    "answer": "A modern data storage solution using coroutines and Flow for async operations; unlike SharedPreferences, it's type-safe with Protocol Buffers and handles errors without crashing",
+    "example": "// Preferences DataStore:\nval dataStore = context.createDataStore(name = \"settings\")\n\n// Write:\ndataStore.edit { prefs ->\n    prefs[KEY_DARK_MODE] = true\n}\n\n// Read:\nval darkMode: Flow<Boolean> = dataStore.data\n    .map { it[KEY_DARK_MODE] ?: false }\n\n// No ANRs, no apply() vs commit() issues"
+  },
+  {
+    "id": 90,
+    "question": "What is `Paging 3` library and when should you use it?",
+    "answer": "A library for loading large datasets incrementally with support for local and network sources, caching, error handling, and retry; use for infinite scrolling lists",
+    "example": "// Define PagingSource:\nclass UserPagingSource : PagingSource<Int, User>() {\n    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {\n        val page = params.key ?: 0\n        return try {\n            val users = api.getUsers(page, params.loadSize)\n            LoadResult.Page(users, prevKey = null, nextKey = page + 1)\n        } catch (e: Exception) {\n            LoadResult.Error(e)\n        }\n    }\n}"
+  },
+  {
+    "id": 91,
+    "question": "What is `RemoteMediator` in Paging 3?",
+    "answer": "Handles loading data from network into local database for offline-first paging; manages when to refresh and append data from remote source",
+    "example": "@OptIn(ExperimentalPagingApi::class)\nclass UserRemoteMediator(\n    private val api: Api,\n    private val db: AppDatabase\n) : RemoteMediator<Int, User>() {\n    \n    override suspend fun load(\n        loadType: LoadType,\n        state: PagingState<Int, User>\n    ): MediatorResult {\n        // Fetch from network, save to database\n        return MediatorResult.Success(endOfPaginationReached = false)\n    }\n}"
+  },
+  {
+    "id": 92,
+    "question": "What is `sealed class` in Kotlin and why is it useful for UI state?",
+    "answer": "A class with a fixed set of subclasses known at compile time; useful for UI state because `when` expressions can be exhaustive without an `else` branch",
+    "example": "sealed class UiState {\n    object Loading : UiState()\n    data class Success(val data: List<Item>) : UiState()\n    data class Error(val message: String) : UiState()\n}\n\n// Exhaustive when - compiler ensures all cases handled:\nwhen (state) {\n    is UiState.Loading -> showLoading()\n    is UiState.Success -> showData(state.data)\n    is UiState.Error -> showError(state.message)\n}"
+  },
+  {
+    "id": 93,
+    "question": "What is `sealed interface` in Kotlin and when should you use it over sealed class?",
+    "answer": "Like sealed class but allows subclasses to extend other classes; use when subclasses need to inherit from different parent classes while still being exhaustive",
+    "example": "sealed interface Result<out T>\ndata class Success<T>(val data: T) : Result<T>\ndata class Error(val exception: Throwable) : Result<Nothing>\nobject Loading : Result<Nothing>\n\n// Subclass can extend another class:\nsealed interface Event\nclass ClickEvent : Event, View.OnClickListener { ... }"
+  },
+  {
+    "id": 94,
+    "question": "What is `inline` function in Kotlin and why use it?",
+    "answer": "Inlines the function body at call sites, eliminating lambda object allocation and enabling non-local returns; use for higher-order functions to reduce overhead",
+    "example": "inline fun measureTime(block: () -> Unit): Long {\n    val start = System.currentTimeMillis()\n    block()  // Inlined, no lambda object created\n    return System.currentTimeMillis() - start\n}\n\n// Non-local return works with inline:\ninline fun List<Int>.firstPositive(action: (Int) -> Unit) {\n    for (i in this) {\n        if (i > 0) { action(i); return }  // Returns from caller\n    }\n}"
+  },
+  {
+    "id": 95,
+    "question": "What does `crossinline` modifier do in Kotlin?",
+    "answer": "Prevents non-local returns in lambdas passed to inline functions, used when the lambda is called from a different execution context like another lambda or object",
+    "example": "inline fun runAsync(crossinline block: () -> Unit) {\n    thread {\n        block()  // Called in different context\n        // return here would be confusing - crossinline prevents it\n    }\n}\n\nrunAsync {\n    // return  // ERROR: not allowed with crossinline\n    doSomething()\n}"
+  },
+  {
+    "id": 96,
+    "question": "What is `reified` type parameter in Kotlin?",
+    "answer": "Makes type parameter available at runtime in inline functions, allowing operations like `is` checks and `::class` that normally fail due to type erasure",
+    "example": "inline fun <reified T> isType(value: Any): Boolean {\n    return value is T  // Works because T is reified\n}\n\nval isString = isType<String>(\"hello\")  // true\n\ninline fun <reified T> Intent.getExtra(key: String): T? {\n    return extras?.get(key) as? T\n}"
+  },
+  {
+    "id": 97,
+    "question": "What is the difference between `Modifier.clip` and `Modifier.graphicsLayer` for shapes?",
+    "answer": "`clip` clips content to a shape affecting touch bounds and drawing, while `graphicsLayer` with clip applies hardware-accelerated clipping without affecting touch bounds",
+    "example": "// clip: affects drawing AND touch bounds\nImage(\n    modifier = Modifier.clip(CircleShape)  // Touch area is circle\n)\n\n// graphicsLayer: drawing only, touch unaffected\nImage(\n    modifier = Modifier.graphicsLayer {\n        clip = true\n        shape = CircleShape  // Touch area still rectangle\n    }\n)"
+  },
+  {
+    "id": 98,
+    "question": "What is `remember(key) { ... }` in Jetpack Compose?",
+    "answer": "Caches a value and recalculates it only when the key changes; without a key, the value persists across recompositions until leaving composition",
+    "example": "// No key: calculated once, cached until leaving composition\nval expensive = remember { calculateExpensiveValue() }\n\n// With key: recalculated when userId changes\nval user = remember(userId) { fetchUser(userId) }\n\n// Multiple keys:\nval result = remember(a, b, c) { compute(a, b, c) }"
+  },
+  {
+    "id": 99,
+    "question": "What is `movableContentOf` in Jetpack Compose?",
+    "answer": "Creates content that can be moved between compositions while preserving state; useful for animations where UI moves between different parents",
+    "example": "val movableContent = remember {\n    movableContentOf {\n        var count by remember { mutableStateOf(0) }\n        Button(onClick = { count++ }) { Text(\"$count\") }\n    }\n}\n\nif (isExpanded) {\n    ExpandedLayout { movableContent() }  // State preserved\n} else {\n    CompactLayout { movableContent() }   // Same state!\n}"
+  },
+  {
+    "id": 100,
+    "question": "What is the purpose of `Modifier.drawBehind` and `Modifier.drawWithContent` in Compose?",
+    "answer": "`drawBehind` draws behind the content using Canvas API, while `drawWithContent` gives control over when to draw content relative to custom drawing",
+    "example": "// drawBehind: draw BEHIND content\nBox(\n    modifier = Modifier.drawBehind {\n        drawCircle(Color.Blue)  // Behind Box content\n    }\n)\n\n// drawWithContent: control draw order\nBox(\n    modifier = Modifier.drawWithContent {\n        drawRect(Color.Red)     // Draw first (background)\n        drawContent()           // Then draw content\n        drawCircle(Color.Blue)  // Finally overlay\n    }\n)"
   }
 ]
