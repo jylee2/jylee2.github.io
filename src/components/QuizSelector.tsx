@@ -12,9 +12,10 @@ import embeddedSystemsQuestions from '../data/embeddedSystemsQuizQuestions.json'
 import productDesignQuestions from '../data/productDesignQuizQuestions.json';
 import dsaQuestions from '../data/dsaQuizQuestions.json';
 import networkingQuestions from '../data/networkingQuizQuestions.json';
+import cfdQuestions from '../data/cfdQuizQuestions.json';
 import './Quiz.css';
 
-type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | 'aiMl' | 'cybersecurity' | 'embeddedSystems' | 'productDesign' | 'dsa' | 'networking' | null;
+type QuizType = 'android' | 'rust' | 'swift' | 'typescript' | 'devops' | 'systemDesign' | 'aiMl' | 'cybersecurity' | 'embeddedSystems' | 'productDesign' | 'dsa' | 'networking' | 'cfd' | null;
 
 interface QuizConfig {
   questions: Question[];
@@ -69,6 +70,10 @@ const quizConfigs: Record<Exclude<QuizType, null>, QuizConfig> = {
   networking: {
     questions: networkingQuestions as Question[],
     title: 'Computer Networking Quiz',
+  },
+  cfd: {
+    questions: cfdQuestions as Question[],
+    title: 'Computational Fluid Dynamics Quiz',
   },
 };
 
@@ -190,6 +195,14 @@ const QuizSelector: React.FC = () => {
           <span className="quiz-select-icon">🌐</span>
           <span className="quiz-select-title">Networking</span>
           <span className="quiz-select-count">{quizConfigs.networking.questions.length} questions</span>
+        </button>
+        <button
+          className="quiz-select-button quiz-btn-cfd"
+          onClick={() => setSelectedQuiz('cfd')}
+        >
+          <span className="quiz-select-icon">🌊</span>
+          <span className="quiz-select-title">CFD</span>
+          <span className="quiz-select-count">{quizConfigs.cfd.questions.length} questions</span>
         </button>
       </div>
     </div>
