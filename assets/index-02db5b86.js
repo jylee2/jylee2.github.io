@@ -2629,7 +2629,161 @@ class StartupBenchmark {
         startActivityAndWait()
     }
     // Results: timeToInitialDisplay: 350ms median
-}`}],mn0=[{id:1,question:"How do you declare variables in Rust and what is the default mutability?",answer:"Variables are declared with `let` and are immutable by default. Use `let mut` for mutable variables. This prevents accidental mutations and makes code safer",example:`// Immutable by default
+}`},{id:146,question:"Why is Kotlin preferred over Java for Android development?",answer:"Kotlin offers null safety at the type system level (eliminating NullPointerException crashes), coroutines for structured concurrency (replacing verbose callback/RxJava chains), concise data classes (replacing Java boilerplate with equals/hashCode/toString/copy), extension functions for cleaner APIs, scope functions (let, apply, also, run, with) for fluent code, sealed classes for exhaustive when-expressions, and default/named arguments eliminating the need for builder patterns or method overloads. Google made Kotlin the recommended language for Android in 2019, and most Jetpack libraries are Kotlin-first",example:`// 1. Null safety — compiler-enforced, no more NPE crashes
+// Java:
+String name = user.getName(); // Can be null — NPE at runtime!
+int length = name.length();    // 💥 NullPointerException
+
+// Kotlin:
+val name: String? = user.name  // Nullable type explicit
+val length = name?.length ?: 0 // Safe call + default
+
+// 2. Coroutines vs callbacks
+// Java (callback hell):
+api.getUser(id, new Callback<User>() {
+    @Override
+    public void onSuccess(User user) {
+        api.getPosts(user.getId(), new Callback<List<Post>>() {
+            @Override
+            public void onSuccess(List<Post> posts) { /* ... */ }
+            @Override
+            public void onFailure(Exception e) { /* ... */ }
+        });
+    }
+    @Override
+    public void onFailure(Exception e) { /* ... */ }
+});
+
+// Kotlin (sequential, readable):
+viewModelScope.launch {
+    val user = api.getUser(id)       // Suspends, no callback
+    val posts = api.getPosts(user.id) // Sequential, readable
+    _state.value = UiState(user, posts)
+}
+
+// 3. Data classes vs Java POJOs
+// Java: ~60 lines for equals, hashCode, toString, getters
+public class User {
+    private final String id;
+    private final String name;
+    public User(String id, String name) { ... }
+    public String getId() { return id; }
+    public String getName() { return name; }
+    @Override public boolean equals(Object o) { ... }
+    @Override public int hashCode() { ... }
+    @Override public String toString() { ... }
+}
+
+// Kotlin: 1 line
+data class User(val id: String, val name: String)
+// Gets equals, hashCode, toString, copy, destructuring for free
+
+// 4. Sealed classes for exhaustive state handling
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    data class Error(val exception: Throwable) : Result<Nothing>()
+    object Loading : Result<Nothing>()
+}
+
+when (result) {
+    is Result.Success -> showData(result.data)
+    is Result.Error -> showError(result.exception)
+    Result.Loading -> showSpinner()
+    // No 'else' needed — compiler ensures all cases handled
+}
+
+// 5. Extension functions for cleaner APIs
+fun View.visible() { visibility = View.VISIBLE }
+fun View.gone() { visibility = View.GONE }
+// Usage: myButton.visible() — reads like English`},{id:147,question:"Why is Jetpack Compose preferred over the XML View system for building Android UIs?",answer:"Compose uses a declarative paradigm where UI is a function of state — you describe what the UI should look like, not how to mutate it step by step. This eliminates entire categories of bugs (stale views, forgotten visibility toggles, adapter sync issues). Compose offers a single-language experience (Kotlin only, no XML), built-in state management with automatic recomposition, a single-pass layout system (vs Views' multi-pass measurement), powerful theming via MaterialTheme and CompositionLocal, easy animations, better preview tooling, and first-class support for unidirectional data flow. It also removes the need for Fragments, View Binding, RecyclerView adapters, and XML resource inflation",example:`// 1. Declarative vs imperative UI updates
+// XML Views (imperative — you manage every mutation):
+fun updateProfile(user: User) {
+    nameTextView.text = user.name
+    emailTextView.text = user.email
+    avatarImageView.load(user.avatarUrl)
+    if (user.isVerified) {
+        verifiedBadge.visibility = View.VISIBLE  // Easy to forget!
+    } else {
+        verifiedBadge.visibility = View.GONE
+    }
+    // Bug: what if a new field is added? Must update here too.
+}
+
+// Compose (declarative — UI is a function of state):
+@Composable
+fun ProfileScreen(user: User) {
+    Column {
+        Text(user.name)
+        Text(user.email)
+        AsyncImage(user.avatarUrl)
+        if (user.isVerified) VerifiedBadge() // Automatic!
+    }
+    // State changes → recomposition → UI always in sync
+}
+
+// 2. No more RecyclerView + Adapter + ViewHolder boilerplate
+// XML Views: ~100 lines (Adapter + ViewHolder + DiffUtil)
+class UserAdapter : ListAdapter<User, UserViewHolder>(DiffCallback) {
+    override fun onCreateViewHolder(...): UserViewHolder { ... }
+    override fun onBindViewHolder(holder: UserViewHolder, pos: Int) {
+        holder.bind(getItem(pos))
+    }
+}
+class UserViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    fun bind(user: User) { ... }
+}
+
+// Compose: ~10 lines
+@Composable
+fun UserList(users: List<User>) {
+    LazyColumn {
+        items(users, key = { it.id }) { user ->
+            UserRow(user)
+        }
+    }
+}
+
+// 3. Theming — no more styles.xml, themes.xml, attrs.xml
+// XML: scattered across multiple XML files
+// styles.xml, themes.xml, attrs.xml, colors.xml...
+
+// Compose: all in Kotlin, type-safe, composable
+MaterialTheme(
+    colorScheme = if (isDark) darkColorScheme() else lightColorScheme(),
+    typography = Typography(bodyLarge = TextStyle(fontSize = 16.sp))
+) {
+    // Access anywhere:
+    Text(color = MaterialTheme.colorScheme.primary)
+}
+
+// 4. Animations — trivial in Compose, painful in Views
+// XML: ObjectAnimator, TransitionManager, MotionLayout (verbose)
+// Compose:
+AnimatedVisibility(visible = showPanel) {
+    Panel() // Fade + expand built-in, customizable
+}
+val size by animateDpAsState(if (expanded) 300.dp else 100.dp)
+Box(Modifier.size(size)) // Smoothly animates
+
+// 5. Live previews without running the app
+@Preview(showBackground = true)
+@Preview(uiMode = UI_MODE_NIGHT_YES) // Dark mode preview
+@Composable
+fun ProfilePreview() {
+    ProfileScreen(user = User.preview())
+}`},{id:148,question:"What does `null.toString()` return in Kotlin, and why does it matter?",answer:'It returns the 4-character string "null" — not an exception and not an empty string. Kotlin defines `toString()` as an extension on `Any?`, so null receivers are safe. This matters because it can introduce silent bugs: null values quietly become the string "null" in UI text, API requests, or database writes instead of crashing early or showing empty. In Java, `null.toString()` throws a NullPointerException, making the bug immediately visible',example:`val name: String? = null
+name.toString()          // "null" (4 chars, no crash)
+name.toString().isEmpty() // false! It's not empty
+
+// Silent bug: user sees literal "null" in UI
+Text("Hello \${name.toString()}") // displays: Hello null
+
+// Fix: use elvis operator
+Text("Hello \${name ?: ""}"})    // displays: Hello
+
+// Java comparison:
+// null.toString() → NullPointerException (fails fast)
+// Kotlin hides the problem — always check with != null`}],mn0=[{id:1,question:"How do you declare variables in Rust and what is the default mutability?",answer:"Variables are declared with `let` and are immutable by default. Use `let mut` for mutable variables. This prevents accidental mutations and makes code safer",example:`// Immutable by default
 let x = 5;
 // x = 6;  // Error: cannot assign twice to immutable variable
 
